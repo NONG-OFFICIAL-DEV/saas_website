@@ -1,0 +1,17 @@
+services:
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smart-store-website
+    image: nongdev/smart-store-website:latest
+    restart: always
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
+  internal_project_network:
+    driver: bridge
