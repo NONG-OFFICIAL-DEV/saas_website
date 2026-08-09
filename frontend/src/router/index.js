@@ -95,18 +95,18 @@ const router = createRouter({
   }
 })
 
-// router.beforeEach(async to => {
-//   if (!to.path.startsWith('/admin')) return true
+router.beforeEach(async to => {
+  if (!to.path.startsWith('/admin')) return true
 
-//   const authStore = useAdminAuthStore()
-//   adminAuthReady ??= authStore.init()
-//   await adminAuthReady
+  const authStore = useAdminAuthStore()
+  adminAuthReady ??= authStore.init()
+  await adminAuthReady
 
-//   const isLoggedIn = !!authStore.session
-//   if (to.name === 'admin-login') {
-//     return isLoggedIn ? { name: 'admin-dashboard' } : true
-//   }
-//   return isLoggedIn ? true : { name: 'admin-login' }
-// })
+  const isLoggedIn = !!authStore.session
+  if (to.name === 'admin-login') {
+    return isLoggedIn ? { name: 'admin-dashboard' } : true
+  }
+  return isLoggedIn ? true : { name: 'admin-login' }
+})
 
 export default router

@@ -27,18 +27,24 @@ function split(key, payload) {
   return { data, content }
 }
 
+// Public reads are deliberately silent (the store shows fallback copy
+// immediately, per stores/siteContent.js) and the admin editor already has
+// its own Save-button spinner — skip the global overlay for both so it
+// never fights with those.
+const NO_OVERLAY = { meta: { loader: 'skip' } }
+
 async function getBlock(key) {
-  const { data } = await cmsApi.get(`/public/site-content/${key}`)
+  const { data } = await cmsApi.get(`/public/site-content/${key}`, NO_OVERLAY)
   return flatten(data.data)
 }
 
 async function updateBlock(key, payload) {
   const { data, content } = split(key, payload)
-  const { data: res } = await cmsApi.put(`/admin/site-content/${key}`, {
-    locale: 'en',
-    data,
-    content
-  })
+  const { data: res } = await cmsApi.put(
+    `/admin/site-content/${key}`,
+    { locale: 'en', data, content },
+    NO_OVERLAY
+  )
   return flatten(res.data)
 }
 

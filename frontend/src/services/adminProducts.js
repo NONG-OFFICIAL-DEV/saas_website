@@ -1,5 +1,11 @@
 import cmsApi from '@/services/cmsApi'
 
+// Calls whose caller already renders its own loading/saving spinner — skip
+// the global overlay so it doesn't stack on top of those. Mutations with no
+// local indicator today (delete, and the blur-triggered nested feature/
+// pricing-tier/screenshot saves) intentionally keep the default overlay.
+const NO_OVERLAY = { meta: { loader: 'skip' } }
+
 function mapProduct(p) {
   if (!p) return p
   return {
@@ -13,13 +19,13 @@ function mapProduct(p) {
 // ── Products ────────────────────────────────────────────────────────────
 
 export async function listAllProducts() {
-  const { data } = await cmsApi.get('/admin/products')
+  const { data } = await cmsApi.get('/admin/products', NO_OVERLAY)
   return data.data ?? []
 }
 
 export async function getProductForEdit(id) {
   try {
-    const { data } = await cmsApi.get(`/admin/products/${id}`)
+    const { data } = await cmsApi.get(`/admin/products/${id}`, NO_OVERLAY)
     return mapProduct(data.data)
   } catch (err) {
     if (err.status === 404) return null
@@ -28,12 +34,12 @@ export async function getProductForEdit(id) {
 }
 
 export async function createProduct(payload) {
-  const { data } = await cmsApi.post('/admin/products', payload)
+  const { data } = await cmsApi.post('/admin/products', payload, NO_OVERLAY)
   return mapProduct(data.data)
 }
 
 export async function updateProduct(id, payload) {
-  const { data } = await cmsApi.put(`/admin/products/${id}`, payload)
+  const { data } = await cmsApi.put(`/admin/products/${id}`, payload, NO_OVERLAY)
   return mapProduct(data.data)
 }
 
@@ -92,7 +98,8 @@ export async function uploadProductMedia(file) {
   const form = new FormData()
   form.append('file', file)
   const { data } = await cmsApi.post('/admin/media', form, {
-    headers: { 'Content-Type': 'multipart/form-data' }
+    headers: { 'Content-Type': 'multipart/form-data' },
+    meta: { loader: 'skip' }
   })
   return data.data.url
 }

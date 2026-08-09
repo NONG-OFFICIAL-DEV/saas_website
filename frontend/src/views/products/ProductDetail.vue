@@ -139,60 +139,6 @@
     <!-- ── Pricing ── -->
     <PriceSection v-if="product.slug === 'nexstack-pos'" />
 
-    <section
-      v-else-if="product.product_pricing_tiers?.length"
-      id="pricing-cta"
-      class="section-pad bg-soft"
-    >
-      <v-container>
-        <div class="text-center mb-10" data-aos="fade-up">
-          <span class="section-tag">{{ t('product_detail.pricing_tag') }}</span>
-          <h2 class="section-title">
-            {{ t('product_detail.get_started_title') }}
-          </h2>
-        </div>
-        <div class="tiers-grid">
-          <div
-            v-for="tier in product.product_pricing_tiers"
-            :key="tier.id"
-            class="tier-card"
-            :class="{ 'tier-card--featured': tier.is_featured }"
-            data-aos="fade-up"
-          >
-            <h3 class="tier-name">{{ tier.name }}</h3>
-            <div class="tier-price">{{ tier.price_label }}</div>
-            <p v-if="tier.description" class="tier-desc">
-              {{ tier.description }}
-            </p>
-            <ul v-if="tier.features_text" class="tier-features">
-              <li
-                v-for="(line, i) in tier.features_text
-                  .split('\n')
-                  .filter(Boolean)"
-                :key="i"
-              >
-                <v-icon icon="mdi-check" size="14" />
-                {{ line }}
-              </li>
-            </ul>
-            <v-btn
-              :color="tier.is_featured ? 'primary' : undefined"
-              :variant="tier.is_featured ? 'flat' : 'outlined'"
-              rounded="lg"
-              block
-              @click="handleCta"
-            >
-              {{
-                tier.cta_label ||
-                product.cta_label ||
-                t('product_detail.get_started_btn')
-              }}
-            </v-btn>
-          </div>
-        </div>
-      </v-container>
-    </section>
-
     <!-- ── Final CTA / waitlist form ── -->
     <section id="cta" class="section-pad">
       <v-container class="text-center">

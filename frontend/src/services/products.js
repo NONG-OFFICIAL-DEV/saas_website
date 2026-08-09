@@ -13,14 +13,19 @@ function mapProduct(p) {
   }
 }
 
+// Both routes already render their own skeleton loader tied to the
+// products store's loading state — skip the global overlay so we don't
+// stack a second loading indicator on top of it.
+const NO_OVERLAY = { meta: { loader: 'skip' } }
+
 export async function getProducts() {
-  const { data } = await cmsApi.get('/public/products')
+  const { data } = await cmsApi.get('/public/products', NO_OVERLAY)
   return data.data ?? []
 }
 
 export async function getProductBySlug(slug) {
   try {
-    const { data } = await cmsApi.get(`/public/products/${slug}`)
+    const { data } = await cmsApi.get(`/public/products/${slug}`, NO_OVERLAY)
     return mapProduct(data.data)
   } catch (err) {
     if (err.status === 404) return null

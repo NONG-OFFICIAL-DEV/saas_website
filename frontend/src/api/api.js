@@ -9,20 +9,30 @@ const api = axios.create({
   }
 })
 
-// Get store instance
-const loadingStore = useLoadingStore()
-// Request Interceptor
+// useLoadingStore() is called inside the interceptors, not at module scope —
+// this module can be reached before main.js calls app.use(pinia), and
+// calling it too early throws "no active Pinia".
+//
+// Every current caller of this client is a customer-facing flow (plans,
+// registration steps, waitlist leads) and already renders its own
+// skeleton/button spinner — a full-screen overlay stacked on top of those
+// is a worse experience, not a better one. So the default here is 'skip';
+// pass { meta: { loader: 'overlay' } } to opt a specific call back in if a
+// future call genuinely has no local loading UI of its own.
 api.interceptors.request.use(async config => {
-  const loaderType = config.meta?.loader || 'overlay'
+  const loaderType = config.meta?.loader ?? 'skip'
   try {
     const token = localStorage.getItem('token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
-    // loadingStore.start(loaderType)
+    if (loaderType !== 'skip') {
+      useLoadingStore().start(loaderType)
+      config.meta = { ...config.meta, __loadingStarted: true }
+    }
     return config
   } catch (error) {
-    loadingStore.stop()
+    if (config.meta?.__loadingStarted) useLoadingStore().stop()
     return Promise.reject(error)
   }
 })
@@ -30,12 +40,12 @@ api.interceptors.request.use(async config => {
 // Response Interceptor
 api.interceptors.response.use(
   response => {
-    loadingStore.stop()
+    if (response.config.meta?.__loadingStarted) useLoadingStore().stop()
     return response
   },
 
   error => {
-    loadingStore.stop()
+    if (error.config?.meta?.__loadingStarted) useLoadingStore().stop()
     return Promise.reject(error)
   }
 )
