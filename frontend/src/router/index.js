@@ -39,11 +39,6 @@ const routes = [
     component: () => import('@/views/legal/PrivacyPage.vue')
   },
   {
-    path: '/emenu',
-    name: 'EMenuLanding',
-    component: () => import('@/views/EMenuLanding.vue')
-  },
-  {
     path: '/admin/login',
     name: 'admin-login',
     component: () => import('@/views/admin/AdminLogin.vue')

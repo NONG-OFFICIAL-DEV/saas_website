@@ -97,7 +97,7 @@
 </template>
 
 <script setup>
-  import { ref, reactive, computed, onMounted } from 'vue'
+  import { ref, reactive, computed, onMounted, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useRouter, useRoute } from 'vue-router'
 
@@ -122,8 +122,14 @@
   // ── Entry: came from pricing page (/pricing?plan=pro&cycle=3) ─────────────────
   const cameFromPricing = route.query.from === 'pricing'
 
+  // ── Entry: "Start Free Trial" CTA (navbar, floating dock) — no plan chosen
+  // yet, but the button already promised "free", so skip the picker and go
+  // straight to the free plan once it loads, instead of asking the user to
+  // choose between paid tiers first.
+  const cameFromTrialCta = route.query.intent === 'trial'
+
   // ── Page step ─────────────────────────────────────────────────────────────────
-  const pageStep = ref(cameFromPricing ? 'business' : 'plan')
+  const pageStep = ref(cameFromPricing || cameFromTrialCta ? 'business' : 'plan')
 
   // ── 3-step header (persistent across the whole flow) ──────────────────────────
   const STEP_ORDER = ['plan', 'business', 'account']
@@ -162,6 +168,27 @@
     selection.value = payload
     selectedPlanId.value = payload.plan_id
   }
+
+  // Trial-CTA entry has no plan id from the URL (unlike the pricing-page
+  // entry) — resolve it to the actual free plan once the plans list loads.
+  watch(
+    () => store.plans,
+    plans => {
+      if (!cameFromTrialCta || selectedPlanId.value || !plans?.length) return
+      const freePlan = plans.find(p => p.code === 'free')
+      if (!freePlan) return
+      const cycle = (freePlan.billing_cycles ?? []).find(c => c.months === 1)
+      selectedPlanId.value = freePlan.id
+      selection.value = {
+        plan_id: freePlan.id,
+        billing_cycle_id: cycle?.id ?? null,
+        billing_months: 1,
+        discount_percent: 0,
+        cycle_label: cycle?.label ?? 'Monthly'
+      }
+    },
+    { immediate: true }
+  )
 
   // ── Derived: chosen plan object ───────────────────────────────────────────────
   const chosenPlan = computed(

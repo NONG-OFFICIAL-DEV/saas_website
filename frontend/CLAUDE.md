@@ -51,7 +51,7 @@ Every CMS-backed Pinia store (`stores/products.js`, `stores/siteContent.js`) fol
 
 Three route groups with different layouts:
 - **Public marketing site**: nested under `LandingLayout.vue` (`/`, `/products`, `/products/:slug`, `/about`) — shares `AppNavbar`, `AppFooter`, `FloatingCtaDock`.
-- **Standalone pages**: `/auth/register`, `/terms`, `/privacy`, `/emenu` — no shared layout, self-contained.
+- **Standalone pages**: `/auth/register`, `/terms`, `/privacy`, — no shared layout, self-contained.
 - **Admin**: nested under `views/admin/AdminLayout.vue` (`/admin`, `/admin/products/new`, `/admin/products/:id/edit`, `/admin/site-content`) — Vuetify `v-navigation-drawer` sidebar layout, separate from the public nav entirely.
 
 `scrollBehavior` resets scroll to top on normal navigation, smooth-scrolls to hash targets (`/#contact`), and restores position on browser back/forward — this is deliberate, don't remove it.

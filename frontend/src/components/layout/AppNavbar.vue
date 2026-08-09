@@ -142,7 +142,7 @@
           variant="flat"
           size="small"
           class="cta-nav-btn d-none d-md-flex px-5"
-          to="/auth/register"
+          to="/auth/register?intent=trial"
         >
           {{ t('landing.hero.cta_primary') }}
         </v-btn>
@@ -271,7 +271,7 @@
           ></v-switch>
         </div>
 
-        <router-link to="/auth/register" class="drawer-cta" @click="mobileOpen = false">
+        <router-link to="/auth/register?intent=trial" class="drawer-cta" @click="mobileOpen = false">
           {{ t('landing.hero.cta_primary') }}
           <svg
             xmlns="http://www.w3.org/2000/svg"

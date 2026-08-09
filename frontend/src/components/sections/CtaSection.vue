@@ -53,7 +53,14 @@ const { t } = useI18n()
 <style scoped>
 .cta-block {
   position: relative;
-  background: linear-gradient(120deg, #1d4ed8 0%, #4f46e5 100%);
+  /* Derived from the theme's actual primary token (not a hardcoded hex)
+     so this correctly follows light/dark mode instead of looking
+     identical in both. */
+  background: linear-gradient(
+    120deg,
+    rgb(var(--v-theme-primary)) 0%,
+    color-mix(in srgb, rgb(var(--v-theme-primary)), black 28%) 100%
+  );
   border-radius: 24px;
   padding: 56px 32px;
 }
@@ -81,7 +88,7 @@ const { t } = useI18n()
 }
 
 .cta-btn-solid {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18) !important;
+  box-shadow: 0 8px 24px rgba(var(--v-theme-on-surface), 0.2) !important;
 }
 .cta-btn-outline {
   color: #fff !important;

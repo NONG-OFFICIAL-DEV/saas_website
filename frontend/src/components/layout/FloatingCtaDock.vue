@@ -11,7 +11,7 @@
         <v-icon icon="mdi-send-outline" size="18" />
         <span class="dock-label">{{ t('dock.telegram') }}</span>
       </a>
-      <router-link to="/auth/register" class="dock-btn dock-btn--demo" :aria-label="t('dock.trial')">
+      <router-link to="/auth/register?intent=trial" class="dock-btn dock-btn--demo" :aria-label="t('dock.trial')">
         <v-icon icon="mdi-rocket-launch-outline" size="18" />
         <span class="dock-label">{{ t('dock.trial') }}</span>
       </router-link>
