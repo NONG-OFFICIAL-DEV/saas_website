@@ -71,7 +71,7 @@
 
   .hub-grid {
     display: grid;
-    gap: 24px;
+    gap: 28px;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   }
 

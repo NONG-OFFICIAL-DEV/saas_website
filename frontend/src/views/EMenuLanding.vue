@@ -279,7 +279,7 @@
         </section>
 
         <!-- ── HOW IT WORKS ────────────────────────────────────────────────── -->
-        <section class="section-pad bg-soft" id="demo">
+        <section class="section-pad section-tint-sky" id="demo">
           <v-container>
             <div class="text-center mb-14" data-aos="fade-up">
               <div class="section-tag">{{ t('emenu.how.tag') }}</div>
@@ -460,7 +460,7 @@
         </section>
 
         <!-- ── FEATURE CARDS GRID ─────────────────────────────────────────── -->
-        <section class="section-pad bg-soft">
+        <section class="section-pad section-tint-mint">
           <v-container>
             <div class="text-center mb-12" data-aos="fade-up">
               <div class="section-tag">{{ t('emenu.more.tag') }}</div>
@@ -1086,6 +1086,12 @@
   }
   .bg-soft {
     background: rgba(var(--v-theme-surface-variant), 0.25);
+  }
+  .section-tint-sky {
+    background: rgba(var(--v-theme-info), 0.06);
+  }
+  .section-tint-mint {
+    background: rgba(var(--v-theme-success), 0.055);
   }
   .section-tag {
     font-size: 0.7rem;

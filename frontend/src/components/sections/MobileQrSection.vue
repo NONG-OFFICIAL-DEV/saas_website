@@ -1,5 +1,5 @@
 <template>
-  <section class="section-pad bg-soft" id="mobile">
+  <section class="section-pad section-tint-mint" id="mobile">
     <v-container>
       <v-row align="center" direction="row-reverse">
         <v-col cols="12" md="6" data-aos="fade-right" data-aos-delay="100">

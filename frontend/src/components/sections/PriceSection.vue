@@ -1,5 +1,5 @@
 <template>
-  <section id="pricing" class="section-pad bg-soft">
+  <section id="pricing" class="section-pad section-tint-peach">
     <v-container>
       <div class="blob blob-1" aria-hidden="true" />
       <div class="blob blob-2" aria-hidden="true" />
@@ -207,6 +207,7 @@
               :color="plan.popular ? 'primary' : undefined"
               :variant="plan.popular ? 'flat' : 'outlined'"
               rounded="lg"
+              size="small"
               block
               :disabled="!isPlanAvailableForCycle(plan)"
               append-icon="mdi-arrow-right"
@@ -551,9 +552,10 @@
     position: relative;
     border-radius: 22px;
     padding: 28px 24px;
-    background: rgba(var(--v-theme-surface), 0.72);
+    background: rgba(var(--v-theme-surface), 0.85);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(var(--v-theme-on-surface), 0.07);
+    box-shadow: 0 12px 28px rgba(var(--v-theme-on-surface), 0.06);
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -566,7 +568,7 @@
   }
   .plan-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.09);
+    box-shadow: 0 20px 44px rgba(var(--v-theme-on-surface), 0.1);
   }
   @keyframes card-rise {
     from {
@@ -700,6 +702,11 @@
 
   /* ── CTA ── */
   .plan-cta {
+    /* v-btn's `block` prop sets flex: 1 0 auto internally (meant for a
+       horizontal row) — inside this vertical flex column that makes the
+       button itself stretch to fill leftover height. Pin it back down;
+       .feature-list's flex-grow: 1 is what should absorb that space. */
+    flex: none !important;
     margin-top: auto;
   }
 

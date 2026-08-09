@@ -1,7 +1,8 @@
 html,
 body {
   scroll-behavior: smooth;
-  font-family: 'Google Sans', serif !important;
+  /* Hanuman is the Khmer fallback — Google Sans has no Khmer glyphs. */
+  font-family: 'Google Sans', 'Hanuman', sans-serif !important;
   /* height: 100vh; */
   overflow-x: hidden;
   max-width: 100vw;
@@ -18,5 +19,5 @@ body {
 .text-h4,
 .text-h5,
 .text-h6 {
-  font-family: 'Google Sans', serif !important;
+  font-family: 'Google Sans', 'Hanuman', sans-serif !important;
 }

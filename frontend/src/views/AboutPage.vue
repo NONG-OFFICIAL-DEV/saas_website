@@ -42,7 +42,7 @@
     </v-container>
   </section>
 
-  <section class="section-pad bg-soft">
+  <section class="section-pad section-tint-peach">
     <v-container>
       <div class="text-center mb-10" data-aos="fade-up">
         <span class="section-tag">{{ about.how_tag }}</span>
@@ -145,12 +145,20 @@
   .value-card {
     position: relative;
     flex: 1 1 220px;
-    padding: 26px;
-    border-radius: 16px;
-    background: rgba(var(--v-theme-surface), 0.9);
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.07);
+    padding: 28px 26px;
+    border-radius: 20px;
+    background: rgb(var(--v-theme-surface));
+    border: 1px solid rgba(var(--v-theme-on-surface), 0.06);
+    box-shadow: 0 12px 28px rgba(var(--v-theme-on-surface), 0.06);
     text-align: center;
     overflow: hidden;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .value-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 36px rgba(var(--v-theme-on-surface), 0.1);
   }
   .value-num {
     position: absolute;

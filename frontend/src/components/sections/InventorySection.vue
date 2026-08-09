@@ -1,5 +1,5 @@
 <template>
-  <section class="section-pad" id="backoffice">
+  <section class="section-pad section-tint-lavender" id="backoffice">
     <v-container>
       <v-row align="center">
         <!-- ── Text column ── -->

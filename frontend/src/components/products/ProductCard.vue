@@ -54,8 +54,11 @@
     gap: 14px;
     padding: 30px 28px;
     border-radius: 22px;
-    background: rgba(var(--v-theme-surface), 0.9);
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.09);
+    background: rgb(var(--v-theme-surface));
+    border: 1px solid rgba(var(--v-theme-on-surface), 0.07);
+    box-shadow:
+      0 14px 32px rgba(var(--v-theme-on-surface), 0.07),
+      0 2px 8px rgba(var(--v-theme-on-surface), 0.04);
     text-decoration: none;
     color: rgb(var(--v-theme-on-surface));
     transition:
@@ -67,7 +70,7 @@
   .product-card:hover {
     transform: translateY(-6px);
     box-shadow:
-      0 20px 44px rgba(0, 0, 0, 0.14),
+      0 22px 48px rgba(var(--v-theme-on-surface), 0.12),
       0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
     border-color: color-mix(in srgb, var(--accent) 45%, transparent);
   }

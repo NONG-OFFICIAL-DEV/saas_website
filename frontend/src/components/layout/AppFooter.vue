@@ -443,9 +443,10 @@
     align-items: center;
     gap: 12px;
     padding: 14px 16px;
-    border-radius: 14px;
-    border: 1px solid rgba(var(--v-theme-primary), 0.2);
+    border-radius: 16px;
+    border: 1px solid rgba(var(--v-theme-primary), 0.18);
     background: rgba(var(--v-theme-primary), 0.06);
+    box-shadow: 0 8px 20px rgba(var(--v-theme-on-surface), 0.04);
     color: rgb(var(--v-theme-primary));
     margin-bottom: 28px;
   }
@@ -479,7 +480,7 @@
   .social-btn {
     width: 38px;
     height: 38px;
-    border-radius: 11px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;

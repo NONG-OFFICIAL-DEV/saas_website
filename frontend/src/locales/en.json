@@ -668,5 +668,30 @@
     "social_telegram": "Telegram",
     "social_facebook": "Facebook",
     "social_tiktok": "TikTok"
+  },
+  "studio_pricing": {
+    "eyebrow": "Pricing",
+    "title": "Plans for Every Studio",
+    "subtitle": "Start free, upgrade as your studio grows.",
+    "billing_cycle": "Billing cycle",
+    "monthly": "Monthly",
+    "quarterly": "Quarterly",
+    "yearly": "Yearly",
+    "popular": "Most popular",
+    "per_month": "/ month",
+    "trial_days": "{days}-day free trial",
+    "unavailable": "Pricing is temporarily unavailable — please check back shortly.",
+    "cta_default": "Get started",
+    "cta_trial": "Start free trial",
+    "feature_users": "Up to {n} users",
+    "feature_users_unlimited": "Unlimited users",
+    "feature_storage": "{n} GB storage",
+    "feature_storage_unlimited": "Unlimited storage",
+    "feature_orders": "{n} orders / month",
+    "feature_orders_unlimited": "Unlimited orders",
+    "feature_online_gallery": "Online client galleries",
+    "feature_reports": "Reporting & analytics",
+    "feature_telegram": "Telegram notifications",
+    "feature_api": "API access"
   }
 }

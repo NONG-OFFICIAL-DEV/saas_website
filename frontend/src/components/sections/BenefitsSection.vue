@@ -1,5 +1,5 @@
 <template>
-  <section class="section-pad" id="benefits">
+  <section class="section-pad section-tint-mint" id="benefits">
     <v-container>
       <div class="text-center mb-12" data-aos="fade-up">
         <span class="section-tag">{{ t('benefits.eyebrow') }}</span>
@@ -10,7 +10,7 @@
         <div
           v-for="(b, i) in items"
           :key="b.key"
-          class="benefit-item"
+          class="benefit-item clay-surface clay-surface--interactive"
           data-aos="fade-up"
           :data-aos-delay="(i % 4) * 80"
         >
@@ -49,6 +49,7 @@
 }
 .benefit-item {
   text-align: center;
+  padding: 26px 20px;
 }
 .benefit-icon {
   width: 44px;

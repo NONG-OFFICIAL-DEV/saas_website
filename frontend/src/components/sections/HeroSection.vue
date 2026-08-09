@@ -1,5 +1,5 @@
 <template>
-  <section class="hero-section">
+  <section class="hero-section section-tint-lavender">
     <!-- Background orbs -->
     <div class="hero-bg-orb orb-1" />
     <div class="hero-bg-orb orb-2" />
@@ -193,11 +193,12 @@ onMounted(() => store.fetchHero())
   z-index: 1;
 }
 .stat-pill {
-  background: rgba(var(--v-theme-on-surface), 0.035);
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.07);
-  border-radius: 16px;
+  background: rgb(var(--v-theme-surface));
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.06);
+  border-radius: 18px;
   padding: 16px 8px;
   text-align: center;
+  box-shadow: 0 8px 20px rgba(var(--v-theme-on-surface), 0.05);
 }
 .stat-num {
   font-size: 1.9rem;

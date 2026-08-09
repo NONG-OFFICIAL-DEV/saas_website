@@ -1,5 +1,5 @@
 <template>
-  <section class="section-pad bg-soft" id="products">
+  <section class="section-pad section-tint-sky" id="products">
     <v-container>
       <div class="text-center mb-10" data-aos="fade-up">
         <span class="section-tag">{{ t('products_teaser.tag') }}</span>
@@ -60,7 +60,7 @@
   }
   .teaser-grid {
     display: grid;
-    gap: 24px;
+    gap: 28px;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     max-width: 780px;
     margin: 0 auto;

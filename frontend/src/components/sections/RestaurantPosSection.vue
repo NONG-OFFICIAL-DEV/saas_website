@@ -1,5 +1,5 @@
 <template>
-  <section class="section-pad" id="pos">
+  <section class="section-pad section-tint-sky" id="pos">
     <v-container>
       <v-row align="center">
         <!-- ── Text column ── -->

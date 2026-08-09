@@ -462,9 +462,9 @@
     right: 0;
     min-width: 150px;
     background: rgb(var(--v-theme-surface));
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.1);
-    border-radius: 14px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    border-radius: 16px;
+    box-shadow: 0 14px 34px rgba(var(--v-theme-on-surface), 0.14);
     padding: 6px;
     z-index: 2000;
   }

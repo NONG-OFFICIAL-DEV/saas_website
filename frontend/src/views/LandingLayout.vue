@@ -59,7 +59,10 @@
 
   .landing-layout,
   .landing-layout * {
-    font-family: 'Google Sans', serif;
+    /* Hanuman is the Khmer fallback — Google Sans has no Khmer glyphs at
+       all, so without this Khmer text silently fell back to whatever
+       generic serif the browser picked. */
+    font-family: 'Google Sans', 'Hanuman', sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
     box-sizing: border-box;
@@ -75,6 +78,76 @@
   }
   .bg-soft {
     background: rgba(var(--v-theme-surface-variant), 0.05);
+  }
+
+  /*
+   * ── Soft section-tint palette ──────────────────────────────────────
+   * Very low-opacity washes derived from the existing theme tokens
+   * (not new hues) so each major section reads as a distinct "zone"
+   * while the page stays mostly neutral. rgba() driven off the theme's
+   * own RGB-channel custom properties means these adapt automatically
+   * between light/dark — no separate dark-mode overrides needed.
+   */
+  .section-tint-lavender {
+    background: rgba(var(--v-theme-primary), 0.05);
+  }
+  .section-tint-sky {
+    background: rgba(var(--v-theme-info), 0.06);
+  }
+  .section-tint-mint {
+    background: rgba(var(--v-theme-success), 0.055);
+  }
+  .section-tint-peach {
+    background: rgba(var(--v-theme-warning), 0.055);
+  }
+  .section-tint-neutral {
+    background: rgba(var(--v-theme-on-surface), 0.03);
+  }
+
+  /*
+   * ── Claymorphism surface ────────────────────────────────────────────
+   * Soft rounded elevation for cards. Shadow color rides on on-surface
+   * (near-black in light mode, near-white in dark mode) so one rule
+   * works correctly in both themes without duplication.
+   */
+  .clay-surface {
+    border-radius: 22px;
+    background: rgb(var(--v-theme-surface));
+    border: 1px solid rgba(var(--v-theme-on-surface), 0.06);
+    box-shadow:
+      0 14px 32px rgba(var(--v-theme-on-surface), 0.08),
+      0 2px 8px rgba(var(--v-theme-on-surface), 0.04);
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .clay-surface--interactive:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 22px 46px rgba(var(--v-theme-on-surface), 0.12),
+      0 4px 14px rgba(var(--v-theme-on-surface), 0.06);
+  }
+
+  /*
+   * ── Buttons ──────────────────────────────────────────────────────────
+   * Scoped to .landing-layout only — the admin panel is a separate root
+   * (AdminLayout's v-navigation-drawer), so this never touches it.
+   * Flat buttons get a soft brand-colored lift; outlined/tonal buttons
+   * (secondary actions) get a soft tinted background + brand-colored
+   * text/border, unless a component already forces its own color
+   * (e.g. CtaSection's white-on-gradient buttons keep their own rule).
+   */
+  .landing-layout .v-btn.v-btn--variant-flat:not(.cta-btn-solid) {
+    box-shadow: 0 10px 26px rgba(var(--v-theme-primary), 0.28);
+  }
+  .landing-layout .v-btn.v-btn--variant-outlined:not(.cta-btn-outline),
+  .landing-layout .v-btn.v-btn--variant-tonal {
+    background: rgba(var(--v-theme-primary), 0.06);
+    color: rgb(var(--v-theme-primary)) !important;
+    border-color: rgba(var(--v-theme-primary), 0.35) !important;
+  }
+  .landing-layout .v-btn:active {
+    transform: scale(0.97);
   }
 
   .section-tag {

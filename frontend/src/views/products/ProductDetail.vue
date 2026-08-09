@@ -73,7 +73,7 @@
     <!-- ── Features ── -->
     <section
       v-if="product.product_features?.length"
-      class="section-pad bg-soft"
+      class="section-pad section-tint-mint"
     >
       <v-container>
         <div class="text-center mb-10" data-aos="fade-up">
@@ -138,6 +138,7 @@
 
     <!-- ── Pricing ── -->
     <PriceSection v-if="product.slug === 'nexstack-pos'" />
+    <StudioPriceSection v-else-if="product.slug === 'studio-management'" @select-plan="scrollToCta" />
 
     <!-- ── Final CTA / waitlist form ── -->
     <section id="cta" class="section-pad">
@@ -235,6 +236,7 @@
 
   import Geometric3D from '@/components/ui/Geometric3D.vue'
   import PriceSection from '@/components/sections/PriceSection.vue'
+  import StudioPriceSection from '@/components/sections/StudioPriceSection.vue'
   import RestaurantPosSection from '@/components/sections/RestaurantPosSection.vue'
   import InventorySection from '@/components/sections/InventorySection.vue'
   import MobileQrSection from '@/components/sections/MobileQrSection.vue'
@@ -385,6 +387,9 @@
   }
   .hero-image {
     max-height: 360px;
+    border-radius: 20px !important;
+    overflow: hidden;
+    box-shadow: 0 18px 40px rgba(var(--v-theme-on-surface), 0.1);
   }
   .hero-geo {
     width: 100%;
@@ -399,10 +404,18 @@
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   }
   .feature-card {
-    padding: 24px;
-    border-radius: 16px;
-    background: rgba(var(--v-theme-surface), 0.9);
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.07);
+    padding: 26px 24px;
+    border-radius: 20px;
+    background: rgb(var(--v-theme-surface));
+    border: 1px solid rgba(var(--v-theme-on-surface), 0.06);
+    box-shadow: 0 12px 28px rgba(var(--v-theme-on-surface), 0.06);
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .feature-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 36px rgba(var(--v-theme-on-surface), 0.1);
   }
   .feature-icon {
     width: 44px;
@@ -432,54 +445,16 @@
     gap: 20px;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
+  .screenshot :deep(.v-img) {
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 14px 32px rgba(var(--v-theme-on-surface), 0.08);
+  }
   .screenshot figcaption {
     text-align: center;
     font-size: 0.82rem;
     color: rgba(var(--v-theme-on-surface), 0.55);
     margin-top: 8px;
-  }
-
-  .tiers-grid {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    max-width: 720px;
-    margin: 0 auto;
-  }
-  .tier-card {
-    padding: 26px;
-    border-radius: 18px;
-    background: rgba(var(--v-theme-surface), 0.9);
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .tier-card--featured {
-    border-color: rgba(var(--v-theme-primary), 0.4);
-    box-shadow: 0 12px 32px rgba(var(--v-theme-primary), 0.12);
-  }
-  .tier-name {
-    font-weight: 800;
-    margin: 0;
-  }
-  .tier-price {
-    font-size: 1.6rem;
-    font-weight: 900;
-  }
-  .tier-desc {
-    font-size: 0.85rem;
-    color: rgba(var(--v-theme-on-surface), 0.6);
-    margin: 0;
-  }
-  .tier-features {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    font-size: 0.85rem;
   }
 
   .waitlist-form {
