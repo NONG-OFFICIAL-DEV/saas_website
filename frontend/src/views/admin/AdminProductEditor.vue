@@ -130,7 +130,7 @@
 
       <template v-if="isNew">
         <v-alert type="info" variant="tonal" rounded="lg">
-          Save this product first to add features, pricing tiers, and screenshots.
+          Save this product first to add features and screenshots.
         </v-alert>
       </template>
 
@@ -162,51 +162,6 @@
             </v-row>
           </div>
           <p v-if="!features.length" class="nested-empty">No features yet.</p>
-        </section>
-
-        <!-- ── Pricing tiers ── -->
-        <section class="editor-section">
-          <div class="section-row">
-            <h2 class="section-heading">Pricing tiers</h2>
-            <v-btn size="small" variant="tonal" prepend-icon="mdi-plus" @click="addPricingTier">Add tier</v-btn>
-          </div>
-
-          <div v-for="tier in pricingTiers" :key="tier.id" class="nested-card">
-            <v-row dense>
-              <v-col cols="12" sm="3">
-                <v-text-field v-model="tier.name" label="Name" density="compact" @blur="savePricingTier(tier)" />
-              </v-col>
-              <v-col cols="12" sm="3">
-                <v-text-field v-model="tier.price_label" label="Price label" density="compact" @blur="savePricingTier(tier)" />
-              </v-col>
-              <v-col cols="12" sm="4">
-                <v-text-field v-model="tier.description" label="Description" density="compact" @blur="savePricingTier(tier)" />
-              </v-col>
-              <v-col cols="12" sm="1">
-                <v-text-field v-model.number="tier.sort_order" type="number" label="Order" density="compact" @blur="savePricingTier(tier)" />
-              </v-col>
-              <v-col cols="12" sm="1" class="d-flex align-center justify-end">
-                <v-btn icon="mdi-delete-outline" size="small" variant="text" color="error" @click="removePricingTier(tier)" />
-              </v-col>
-              <v-col cols="12" sm="8">
-                <v-textarea
-                  v-model="tier.features_text"
-                  label="Features (one per line)"
-                  density="compact"
-                  rows="2"
-                  auto-grow
-                  @blur="savePricingTier(tier)"
-                />
-              </v-col>
-              <v-col cols="12" sm="2">
-                <v-text-field v-model="tier.cta_label" label="CTA label override" density="compact" @blur="savePricingTier(tier)" />
-              </v-col>
-              <v-col cols="12" sm="2" class="d-flex align-center">
-                <v-checkbox v-model="tier.is_featured" label="Featured" density="compact" hide-details @change="savePricingTier(tier)" />
-              </v-col>
-            </v-row>
-          </div>
-          <p v-if="!pricingTiers.length" class="nested-empty">No pricing tiers yet.</p>
         </section>
 
         <!-- ── Screenshots ── -->
@@ -259,9 +214,6 @@
     createFeature,
     updateFeature,
     deleteFeature,
-    createPricingTier,
-    updatePricingTier,
-    deletePricingTier,
     createScreenshot,
     updateScreenshot,
     deleteScreenshot,
@@ -295,7 +247,6 @@
   })
 
   const features = ref([])
-  const pricingTiers = ref([])
   const screenshots = ref([])
 
   const loading = ref(false)
@@ -340,7 +291,6 @@
         is_published: data.is_published
       })
       features.value = data.product_features ?? []
-      pricingTiers.value = data.product_pricing_tiers ?? []
       screenshots.value = data.product_screenshots ?? []
     } catch (err) {
       error.value = err.message
@@ -416,48 +366,6 @@
     try {
       await deleteFeature(f.id)
       features.value = features.value.filter(x => x.id !== f.id)
-    } catch (err) {
-      error.value = err.message
-    }
-  }
-
-  // ── Pricing tiers ──
-  async function addPricingTier() {
-    try {
-      const created = await createPricingTier(productId.value, {
-        name: 'New tier',
-        price_label: '',
-        description: '',
-        features_text: '',
-        is_featured: false,
-        cta_label: '',
-        sort_order: pricingTiers.value.length + 1
-      })
-      pricingTiers.value.push(created)
-    } catch (err) {
-      error.value = err.message
-    }
-  }
-  async function savePricingTier(tier) {
-    try {
-      await updatePricingTier(tier.id, {
-        name: tier.name,
-        price_label: tier.price_label,
-        description: tier.description,
-        features_text: tier.features_text,
-        is_featured: tier.is_featured,
-        cta_label: tier.cta_label,
-        sort_order: tier.sort_order
-      })
-    } catch (err) {
-      error.value = err.message
-    }
-  }
-  async function removePricingTier(tier) {
-    if (!window.confirm('Delete this pricing tier?')) return
-    try {
-      await deletePricingTier(tier.id)
-      pricingTiers.value = pricingTiers.value.filter(x => x.id !== tier.id)
     } catch (err) {
       error.value = err.message
     }

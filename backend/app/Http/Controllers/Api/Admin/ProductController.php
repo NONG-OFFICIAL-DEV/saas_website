@@ -63,7 +63,7 @@ class ProductController extends Controller
     /** Full detail for the admin editor: every translation + nested content. */
     public function show(Product $product)
     {
-        $product->load(['translations', 'features.translations', 'pricingTiers.translations', 'screenshots.translations']);
+        $product->load(['translations', 'features.translations', 'screenshots.translations']);
 
         return response()->json([
             'success' => true,
@@ -89,7 +89,7 @@ class ProductController extends Controller
             );
         }
 
-        $product->load(['translations', 'features.translations', 'pricingTiers.translations', 'screenshots.translations']);
+        $product->load(['translations', 'features.translations', 'screenshots.translations']);
 
         return response()->json([
             'success' => true,

@@ -38,11 +38,6 @@ class Product extends Model
         return $this->hasMany(ProductFeature::class)->orderBy('sort_order');
     }
 
-    public function pricingTiers()
-    {
-        return $this->hasMany(ProductPricingTier::class)->orderBy('sort_order');
-    }
-
     public function screenshots()
     {
         return $this->hasMany(ProductScreenshot::class)->orderBy('sort_order');

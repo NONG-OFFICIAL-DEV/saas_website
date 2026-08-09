@@ -3,7 +3,7 @@ import cmsApi from '@/services/cmsApi'
 // Calls whose caller already renders its own loading/saving spinner — skip
 // the global overlay so it doesn't stack on top of those. Mutations with no
 // local indicator today (delete, and the blur-triggered nested feature/
-// pricing-tier/screenshot saves) intentionally keep the default overlay.
+// screenshot saves) intentionally keep the default overlay.
 const NO_OVERLAY = { meta: { loader: 'skip' } }
 
 function mapProduct(p) {
@@ -11,7 +11,6 @@ function mapProduct(p) {
   return {
     ...p,
     product_features: p.features ?? [],
-    product_pricing_tiers: p.pricing_tiers ?? [],
     product_screenshots: p.screenshots ?? []
   }
 }
@@ -60,21 +59,6 @@ export async function updateFeature(id, payload) {
 
 export async function deleteFeature(id) {
   await cmsApi.delete(`/admin/features/${id}`)
-}
-
-// ── Pricing tiers ───────────────────────────────────────────────────────
-
-export async function createPricingTier(productId, payload) {
-  const { data } = await cmsApi.post(`/admin/products/${productId}/pricing-tiers`, payload)
-  return data.data
-}
-
-export async function updatePricingTier(id, payload) {
-  await cmsApi.put(`/admin/pricing-tiers/${id}`, payload)
-}
-
-export async function deletePricingTier(id) {
-  await cmsApi.delete(`/admin/pricing-tiers/${id}`)
 }
 
 // ── Screenshots ─────────────────────────────────────────────────────────

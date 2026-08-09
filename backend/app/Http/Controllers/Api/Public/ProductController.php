@@ -23,7 +23,7 @@ class ProductController extends Controller
     /** Product detail page — published only, with all nested content. */
     public function show(Request $request, string $slug)
     {
-        $product = Product::with(['translations', 'features.translations', 'pricingTiers.translations', 'screenshots.translations'])
+        $product = Product::with(['translations', 'features.translations', 'screenshots.translations'])
             ->where('slug', $slug)
             ->where('is_published', true)
             ->first();

@@ -67,14 +67,5 @@ class ProductSeeder extends Seeder
             $feature->translations()->create(['locale' => 'en', 'title' => $title, 'description' => $description]);
         }
 
-        $tier = $studio->pricingTiers()->create(['is_featured' => true, 'sort_order' => 1]);
-        $tier->translations()->create([
-            'locale' => 'en',
-            'name' => 'Early Access',
-            'price_label' => 'Free during beta',
-            'description' => 'Be one of the first studios on the platform.',
-            'features_text' => "Unlimited bookings\nStaff scheduling\nEmail support",
-            'cta_label' => 'Join Waitlist',
-        ]);
     }
 }

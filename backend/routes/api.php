@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\Admin\MediaController;
 use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Api\Admin\ProductFeatureController;
-use App\Http\Controllers\Api\Admin\ProductPricingTierController;
 use App\Http\Controllers\Api\Admin\ProductScreenshotController;
 use App\Http\Controllers\Api\Admin\SiteContentController as AdminSiteContentController;
 use App\Http\Controllers\Api\AuthController;
@@ -31,10 +30,6 @@ Route::prefix('v1/admin')->middleware('auth:sanctum')->group(function () {
     Route::post('products/{product}/features', [ProductFeatureController::class, 'store']);
     Route::put('features/{feature}', [ProductFeatureController::class, 'update']);
     Route::delete('features/{feature}', [ProductFeatureController::class, 'destroy']);
-
-    Route::post('products/{product}/pricing-tiers', [ProductPricingTierController::class, 'store']);
-    Route::put('pricing-tiers/{pricingTier}', [ProductPricingTierController::class, 'update']);
-    Route::delete('pricing-tiers/{pricingTier}', [ProductPricingTierController::class, 'destroy']);
 
     Route::post('products/{product}/screenshots', [ProductScreenshotController::class, 'store']);
     Route::put('screenshots/{screenshot}', [ProductScreenshotController::class, 'update']);

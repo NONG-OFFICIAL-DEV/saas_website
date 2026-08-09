@@ -8,7 +8,6 @@ function mapProduct(p) {
   return {
     ...p,
     product_features: p.features ?? [],
-    product_pricing_tiers: p.pricing_tiers ?? [],
     product_screenshots: p.screenshots ?? []
   }
 }

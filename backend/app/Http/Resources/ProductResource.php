@@ -34,9 +34,11 @@ class ProductResource extends JsonResource
             'seo_title' => $t?->seo_title,
             'seo_description' => $t?->seo_description,
 
-            // Nested content — only present when eager-loaded by the controller
+            // Nested content — only present when eager-loaded by the controller.
+            // No pricing/plan data here by design — plans are owned and
+            // managed entirely by the existing SaaS billing system, not
+            // this CMS. The frontend fetches a product's plans from there.
             'features' => ProductFeatureResource::collection($this->whenLoaded('features')),
-            'pricing_tiers' => ProductPricingTierResource::collection($this->whenLoaded('pricingTiers')),
             'screenshots' => ProductScreenshotResource::collection($this->whenLoaded('screenshots')),
 
             // Raw translations — only for the admin editor (needs every locale at once)
