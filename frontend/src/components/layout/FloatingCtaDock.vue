@@ -11,20 +11,33 @@
         <v-icon icon="mdi-send-outline" size="18" />
         <span class="dock-label">{{ t('dock.telegram') }}</span>
       </a>
-      <router-link to="/auth/register?intent=trial" class="dock-btn dock-btn--demo" :aria-label="t('dock.trial')">
+      <component
+        :is="trialLinkBindings.to ? 'router-link' : 'a'"
+        v-bind="trialLinkBindings"
+        class="dock-btn dock-btn--demo"
+        :aria-label="t('dock.trial')"
+      >
         <v-icon icon="mdi-rocket-launch-outline" size="18" />
         <span class="dock-label">{{ t('dock.trial') }}</span>
-      </router-link>
+      </component>
     </div>
   </Transition>
 </template>
 
 <script setup>
-  import { ref, onMounted, onUnmounted } from 'vue'
+  import { ref, computed, onMounted, onUnmounted } from 'vue'
   import { useI18n } from 'vue-i18n'
+  import { useProductContextStore } from '@/stores/productContext'
+  import { getTrialLink } from '@/config/productTrials'
 
   const { t } = useI18n()
+  const productContext = useProductContextStore()
   const visible = ref(false)
+
+  const trialLinkBindings = computed(() => {
+    const link = getTrialLink(productContext.activeSlug)
+    return link.href ? { href: link.href, target: '_blank', rel: 'noopener' } : { to: link.to }
+  })
 
   function onScroll() {
     visible.value = window.scrollY > 480

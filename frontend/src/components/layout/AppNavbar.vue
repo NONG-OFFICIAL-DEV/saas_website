@@ -142,7 +142,7 @@
           variant="flat"
           size="small"
           class="cta-nav-btn d-none d-md-flex px-5"
-          to="/auth/register?intent=trial"
+          v-bind="trialLinkBindings"
         >
           {{ t('landing.hero.cta_primary') }}
         </v-btn>
@@ -271,7 +271,12 @@
           ></v-switch>
         </div>
 
-        <router-link to="/auth/register?intent=trial" class="drawer-cta" @click="mobileOpen = false">
+        <component
+          :is="trialLinkBindings.to ? 'router-link' : 'a'"
+          v-bind="trialLinkBindings"
+          class="drawer-cta"
+          @click="mobileOpen = false"
+        >
           {{ t('landing.hero.cta_primary') }}
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -287,7 +292,7 @@
             <line x1="5" y1="12" x2="19" y2="12" />
             <polyline points="12 5 19 12 12 19" />
           </svg>
-        </router-link>
+        </component>
       </div>
     </Transition>
   </Teleport>
@@ -297,9 +302,20 @@
   import { ref, computed, onMounted, onUnmounted } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useTheme } from 'vuetify'
+  import { useProductContextStore } from '@/stores/productContext'
+  import { getTrialLink } from '@/config/productTrials'
 
   const { t, locale } = useI18n()
   const theme = useTheme()
+  const productContext = useProductContextStore()
+
+  // "Start Free Trial" must route to whichever product the visitor is
+  // looking at (or last viewed) — Nexstack POS's own signup flow, or a
+  // real handoff to another product's own app (e.g. Studio Management).
+  const trialLinkBindings = computed(() => {
+    const link = getTrialLink(productContext.activeSlug)
+    return link.href ? { href: link.href, target: '_blank', rel: 'noopener' } : { to: link.to }
+  })
 
   const mobileOpen = ref(false)
   const langMenuOpen = ref(false)

@@ -138,7 +138,7 @@
 
     <!-- ── Pricing ── -->
     <PriceSection v-if="product.slug === 'nexstack-pos'" />
-    <StudioPriceSection v-else-if="product.slug === 'studio-management'" @select-plan="scrollToCta" />
+    <StudioPriceSection v-else-if="product.slug === 'studio-management'" @select-plan="goToStudioRegister" />
 
     <!-- ── Final CTA / waitlist form ── -->
     <section id="cta" class="section-pad">
@@ -232,6 +232,8 @@
   import { useRoute, useRouter } from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { useProductsStore } from '@/stores/products'
+  import { useProductContextStore } from '@/stores/productContext'
+  import { getTrialLink } from '@/config/productTrials'
   import { submitLead } from '@/api/leads'
 
   import Geometric3D from '@/components/ui/Geometric3D.vue'
@@ -262,6 +264,7 @@
   const route = useRoute()
   const router = useRouter()
   const store = useProductsStore()
+  const productContext = useProductContextStore()
 
   const product = computed(() => store.currentProduct)
   const deepDiveExtras = computed(
@@ -287,6 +290,7 @@
     product,
     p => {
       if (!p) return
+      productContext.setLastViewed(p.slug)
       document.title = p.seo_title || `${p.name} · Nexstack`
       let meta = document.querySelector('meta[name="description"]')
       if (!meta) {
@@ -301,6 +305,15 @@
 
   function scrollToCta() {
     document.getElementById('cta')?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  // Studio Management System is a real, separate SaaS app with its own
+  // accounts — a plan selection here hands off to that app's own register
+  // page (new tab, same convention as cta_type === 'external_link' below),
+  // it doesn't scroll to this site's waitlist form.
+  function goToStudioRegister(planCode) {
+    const { href } = getTrialLink('studio-management', planCode)
+    window.open(href, '_blank', 'noopener')
   }
 
   function handleCta() {
