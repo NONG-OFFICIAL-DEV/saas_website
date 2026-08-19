@@ -82,7 +82,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           source: "docker-compose.yml"
-          target: "~/smart_store_website"
+          target: "~/nexstack-website"
 
       # STEP 2: Run the deployment script
       - name: Deploy via SSH
@@ -93,7 +93,7 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
             set -e
-            cd ~/smart_store_website
+            cd ~/nexstack-website
 
             echo ">>> Pulling latest images"
             docker compose pull
