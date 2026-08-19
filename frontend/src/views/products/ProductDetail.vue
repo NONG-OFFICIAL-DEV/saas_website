@@ -137,16 +137,16 @@
     <component :is="extra" v-for="(extra, idx) in deepDiveExtras" :key="idx" />
 
     <!-- ── Pricing ──
-         pricing_mode 'live' means the product has its own real billing
-         backend (still one bespoke component per such product — there are
-         only two today); 'cms' is the generic path every future product
-         gets for free, driven purely by the pricing_plans CMS data. ── -->
-    <PriceSection v-if="product.pricing_mode === 'live' && product.slug === 'nexstack-pos'" />
+         Pricing is controlled entirely within each product's own SaaS
+         backend — this site only ever displays it via that product's own
+         live API, one bespoke component per product. A product with no
+         live pricing component yet simply shows no pricing section here;
+         there is no CMS-authored placeholder pricing. ── -->
+    <PriceSection v-if="product.slug === 'nexstack-pos'" />
     <StudioPriceSection
-      v-else-if="product.pricing_mode === 'live' && product.slug === 'studio-management'"
+      v-else-if="product.slug === 'studio-management'"
       @select-plan="goToStudioRegister"
     />
-    <CmsPricingSection v-else-if="product.pricing_mode === 'cms'" :plans="product.pricing_plans" />
 
     <!-- ── FAQ ── -->
     <ProductFaqSection :faqs="product.faqs" />
@@ -249,7 +249,6 @@
   import Geometric3D from '@/components/ui/Geometric3D.vue'
   import PriceSection from '@/components/sections/PriceSection.vue'
   import StudioPriceSection from '@/components/sections/StudioPriceSection.vue'
-  import CmsPricingSection from '@/components/sections/CmsPricingSection.vue'
   import ProductFaqSection from '@/components/sections/ProductFaqSection.vue'
   import RestaurantPosSection from '@/components/sections/RestaurantPosSection.vue'
   import InventorySection from '@/components/sections/InventorySection.vue'

@@ -237,6 +237,21 @@
     "sub": "Each product has its own plans. Pick one to see full pricing.",
     "view_plans": "View plans"
   },
+  "testimonials": {
+    "eyebrow": "What business owners say",
+    "title": "Real businesses, real results"
+  },
+  "blog_hub": {
+    "tag": "Blog",
+    "title": "Notes on running a business",
+    "sub": "Practical tips from building and supporting these products every day.",
+    "empty": "No posts published yet — check back soon."
+  },
+  "blog_detail": {
+    "not_found_title": "Post not found",
+    "not_found_desc": "This post doesn't exist or isn't published yet.",
+    "back_to_blog": "Back to Blog"
+  },
   "get_started_page": {
     "tag": "Get Started",
     "title": "What do you want to manage?",

@@ -5,17 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
-class PricingPlan extends Model
+class Testimonial extends Model
 {
     use HasUuids;
 
-    protected $fillable = ['product_id', 'slug', 'monthly_price', 'yearly_price', 'is_popular', 'sort_order'];
+    protected $fillable = [
+        'author_name',
+        'author_title',
+        'author_avatar_url',
+        'product_id',
+        'rating',
+        'sort_order',
+        'is_published',
+    ];
 
     protected $casts = [
-        'monthly_price' => 'decimal:2',
-        'yearly_price' => 'decimal:2',
-        'is_popular' => 'boolean',
+        'rating' => 'integer',
         'sort_order' => 'integer',
+        'is_published' => 'boolean',
     ];
 
     public function product()
@@ -25,7 +32,7 @@ class PricingPlan extends Model
 
     public function translations()
     {
-        return $this->hasMany(PricingPlanTranslation::class);
+        return $this->hasMany(TestimonialTranslation::class);
     }
 
     public function translation(string $locale = 'en')

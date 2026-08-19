@@ -33,8 +33,7 @@ const PRODUCT_TRIAL_LINKS = {
 export function getTrialLink(slug, planCode) {
   const resolve = PRODUCT_TRIAL_LINKS[slug]
   if (resolve) return resolve(planCode)
-  // No live signup flow wired up for this product yet (e.g. a new product
-  // still in pricing_mode 'cms') — send them to its own marketing page
-  // rather than pretending it's a different product.
+  // No live signup flow wired up for this product yet — send them to its
+  // own marketing page rather than pretending it's a different product.
   return { to: slug ? `/products/${slug}` : '/products' }
 }

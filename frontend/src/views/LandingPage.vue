@@ -3,6 +3,7 @@
   <HeroSection />
   <ProductsTeaserSection />
   <BenefitsSection />
+  <TestimonialsSection />
   <CtaSection />
 </template>
 
@@ -10,5 +11,6 @@
 import HeroSection          from '@/components/sections/HeroSection.vue'
 import ProductsTeaserSection from '@/components/sections/ProductsTeaserSection.vue'
 import BenefitsSection      from '@/components/sections/BenefitsSection.vue'
+import TestimonialsSection  from '@/components/sections/TestimonialsSection.vue'
 import CtaSection           from '@/components/sections/CtaSection.vue'
 </script>

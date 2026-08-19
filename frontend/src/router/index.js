@@ -67,8 +67,12 @@ const routes = [
       {
         path: 'blog',
         name: 'blog',
-        component: () => import('@/views/ComingSoonPage.vue'),
-        props: { titleKey: 'resources.blog' }
+        component: () => import('@/views/blog/BlogHub.vue')
+      },
+      {
+        path: 'blog/:slug',
+        name: 'blog-post-detail',
+        component: () => import('@/views/blog/BlogPostDetail.vue')
       }
     ]
   },
@@ -100,6 +104,51 @@ const routes = [
         path: 'products/:id/edit',
         name: 'admin-product-edit',
         component: () => import('@/views/admin/AdminProductEditor.vue')
+      },
+      {
+        path: 'solutions',
+        name: 'admin-solutions',
+        component: () => import('@/views/admin/AdminSolutionsDashboard.vue')
+      },
+      {
+        path: 'solutions/new',
+        name: 'admin-solution-new',
+        component: () => import('@/views/admin/AdminSolutionEditor.vue')
+      },
+      {
+        path: 'solutions/:id/edit',
+        name: 'admin-solution-edit',
+        component: () => import('@/views/admin/AdminSolutionEditor.vue')
+      },
+      {
+        path: 'testimonials',
+        name: 'admin-testimonials',
+        component: () => import('@/views/admin/AdminTestimonialsDashboard.vue')
+      },
+      {
+        path: 'testimonials/new',
+        name: 'admin-testimonial-new',
+        component: () => import('@/views/admin/AdminTestimonialEditor.vue')
+      },
+      {
+        path: 'testimonials/:id/edit',
+        name: 'admin-testimonial-edit',
+        component: () => import('@/views/admin/AdminTestimonialEditor.vue')
+      },
+      {
+        path: 'blog',
+        name: 'admin-blog',
+        component: () => import('@/views/admin/AdminBlogDashboard.vue')
+      },
+      {
+        path: 'blog/new',
+        name: 'admin-blog-new',
+        component: () => import('@/views/admin/AdminBlogEditor.vue')
+      },
+      {
+        path: 'blog/:id/edit',
+        name: 'admin-blog-edit',
+        component: () => import('@/views/admin/AdminBlogEditor.vue')
       },
       {
         path: 'site-content',

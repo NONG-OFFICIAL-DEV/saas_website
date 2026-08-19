@@ -76,6 +76,21 @@ export async function deleteScreenshot(id) {
   await cmsApi.delete(`/admin/screenshots/${id}`)
 }
 
+// ── FAQs ────────────────────────────────────────────────────────────────
+
+export async function createFaq(productId, payload) {
+  const { data } = await cmsApi.post(`/admin/products/${productId}/faqs`, payload)
+  return data.data
+}
+
+export async function updateFaq(id, payload) {
+  await cmsApi.put(`/admin/faqs/${id}`, payload)
+}
+
+export async function deleteFaq(id) {
+  await cmsApi.delete(`/admin/faqs/${id}`)
+}
+
 // ── Media ───────────────────────────────────────────────────────────────
 
 export async function uploadProductMedia(file) {

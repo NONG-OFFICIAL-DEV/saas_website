@@ -199,6 +199,32 @@
           </div>
           <p v-if="!screenshots.length" class="nested-empty">No screenshots yet.</p>
         </section>
+
+        <!-- ── FAQs ── -->
+        <section class="editor-section">
+          <div class="section-row">
+            <h2 class="section-heading">FAQs</h2>
+            <v-btn size="small" variant="tonal" prepend-icon="mdi-plus" @click="addFaq">Add FAQ</v-btn>
+          </div>
+
+          <div v-for="f in faqs" :key="f.id" class="nested-card">
+            <v-row dense>
+              <v-col cols="12" sm="5">
+                <v-text-field v-model="f.question" label="Question" density="compact" @blur="saveFaq(f)" />
+              </v-col>
+              <v-col cols="12" sm="5">
+                <v-text-field v-model="f.answer" label="Answer" density="compact" @blur="saveFaq(f)" />
+              </v-col>
+              <v-col cols="12" sm="1">
+                <v-text-field v-model.number="f.sort_order" type="number" label="Order" density="compact" @blur="saveFaq(f)" />
+              </v-col>
+              <v-col cols="12" sm="1" class="d-flex align-center justify-end">
+                <v-btn icon="mdi-delete-outline" size="small" variant="text" color="error" @click="removeFaq(f)" />
+              </v-col>
+            </v-row>
+          </div>
+          <p v-if="!faqs.length" class="nested-empty">No FAQs yet.</p>
+        </section>
       </template>
     </template>
   </div>
@@ -217,6 +243,9 @@
     createScreenshot,
     updateScreenshot,
     deleteScreenshot,
+    createFaq,
+    updateFaq,
+    deleteFaq,
     uploadProductMedia
   } from '@/services/adminProducts'
 
@@ -248,6 +277,7 @@
 
   const features = ref([])
   const screenshots = ref([])
+  const faqs = ref([])
 
   const loading = ref(false)
   const saving = ref(false)
@@ -292,6 +322,7 @@
       })
       features.value = data.product_features ?? []
       screenshots.value = data.product_screenshots ?? []
+      faqs.value = data.faqs ?? []
     } catch (err) {
       error.value = err.message
     } finally {
@@ -406,6 +437,40 @@
     try {
       await deleteScreenshot(s.id)
       screenshots.value = screenshots.value.filter(x => x.id !== s.id)
+    } catch (err) {
+      error.value = err.message
+    }
+  }
+
+  // ── FAQs ──
+  async function addFaq() {
+    try {
+      const created = await createFaq(productId.value, {
+        question: 'New question',
+        answer: 'Answer here...',
+        sort_order: faqs.value.length + 1
+      })
+      faqs.value.push(created)
+    } catch (err) {
+      error.value = err.message
+    }
+  }
+  async function saveFaq(f) {
+    try {
+      await updateFaq(f.id, {
+        question: f.question,
+        answer: f.answer,
+        sort_order: f.sort_order
+      })
+    } catch (err) {
+      error.value = err.message
+    }
+  }
+  async function removeFaq(f) {
+    if (!window.confirm('Delete this FAQ?')) return
+    try {
+      await deleteFaq(f.id)
+      faqs.value = faqs.value.filter(x => x.id !== f.id)
     } catch (err) {
       error.value = err.message
     }

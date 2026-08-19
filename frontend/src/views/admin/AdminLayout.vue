@@ -80,6 +80,24 @@
       match: path => path === '/admin' || path.startsWith('/admin/products')
     },
     {
+      to: '/admin/solutions',
+      icon: 'mdi-lightbulb-outline',
+      title: 'Solutions',
+      match: path => path.startsWith('/admin/solutions')
+    },
+    {
+      to: '/admin/testimonials',
+      icon: 'mdi-comment-quote-outline',
+      title: 'Testimonials',
+      match: path => path.startsWith('/admin/testimonials')
+    },
+    {
+      to: '/admin/blog',
+      icon: 'mdi-newspaper-variant-outline',
+      title: 'Blog',
+      match: path => path.startsWith('/admin/blog')
+    },
+    {
       to: '/admin/site-content',
       icon: 'mdi-file-document-edit-outline',
       title: 'Site Content',

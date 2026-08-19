@@ -33,7 +33,6 @@ class ProductController extends Controller
             'status' => $data['status'] ?? 'coming_soon',
             'cta_type' => $data['cta_type'] ?? 'waitlist',
             'cta_url' => $data['cta_url'] ?? null,
-            'pricing_mode' => $data['pricing_mode'] ?? 'cms',
             'accent_color' => $data['accent_color'] ?? '#6366F1',
             'logo_url' => $data['logo_url'] ?? null,
             'hero_image_url' => $data['hero_image_url'] ?? null,
@@ -68,7 +67,6 @@ class ProductController extends Controller
             'translations',
             'features.translations',
             'screenshots.translations',
-            'pricingPlans.translations',
             'faqs.translations',
         ]);
 
@@ -83,7 +81,7 @@ class ProductController extends Controller
         $data = $request->validated();
 
         $product->update(array_intersect_key($data, array_flip([
-            'slug', 'status', 'cta_type', 'cta_url', 'pricing_mode', 'accent_color',
+            'slug', 'status', 'cta_type', 'cta_url', 'accent_color',
             'logo_url', 'hero_image_url', 'lead_source', 'sort_order', 'is_published',
         ])));
 
@@ -100,7 +98,6 @@ class ProductController extends Controller
             'translations',
             'features.translations',
             'screenshots.translations',
-            'pricingPlans.translations',
             'faqs.translations',
         ]);
 

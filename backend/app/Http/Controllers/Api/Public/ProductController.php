@@ -27,7 +27,6 @@ class ProductController extends Controller
             'translations',
             'features.translations',
             'screenshots.translations',
-            'pricingPlans.translations',
             'faqs.translations',
         ])
             ->where('slug', $slug)
