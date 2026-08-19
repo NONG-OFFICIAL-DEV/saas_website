@@ -19,7 +19,7 @@
 
       <span class="status-chip" :class="`status-chip--${product.status}`">
         <span v-if="product.status === 'live'" class="status-dot" />
-        {{ t(`product_card.status.${product.status}`) }}
+        {{ t(`common.status.${product.status}`) }}
       </span>
     </div>
 
@@ -27,7 +27,7 @@
     <p class="product-tagline">{{ product.tagline || product.summary }}</p>
 
     <div class="card-cta">
-      <span>{{ t('product_card.learn_more') }}</span>
+      <span>{{ t('button.learn_more') }}</span>
       <v-icon icon="mdi-arrow-right" size="16" />
     </div>
   </router-link>

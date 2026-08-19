@@ -13,7 +13,7 @@
         {{ t('product_detail.not_found_desc') }}
       </p>
       <v-btn color="primary" rounded="lg" to="/products">
-        {{ t('product_detail.back_to_products') }}
+        {{ t('button.back_to_products') }}
       </v-btn>
     </v-container>
   </div>
@@ -28,7 +28,7 @@
         <v-row align="center">
           <v-col cols="12" md="7" data-aos="fade-right">
             <v-chip size="small" variant="flat" class="status-chip mb-4">
-              {{ t(`product_card.status.${product.status}`) }}
+              {{ t(`common.status.${product.status}`) }}
             </v-chip>
             <h1 class="hero-title">{{ product.name }}</h1>
             <p class="hero-tagline">{{ product.tagline }}</p>
@@ -41,15 +41,15 @@
                 variant="flat"
                 @click="scrollToCta"
               >
-                {{ product.cta_label || t('product_detail.learn_more') }}
+                {{ product.cta_label || t('button.learn_more') }}
               </v-btn>
               <v-btn
                 rounded="lg"
-                
+
                 variant="outlined"
                 to="/products"
               >
-                {{ t('product_detail.all_products') }}
+                {{ t('button.all_products') }}
               </v-btn>
             </div>
           </v-col>
@@ -136,9 +136,20 @@
     <!-- ── Deep-dive extras (bespoke per-product sections, e.g. POS mockups) ── -->
     <component :is="extra" v-for="(extra, idx) in deepDiveExtras" :key="idx" />
 
-    <!-- ── Pricing ── -->
-    <PriceSection v-if="product.slug === 'nexstack-pos'" />
-    <StudioPriceSection v-else-if="product.slug === 'studio-management'" @select-plan="goToStudioRegister" />
+    <!-- ── Pricing ──
+         pricing_mode 'live' means the product has its own real billing
+         backend (still one bespoke component per such product — there are
+         only two today); 'cms' is the generic path every future product
+         gets for free, driven purely by the pricing_plans CMS data. ── -->
+    <PriceSection v-if="product.pricing_mode === 'live' && product.slug === 'nexstack-pos'" />
+    <StudioPriceSection
+      v-else-if="product.pricing_mode === 'live' && product.slug === 'studio-management'"
+      @select-plan="goToStudioRegister"
+    />
+    <CmsPricingSection v-else-if="product.pricing_mode === 'cms'" :plans="product.pricing_plans" />
+
+    <!-- ── FAQ ── -->
+    <ProductFaqSection :faqs="product.faqs" />
 
     <!-- ── Final CTA / waitlist form ── -->
     <section id="cta" class="section-pad">
@@ -188,7 +199,7 @@
               type="submit"
               :loading="waitlistLoading"
             >
-              {{ product.cta_label || t('product_detail.waitlist_btn') }}
+              {{ product.cta_label || t('button.join_waitlist') }}
             </v-btn>
           </v-form>
           <v-alert v-else type="success" variant="tonal" rounded="lg">
@@ -208,7 +219,7 @@
             target="_blank"
             rel="noopener"
           >
-            {{ product.cta_label || t('product_detail.visit_site') }}
+            {{ product.cta_label || t('button.visit_site') }}
           </v-btn>
         </div>
 
@@ -217,9 +228,9 @@
             color="primary"
             variant="flat"
             rounded="lg"
-            :to="`/auth/register?product=${product.slug}`"
+            v-bind="finalCtaLink"
           >
-            {{ product.cta_label || t('product_detail.start_trial') }}
+            {{ product.cta_label || t('button.start_free_trial') }}
           </v-btn>
         </div>
       </v-container>
@@ -229,16 +240,17 @@
 
 <script setup>
   import { computed, onMounted, ref, watch } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
+  import { useRoute } from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { useProductsStore } from '@/stores/products'
-  import { useProductContextStore } from '@/stores/productContext'
   import { getTrialLink } from '@/config/productTrials'
   import { submitLead } from '@/api/leads'
 
   import Geometric3D from '@/components/ui/Geometric3D.vue'
   import PriceSection from '@/components/sections/PriceSection.vue'
   import StudioPriceSection from '@/components/sections/StudioPriceSection.vue'
+  import CmsPricingSection from '@/components/sections/CmsPricingSection.vue'
+  import ProductFaqSection from '@/components/sections/ProductFaqSection.vue'
   import RestaurantPosSection from '@/components/sections/RestaurantPosSection.vue'
   import InventorySection from '@/components/sections/InventorySection.vue'
   import MobileQrSection from '@/components/sections/MobileQrSection.vue'
@@ -262,14 +274,20 @@
   }
 
   const route = useRoute()
-  const router = useRouter()
   const store = useProductsStore()
-  const productContext = useProductContextStore()
 
   const product = computed(() => store.currentProduct)
   const deepDiveExtras = computed(
     () => DEEP_DIVE_EXTRAS[route.params.slug] ?? []
   )
+
+  // Default ("register") CTA hands off to that specific product's own
+  // signup — never a hardcoded route, so this is correct regardless of
+  // which product is on screen (see config/productTrials.js).
+  const finalCtaLink = computed(() => {
+    const link = getTrialLink(product.value.slug)
+    return link.href ? { href: link.href, target: '_blank', rel: 'noopener' } : { to: link.to }
+  })
 
   const waitlist = ref({ name: '', email: '' })
   const waitlistLoading = ref(false)
@@ -290,7 +308,6 @@
     product,
     p => {
       if (!p) return
-      productContext.setLastViewed(p.slug)
       document.title = p.seo_title || `${p.name} · Nexstack`
       let meta = document.querySelector('meta[name="description"]')
       if (!meta) {
@@ -314,16 +331,6 @@
   function goToStudioRegister(planCode) {
     const { href } = getTrialLink('studio-management', planCode)
     window.open(href, '_blank', 'noopener')
-  }
-
-  function handleCta() {
-    if (product.value.cta_type === 'waitlist') {
-      scrollToCta()
-    } else if (product.value.cta_type === 'external_link') {
-      window.open(product.value.cta_url, '_blank', 'noopener')
-    } else {
-      router.push(`/auth/register?product=${product.value.slug}`)
-    }
   }
 
   async function submitWaitlist() {

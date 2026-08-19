@@ -16,6 +16,7 @@ class ProductSeeder extends Seeder
             'slug' => 'nexstack-pos',
             'status' => 'live',
             'cta_type' => 'register',
+            'pricing_mode' => 'live',
             'accent_color' => '#3B5BDB',
             'sort_order' => 1,
             'is_published' => true,
@@ -40,10 +41,20 @@ class ProductSeeder extends Seeder
             $feature->translations()->create(['locale' => 'en', 'title' => $title, 'description' => $description]);
         }
 
+        foreach ([
+            ['Can I use Nexstack POS across multiple branches?', 'Yes — every branch stays in sync in real time, and you can view combined or per-branch reports from one account.'],
+            ['Does it work offline?', 'Checkout keeps working during a connectivity drop and syncs automatically once you\'re back online.'],
+            ['Is Khmer language supported?', 'Yes, the whole system — receipts, reports, and the customer-facing QR menu — supports both Khmer and English.'],
+        ] as $i => [$question, $answer]) {
+            $faq = $pos->faqs()->create(['sort_order' => $i + 1]);
+            $faq->translations()->create(['locale' => 'en', 'question' => $question, 'answer' => $answer]);
+        }
+
         $studio = Product::create([
             'slug' => 'studio-management',
             'status' => 'coming_soon',
             'cta_type' => 'waitlist',
+            'pricing_mode' => 'live',
             'accent_color' => '#F59E0B',
             'sort_order' => 2,
             'is_published' => true,
@@ -67,5 +78,13 @@ class ProductSeeder extends Seeder
             $feature->translations()->create(['locale' => 'en', 'title' => $title, 'description' => $description]);
         }
 
+        foreach ([
+            ['Who is Studio Management for?', 'Any studio that books appointments and sells packages — photography, fitness, beauty, and similar service businesses.'],
+            ['Can clients book without calling or messaging?', 'Yes — clients pick an open slot from your live calendar and book themselves.'],
+            ['When can I join?', 'Studio Management is currently in development. Join the waitlist and we\'ll reach out as soon as early access opens up.'],
+        ] as $i => [$question, $answer]) {
+            $faq = $studio->faqs()->create(['sort_order' => $i + 1]);
+            $faq->translations()->create(['locale' => 'en', 'question' => $question, 'answer' => $answer]);
+        }
     }
 }

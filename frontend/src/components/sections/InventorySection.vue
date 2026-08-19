@@ -4,9 +4,9 @@
       <v-row align="center">
         <!-- ── Text column ── -->
         <v-col cols="12" md="5" data-aos="fade-right">
-          <div class="section-tag">{{ t('landing.inventory.tag') }}</div>
-          <h2 class="section-title">{{ t('landing.inventory.title') }}</h2>
-          <p class="section-sub mb-7">{{ t('landing.inventory.sub') }}</p>
+          <div class="section-tag">{{ t('home.inventory.tag') }}</div>
+          <h2 class="section-title">{{ t('home.inventory.title') }}</h2>
+          <p class="section-sub mb-7">{{ t('home.inventory.sub') }}</p>
           <FeatureChecks :items="checks" />
         </v-col>
 
@@ -66,7 +66,7 @@ import VisualWrapper from '@/components/ui/VisualWrapper.vue'
 const { t } = useI18n()
 
 const checks = computed(() =>
-  ['f1', 'f2', 'f3', 'f4'].map((k) => t(`landing.inventory.${k}`))
+  ['f1', 'f2', 'f3', 'f4'].map((k) => t(`home.inventory.${k}`))
 )
 
 const chartBars = [

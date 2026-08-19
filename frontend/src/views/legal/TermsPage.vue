@@ -1,16 +1,16 @@
 <template>
   <div class="legal-page">
     <div class="legal-inner">
-      <router-link to="/auth/register" class="back-link">
+      <router-link to="/" class="back-link">
         <v-icon icon="mdi-arrow-left" size="16" />
-        {{ t('legal.back') }}
+        {{ t('button.back_to_home') }}
       </router-link>
 
       <div class="legal-header">
         <div class="legal-icon">
           <v-icon icon="mdi-file-document-outline" size="28" />
         </div>
-        <h1 class="legal-title">{{ t('legal.terms.title') }}</h1>
+        <h1 class="legal-title">{{ t('common.terms_of_service') }}</h1>
         <p class="legal-date">
           {{ t('legal.last_updated') }}: {{ t('legal.terms.updated') }}
         </p>
@@ -50,7 +50,7 @@
           </a>
         </p>
         <router-link to="/privacy" class="link-primary">
-          {{ t('legal.view_privacy') }} →
+          {{ t('button.view_privacy_policy') }} →
         </router-link>
       </div>
     </div>

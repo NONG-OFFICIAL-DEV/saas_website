@@ -30,7 +30,13 @@ This is a Vue 3 + Vuetify 3 + Vite marketing/SaaS site ("Nexstack") for a solo f
 1. **Legacy REST API** (`src/api/*.js`, axios client in `src/api/api.js`, base URL from `VITE_APP_API_BASE_URL`): powers the *real* product — Nexstack POS's auth, registration (`Register.vue` + `components/register/*`), lead capture (`api/leads.js`), and live subscription plans/billing (`stores/register.js`, rendered in `components/sections/PriceSection.vue`). This is the only source of truth for actual money/checkout.
 2. **CMS backend** (`src/services/cmsApi.js`, a standalone Laravel + PostgreSQL + Sanctum API, base URL from `VITE_APP_CMS_API_URL`, lives in the sibling `../backend` directory of this `SaaS_Website` folder): powers the CMS — marketing content for the products hub/detail pages and site-wide copy (hero, about, footer) — plus Sanctum token auth for the admin panel (`stores/adminAuth.js`). No real payments happen here. This backend is entirely separate from `smart-store-admin`/`smart_store_db` (the real POS backend) — never conflate the two.
 
-Because of this split, `ProductDetail.vue` treats pricing specially: for `nexstack-pos` it renders the real `PriceSection.vue` (live billing via backend #1); every other product renders CMS-authored `product_pricing_tiers` rows instead (marketing-only "starting at" cards, no checkout).
+Because of this split, `ProductDetail.vue` picks a pricing component off `product.pricing_mode` (`live` | `cms`, column on `products`, defaults to `cms`):
+- **`pricing_mode: 'live'`** — the product has its own real billing backend. Currently only `nexstack-pos` (`PriceSection.vue`, fetches from backend #1 via `stores/register.js`) and `studio-management` (`StudioPriceSection.vue`, fetches from Studio's own live production API via `stores/studioPlans.js` / `services/studioPlans.js` — **not** CMS data, despite living in this repo) — both are still one bespoke component per product, still slug-keyed in `ProductDetail.vue`, and that's fine: there are only two and each needs real checkout wiring anyway.
+- **`pricing_mode: 'cms'`** (the default) — no live billing backend yet, so pricing is CMS-authored marketing content ("starting at" cards, no checkout) via the generic `CmsPricingSection.vue`, driven by the `pricing_plans` + `pricing_plan_translations` tables (`Product::pricingPlans()`). This is what every *new* product gets for free — no bespoke Vue component needed, just rows in `pricing_plans`.
+
+`product_pricing_tiers` (the original, undifferentiated version of this) was built then fully deleted in commit `374a064` — the deletion was intentional (a comment in `ProductResource.php` says plans belong to each product's own billing system), but that was only true for `nexstack-pos`/`studio-management`, which already have real billing. `pricing_plans` restores the same idea correctly scoped: it's *only* consulted when `pricing_mode` is `'cms'`.
+
+Similarly, `Product::faqs()` (`product_faqs` + `product_faq_translations`) backs a generic `ProductFaqSection.vue` rendered on every product page regardless of pricing_mode — plain CMS content, no live/cms split needed since there's no billing-system analog for FAQs.
 
 ### CMS data model (Laravel backend)
 
@@ -56,7 +62,7 @@ Three route groups with different layouts:
 
 `scrollBehavior` resets scroll to top on normal navigation, smooth-scrolls to hash targets (`/#contact`), and restores position on browser back/forward — this is deliberate, don't remove it.
 
-There is a commented-out `router.beforeEach` guard (using `stores/adminAuth.js`) that's meant to redirect unauthenticated users away from `/admin/*`. It was disabled mid-debugging a Supabase Auth login issue and **needs to be re-enabled** before `/admin` is exposed anywhere real — check its current state before assuming `/admin` is protected.
+`router.beforeEach` (using `stores/adminAuth.js`) is live and guards every `/admin/*` route — unauthenticated visitors are redirected to `/admin/login`, and an already-logged-in visitor hitting `/admin/login` is redirected to the dashboard instead.
 
 ### AOS (scroll animations) across nested routes
 
@@ -64,7 +70,7 @@ There is a commented-out `router.beforeEach` guard (using `stores/adminAuth.js`)
 
 ### Product detail pages: generic CMS + bespoke "deep dive" extras
 
-`views/products/ProductDetail.vue` always renders the generic CMS-driven blocks (features grid, screenshots, pricing) for any product. Additionally, it has a hardcoded `DEEP_DIVE_EXTRAS` map keyed by product `slug` that injects extra hand-built Vue components after the generic content — currently only `nexstack-pos` has entries (`BizTypesSection`, `TargetAudienceSection`, `FeatureCardsSection`, `RestaurantPosSection`, `InventorySection`, `MobileQrSection`, `FaqSection` — all pre-existing, POS-specific, non-i18n'd mockup components under `components/sections/`). Use this pattern for any product that needs bespoke marketing sections beyond what the generic CMS fields support, rather than hardcoding product-specific logic into the generic rendering path.
+`views/products/ProductDetail.vue` always renders the generic CMS-driven blocks (features grid, screenshots, pricing) for any product. Additionally, it has a hardcoded `DEEP_DIVE_EXTRAS` map keyed by product `slug` that injects extra hand-built Vue components after the generic content — currently only `nexstack-pos` has entries (`RestaurantPosSection`, `InventorySection`, `MobileQrSection`, all POS-specific, non-i18n'd mockup components under `components/sections/`). `BizTypesSection`/`FeatureCardsSection` used to be in this list but were removed (and deleted from disk) for duplicating content shown elsewhere on the page; `TargetAudienceSection`/`FaqSection` never existed. Use this pattern for any product that needs bespoke marketing sections beyond what the generic CMS fields support, rather than hardcoding product-specific logic into the generic rendering path.
 
 ### Vuetify theme (`src/plugins/vuetify.js`)
 

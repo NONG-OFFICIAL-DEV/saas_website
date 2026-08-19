@@ -9,7 +9,7 @@
 
       <!-- ── Billing cycle toggle ── -->
       <div v-if="!store.loading && hasPaidPlans" class="cycle-wrap">
-        <div class="cycle-track" role="group" :aria-label="t('studio_pricing.billing_cycle')">
+        <div class="cycle-track" role="group" :aria-label="t('common.billing_cycle')">
           <button
             v-for="c in CYCLES"
             :key="c.months"
@@ -52,7 +52,7 @@
           :class="{ 'plan-card--featured': plan.code === 'professional' }"
         >
           <v-chip v-if="plan.code === 'professional'" class="popular-badge" color="primary" size="x-small" variant="flat" prepend-icon="mdi-star">
-            {{ t('studio_pricing.popular') }}
+            {{ t('common.most_popular') }}
           </v-chip>
 
           <h3 class="plan-name">{{ plan.name }}</h3>
@@ -78,7 +78,7 @@
                 </Transition>
               </div>
               <div class="price-meta">
-                <span class="price-per">{{ t('studio_pricing.per_month') }}</span>
+                <span class="price-per">{{ t('common.per_month') }}</span>
               </div>
             </template>
           </div>
@@ -103,7 +103,7 @@
             class="plan-cta"
             @click="$emit('select-plan', plan.code)"
           >
-            {{ isFree(plan) ? t('studio_pricing.cta_trial') : t('studio_pricing.cta_default') }}
+            {{ isFree(plan) ? t('button.start_free_trial') : t('button.get_started') }}
           </v-btn>
         </div>
       </div>

@@ -2,8 +2,8 @@
   <section class="section-pad section-tint-mint" id="benefits">
     <v-container>
       <div class="text-center mb-12" data-aos="fade-up">
-        <span class="section-tag">{{ t('benefits.eyebrow') }}</span>
-        <h2 class="section-title">{{ t('benefits.title') }}</h2>
+        <span class="section-tag">{{ t('home.benefits.eyebrow') }}</span>
+        <h2 class="section-title">{{ t('home.benefits.title') }}</h2>
       </div>
 
       <div class="benefits-grid">
@@ -17,8 +17,8 @@
           <div class="benefit-icon">
             <v-icon :icon="b.icon" size="20" />
           </div>
-          <h3 class="benefit-title">{{ t(`benefits.items.${b.key}.title`) }}</h3>
-          <p class="benefit-desc">{{ t(`benefits.items.${b.key}.desc`) }}</p>
+          <h3 class="benefit-title">{{ t(`home.benefits.items.${b.key}.title`) }}</h3>
+          <p class="benefit-desc">{{ t(`home.benefits.items.${b.key}.desc`) }}</p>
         </div>
       </div>
     </v-container>

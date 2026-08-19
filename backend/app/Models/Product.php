@@ -15,6 +15,7 @@ class Product extends Model
         'status',
         'cta_type',
         'cta_url',
+        'pricing_mode',
         'accent_color',
         'logo_url',
         'hero_image_url',
@@ -41,6 +42,19 @@ class Product extends Model
     public function screenshots()
     {
         return $this->hasMany(ProductScreenshot::class)->orderBy('sort_order');
+    }
+
+    /** Marketing-only "starting at" pricing cards — only meaningful when pricing_mode is 'cms'.
+     *  Products with pricing_mode 'live' (nexstack-pos, studio-management) fetch real plans
+     *  from their own backend instead; see PriceSection.vue / StudioPriceSection.vue. */
+    public function pricingPlans()
+    {
+        return $this->hasMany(PricingPlan::class)->orderBy('sort_order');
+    }
+
+    public function faqs()
+    {
+        return $this->hasMany(ProductFaq::class)->orderBy('sort_order');
     }
 
     /** Get the translation row for a given locale, falling back to English. */

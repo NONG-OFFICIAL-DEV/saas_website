@@ -2,10 +2,10 @@
   <section class="section-pad section-tint-sky" id="products">
     <v-container>
       <div class="text-center mb-10" data-aos="fade-up">
-        <span class="section-tag">{{ t('products_teaser.tag') }}</span>
-        <h2 class="section-title">{{ t('products_teaser.title') }}</h2>
+        <span class="section-tag">{{ t('home.products_teaser.tag') }}</span>
+        <h2 class="section-title">{{ t('home.products_teaser.title') }}</h2>
         <p class="section-sub teaser-sub">
-          {{ t('products_teaser.sub') }}
+          {{ t('home.products_teaser.sub') }}
         </p>
       </div>
 
@@ -34,7 +34,7 @@
           to="/products"
           append-icon="mdi-arrow-right"
         >
-          {{ t('products_teaser.view_all') }}
+          {{ t('button.view_all_products') }}
         </v-btn>
       </div>
     </v-container>

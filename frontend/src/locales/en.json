@@ -1,61 +1,72 @@
 {
-  "lang": {
-    "en": "English",
-    "km": "Khmer",
-    "label": "Language"
-  },
-  "btn": {
-    "delete": "Delete",
-    "cancel": "Cancel",
-    "confirm": "Confirm"
-  },
-  "nav": {
+  "common": {
+    "language": "Language",
+    "lang_en": "English",
+    "lang_km": "Khmer",
     "theme_light": "Light",
     "theme_dark": "Dark",
     "open_menu": "Open menu",
     "close_menu": "Close menu",
-    "home": "Home",
-    "products": "Products",
-    "about": "About"
-  },
-  "products": {
-    "pos": {
-      "name": "Nexstack POS",
-      "desc": "Sales, receipts & cashier"
-    },
-    "backoffice": {
-      "name": "Back Office",
-      "desc": "Inventory, staff & analytics"
-    },
-    "mobile": {
-      "name": "Mobile Menu Scan",
-      "desc": "QR menus & table ordering"
+    "most_popular": "Most popular",
+    "per_month": "/ month",
+    "billing_cycle": "Billing cycle",
+    "terms_of_service": "Terms of Service",
+    "privacy_policy": "Privacy Policy",
+    "status": {
+      "live": "Live",
+      "beta": "Beta",
+      "coming_soon": "Coming Soon"
     }
   },
-  "landing": {
-    "nav": {
-      "features": "Features",
-      "pos": "POS",
-      "products": "POS",
-      "inventory": "Inventory",
-      "contact": "Contact",
-      "pricing": "Pricing"
-    },
-    "hero": {
-      "badge": "🇰🇭 Independent SaaS builder",
-      "title1": "One Builder.",
-      "title2": "Multiple Products, Real Support.",
-      "sub": "I design, build, and personally support small SaaS products for real businesses starting with point-of-sale, and growing from there.",
-      "trust_line": "No agencies · No account managers · Direct support from the person who builds it",
-      "cta_primary": "View Products",
-      "cta_secondary": "Talk to Me"
-    },
-    "stats": {
-      "products_live": "Products Live",
-      "businesses_served": "Businesses Served",
-      "support": "Direct Support",
-      "origin": "Built in Cambodia"
-    },
+  "menu": {
+    "home": "Home",
+    "platform": "Platform",
+    "products": "Products",
+    "solutions": "Solutions",
+    "view_all_solutions": "All Solutions",
+    "pricing": "Pricing",
+    "resources": "Resources",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "resources": {
+    "documentation": "Documentation",
+    "help_center": "Help Center",
+    "blog": "Blog"
+  },
+  "coming_soon": {
+    "title": "Coming soon",
+    "desc": "We're still building this page. Check back soon."
+  },
+  "button": {
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "yes": "Yes",
+    "learn_more": "Learn more",
+    "view_products": "View Products",
+    "chat_telegram": "Chat on Telegram",
+    "log_in": "Log in",
+    "start_free_trial": "Start Free Trial",
+    "start_free": "Start free",
+    "get_started": "Get started",
+    "contact_sales": "Contact sales",
+    "view_all_products": "View all products",
+    "all_products": "All products",
+    "back_to_products": "Back to Products",
+    "join_waitlist": "Join Waitlist",
+    "visit_site": "Visit site",
+    "continue": "Continue",
+    "back": "Back",
+    "back_to_home": "Back to Nexstack",
+    "back_to_pricing": "Back to pricing",
+    "change_plan": "Change plan",
+    "create_account": "Create my account",
+    "sign_in": "Sign in",
+    "tap_to_upload": "Tap to upload",
+    "view_privacy_policy": "View Privacy Policy",
+    "view_terms_of_service": "View Terms of Service"
+  },
+  "home": {
     "biz": {
       "tag": "BUILT FOR EVERY BUSINESS",
       "title": "One system, every business type",
@@ -63,27 +74,7 @@
       "cafe": "Cafe",
       "minimart": "Mini Mart",
       "retail": "Clothes shop",
-      "bakery": "Bakery",
-      "food_truck": "Food Truck"
-    },
-
-    "mart_pos": {
-      "tag": "MART & RETAIL POS",
-      "title": "Sell by unit, pack, or box",
-      "sub": "Multi-unit pricing out of the box. Sell a single can or a case of 24 stock deducts correctly in base units every time.",
-      "f1": "Multi-unit: can, pack, box, carton, kg",
-      "f2": "Retail & wholesale pricing per unit",
-      "f3": "Barcode scanning support",
-      "f4": "Stock auto-deducts in base units on every sale"
-    },
-    "inventory": {
-      "tag": "INVENTORY MANAGEMENT",
-      "title": "Always know what's in stock",
-      "sub": "Purchase orders, stock movements, adjustments, and low-stock alerts keep your shelves full and numbers accurate.",
-      "f1": "Sales and profit reports by period",
-      "f2": "Full stock movement ledger",
-      "f3": "Low stock alerts & reorder levels",
-      "f4": "Stock count & manual adjustments"
+      "bakery": "Bakery"
     },
     "features": {
       "tag": "FEWER TOOLS. FASTER OPERATIONS.",
@@ -100,6 +91,67 @@
       "analytics_desc": "Know what's selling, what's not, and what each branch made today updated live, not after you close the register.",
       "payments_title": "Digital Payments",
       "payments_desc": "Accept the payment methods your customers already use, without a second device at the counter."
+    },
+    "inventory": {
+      "tag": "INVENTORY MANAGEMENT",
+      "title": "Always know what's in stock",
+      "sub": "Purchase orders, stock movements, adjustments, and low-stock alerts keep your shelves full and numbers accurate.",
+      "f1": "Sales and profit reports by period",
+      "f2": "Full stock movement ledger",
+      "f3": "Low stock alerts & reorder levels",
+      "f4": "Stock count & manual adjustments"
+    },
+    "products_teaser": {
+      "tag": "What I build",
+      "title": "Independent products, built to last",
+      "sub": "Each one solves a specific problem for a specific kind of business. More are on the way."
+    },
+    "benefits": {
+      "eyebrow": "Why Choose Nexstack",
+      "title": "Built to save you time and grow your revenue",
+      "items": {
+        "save_time": {
+          "title": "Save Time",
+          "desc": "Automate daily tasks so you can focus on your customers."
+        },
+        "reduce_errors": {
+          "title": "Reduce Errors",
+          "desc": "Fewer manual mistakes in sales, stock, and cash counts."
+        },
+        "increase_sales": {
+          "title": "Increase Sales",
+          "desc": "Spot your best sellers and act on them faster."
+        },
+        "real_time_reports": {
+          "title": "Real-Time Reports",
+          "desc": "Know exactly what's selling, right now, from any device."
+        },
+        "easy_to_use": {
+          "title": "Easy to Use",
+          "desc": "A clean interface your staff can learn in minutes."
+        },
+        "cloud_based": {
+          "title": "Cloud-Based",
+          "desc": "Access your business from anywhere, on any device."
+        },
+        "secure_data": {
+          "title": "Secure Data",
+          "desc": "Your sales and customer data stay encrypted and backed up."
+        },
+        "affordable": {
+          "title": "Affordable Pricing",
+          "desc": "Transparent plans with no hidden fees, ever."
+        }
+      }
+    },
+    "cta": {
+      "title": "Not sure where to start?",
+      "sub": "Browse everything I've built and pick what fits your business, or reach out directly if you want to talk it through first.",
+      "reassurance": {
+        "no_fees": "No agencies",
+        "setup": "Direct support",
+        "cancel_anytime": "More products coming"
+      }
     }
   },
   "pos": {
@@ -111,234 +163,111 @@
     "f3": "Works on Tablet & iPad",
     "f4": "Real-Time Analytics & Secure Multi-Channel Payments"
   },
+  "scan_menu": {
+    "tag": "Mobile Ordering",
+    "title": "Let Customers Order From Their Phone",
+    "subtitle": "Scan a QR code, browse the menu, and place orders no app download needed.",
+    "feat1": "Scan QR & Order Instantly",
+    "feat2": "Dine-In Ordering from Your Table",
+    "feat3": "Faster Service, Less Waiting Time",
+    "feat4": "Works on Mobile, Tablet & iPad"
+  },
   "pricing": {
     "eyebrow": "Pricing",
     "title": "Scalable Plans for Every Business",
     "subtitle": "Start free, scale as you grow. No hidden fees.",
-    "billing_label": "Billing cycle",
-    "popular": "Most popular",
     "free_monthly_only": "Free plan is 1 month only",
     "save_pct": "save {pct}%",
-    "billing_cycle": "Billed {cycle}",
-    "cycles": {
-      "1m": "1 month",
-      "3m": "3 months",
-      "1y": "1 year"
-    },
-
-    "per_month": "/ month",
-    "per_month_billed": "/ mo · ${total} billed every {months} mo",
-    "save": "Save ${amount}",
     "billed_every_months": "${price} billed every {months} months",
-
     "discount_note_3m": "3-month plan saves 10%",
     "discount_note_1y": "Annual plan saves 20%",
-
-    "footer_note": "Secure checkout · Cancel anytime · No contracts",
-    "cta_default": "Start free",
-    "plans": {
-      "starter": {
-        "name": "Starter",
-        "tagline": "Try it free for 1 month",
-        "cta": "Get started",
-        "features": {
-          "products": "Up to 50 products",
-          "reports": "Basic sales reports",
-          "inventory": "Inventory management",
-          "branches": "1 branch only",
-          "staff": "1 staff account",
-          "digital_menu": "Digital menu (QR code ordering)"
-        }
-      },
-      "pro": {
-        "name": "Pro",
-        "tagline": "Best for growing stores",
-        "cta": "Get started",
-        "features": {
-          "products": "Unlimited products",
-          "reports": "Advanced sales reports",
-          "inventory": "Inventory management",
-          "branches": "Up to 2 branches",
-          "staff": "Up to 5 staff accounts",
-          "digital_menu": "Digital menu (QR code ordering)"
-        }
-      },
-      "enterprise": {
-        "name": "Enterprise",
-        "tagline": "For multi-branch businesses",
-        "cta": "Contact sales",
-        "features": {
-          "products": "Unlimited products",
-          "reports": "Advanced + custom reports",
-          "inventory": "Inventory management",
-          "branches": "Unlimited branches",
-          "staff": "Unlimited staff accounts",
-          "digital_menu": "Digital menu (QR code ordering)"
-        }
-      }
-    }
+    "footer_note": "Secure checkout · Cancel anytime · No contracts"
   },
-  "trusted": {
-    "eyebrow": "Trusted by growing businesses across Cambodia",
-    "stats": {
-      "businesses": "Businesses",
-      "provinces": "Provinces",
-      "uptime": "Uptime",
-      "support": "Support"
-    }
-  },
-  "benefits": {
-    "eyebrow": "Why Choose Nexstack",
-    "title": "Built to save you time and grow your revenue",
-    "items": {
-      "save_time": {
-        "title": "Save Time",
-        "desc": "Automate daily tasks so you can focus on your customers."
-      },
-      "reduce_errors": {
-        "title": "Reduce Errors",
-        "desc": "Fewer manual mistakes in sales, stock, and cash counts."
-      },
-      "increase_sales": {
-        "title": "Increase Sales",
-        "desc": "Spot your best sellers and act on them faster."
-      },
-      "real_time_reports": {
-        "title": "Real-Time Reports",
-        "desc": "Know exactly what's selling, right now, from any device."
-      },
-      "easy_to_use": {
-        "title": "Easy to Use",
-        "desc": "A clean interface your staff can learn in minutes."
-      },
-      "cloud_based": {
-        "title": "Cloud-Based",
-        "desc": "Access your business from anywhere, on any device."
-      },
-      "secure_data": {
-        "title": "Secure Data",
-        "desc": "Your sales and customer data stay encrypted and backed up."
-      },
-      "affordable": {
-        "title": "Affordable Pricing",
-        "desc": "Transparent plans with no hidden fees, ever."
-      }
-    }
-  },
-  "faq": {
-    "eyebrow": "FAQ",
-    "title": "Frequently Asked Questions",
-    "items": {
-      "offline": {
-        "q": "Can I use it offline?",
-        "a": "Nexstack is cloud-based, so an internet connection is required to keep your sales, inventory, and reports in sync in real time. We recommend a stable Wi-Fi or mobile data connection at your store."
-      },
-      "khmer": {
-        "q": "Does it support Khmer?",
-        "a": "Yes. The entire interface is available in both Khmer and English switch anytime with one tap."
-      },
-      "branches": {
-        "q": "Can I use multiple branches?",
-        "a": "Yes, you can manage multiple branches from a single account, each with its own stock, staff, and reports."
-      },
-      "qr_payments": {
-        "q": "Does it support QR payments?",
-        "a": "Nexstack supports multiple payment methods including cash and card. For QR or mobile wallet payment integrations in your region, please contact our sales team to confirm current availability."
-      },
-      "import": {
-        "q": "Can I import my products?",
-        "a": "Yes our onboarding team can help you import your existing product list so you don't have to start from scratch."
-      },
-      "support": {
-        "q": "How do I get support?",
-        "a": "Reach us anytime via Telegram, phone, or email our support team is available 24/7."
-      }
-    }
-  },
-  "audience": {
-    "eyebrow": "Built For Your Type Of Business",
-    "title": "One Platform. Adapted To How You Actually Operate.",
-    "restaurant": {
-      "tab": "Restaurants",
-      "headline": "From table to kitchen, without a single shout across the room.",
-      "desc": "Table and order management sync straight to your kitchen display no more paper tickets, no more \"did that order go through?\" Servers get real-time status back the moment a dish is ready.",
-      "b1": "Table & order management",
-      "b2": "Live kitchen display sync",
-      "b3": "Split bills & multi-course timing"
-    },
-    "cafe": {
-      "tab": "Cafes",
-      "headline": "Built for the morning rush, not against it.",
-      "desc": "Fast checkout, modifiers (size, sugar level, add-ons) in two taps, and QR ordering for customers who'd rather order from their table than queue at the counter.",
-      "b1": "Quick modifiers: size, sugar, add-ons",
-      "b2": "QR ordering from the table",
-      "b3": "Fast checkout for rush hours"
-    },
-    "mart": {
-      "tab": "Marts & Retail",
-      "headline": "Sell by the can, the case, or the kilo stock adjusts itself.",
-      "desc": "Multi-unit pricing and barcode scanning built in, so a single item can be sold retail or wholesale, and your stock count is always accurate without manual recalculation.",
-      "b1": "Multi-unit pricing (retail & wholesale)",
-      "b2": "Barcode scanning built in",
-      "b3": "Auto stock deduction on every sale"
-    }
-  },
-  "cta": {
-    "title": "Not sure where to start?",
-    "sub": "Browse everything I've built and pick what fits your business, or reach out directly if you want to talk it through first.",
-    "or": "or",
-
-    "self": {
-      "title": "Explore Products",
-      "desc": "See what's live, what's coming next, and how to get started.",
-      "btn": "View Products"
-    },
-
-    "contact": {
-      "title": "Talk to Me",
-      "desc": "Questions, custom needs, or just curious? You'll reach me directly no sales team in between.",
-      "btn": "Chat on Telegram"
-    },
-
-    "reassurance": {
-      "no_fees": "No agencies",
-      "setup": "Direct support",
-      "cancel_anytime": "More products coming"
-    }
-  },
-  "dock": {
-    "telegram": "Chat on Telegram",
-    "trial": "Start Free Trial"
+  "studio_pricing": {
+    "eyebrow": "Pricing",
+    "title": "Plans for Every Studio",
+    "subtitle": "Start free, upgrade as your studio grows.",
+    "monthly": "Monthly",
+    "quarterly": "Quarterly",
+    "yearly": "Yearly",
+    "unavailable": "Pricing is temporarily unavailable — please check back shortly.",
+    "trial_days": "{days}-day free trial",
+    "feature_users": "Up to {n} users",
+    "feature_users_unlimited": "Unlimited users",
+    "feature_storage": "{n} GB storage",
+    "feature_storage_unlimited": "Unlimited storage",
+    "feature_orders": "{n} orders / month",
+    "feature_orders_unlimited": "Unlimited orders",
+    "feature_online_gallery": "Online client galleries",
+    "feature_reports": "Reporting & analytics",
+    "feature_telegram": "Telegram notifications",
+    "feature_api": "API access"
   },
   "footer": {
-    "address": "Phnom Penh, Cambodia",
     "products_heading": "Products",
-    "products": {
-      "retail": "Retail POS",
-      "coffee": "Coffee Shop POS",
-      "restaurant": "Restaurant POS",
-      "backoffice": "Back Office"
-    },
     "links_heading": "Company",
     "platform_heading": "Platform",
     "web_only": "Web-based Platform",
     "web_only_sub": "No download needed, works in any browser",
     "follow_heading": "Follow Us",
-    "copy": "© 2026 Nexstack. All rights reserved.",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Service"
+    "copy": "© 2026 Nexstack. All rights reserved."
+  },
+  "products_hub": {
+    "tag": "Products",
+    "title": "Everything I've built, in one place",
+    "sub": "Independent SaaS products, each solving one problem well. Pick one to see what it does and how to get started.",
+    "empty": "No products published yet check back soon."
+  },
+  "solutions_hub": {
+    "tag": "Solutions",
+    "title": "Built for your kind of business",
+    "sub": "Pick the business type closest to yours to see exactly which product fits and what it does for you.",
+    "empty": "No solutions published yet check back soon."
+  },
+  "solution_detail": {
+    "not_found_title": "Solution not found",
+    "not_found_desc": "This solution doesn't exist or isn't published yet.",
+    "back_to_solutions": "Back to Solutions",
+    "products_tag": "Recommended for you",
+    "products_title": "The product built for this"
+  },
+  "pricing_hub": {
+    "tag": "Pricing",
+    "title": "Simple pricing, by product",
+    "sub": "Each product has its own plans. Pick one to see full pricing.",
+    "view_plans": "View plans"
+  },
+  "get_started_page": {
+    "tag": "Get Started",
+    "title": "What do you want to manage?",
+    "sub": "Pick the product that fits your business — you'll be up and running in minutes.",
+    "choose": "Get started with {name}",
+    "explore_more": "Not sure yet? Explore all products"
+  },
+  "product_detail": {
+    "not_found_title": "Product not found",
+    "not_found_desc": "This product doesn't exist or isn't published yet.",
+    "features_tag": "Features",
+    "features_title": "What {name} does",
+    "screenshots_tag": "See it in action",
+    "screenshots_title": "Screenshots",
+    "pricing_tag": "Pricing",
+    "pricing_title": "Simple, transparent pricing",
+    "pricing_monthly": "Monthly",
+    "pricing_yearly": "Yearly",
+    "faq_tag": "FAQ",
+    "faq_title": "Frequently asked questions",
+    "ready_title": "Ready to try {name}?",
+    "name_label": "Name",
+    "email_label": "Email",
+    "waitlist_success": "Thanks you're on the list. I'll email you when it's ready.",
+    "waitlist_error": "Something went wrong please try again."
   },
   "auth": {
     "register": {
       "step1_label": "Choose plan",
-      "step2_label": "Your details",
-      "step3_label": "Account",
-
       "tab_business": "Business info",
       "tab_account": "Account info",
-
-      "business_hint": "Tell us about your business.",
-      "account_hint": "This will be your login to manage your store.",
 
       "first_name": "First name",
       "first_name_placeholder": "e.g. Sokha",
@@ -354,25 +283,14 @@
         "strong": "Strong"
       },
 
-      "next": "Continue",
-      "back": "Back",
-
-      "form_title": "Set up your store",
-      "form_sub": "Takes less than 2 minutes. No credit card required for free plan.",
-
-      "section_business": "Business info",
-      "section_account": "Account info",
-
+      "logo": "Store Logo",
       "store_name": "Store name",
       "store_name_placeholder": "e.g. My Coffee Shop",
       "business": "Business type",
-      "business_placeholder": "Select type",
       "address": "Address (optional)",
       "address_placeholder": "e.g. Phnom Penh, Cambodia",
       "phone": "Phone number",
       "phone_placeholder": "097 xx xxx xxx",
-      "owner_name": "Owner name",
-      "owner_name_placeholder": "Full name",
       "email": "Email address",
       "email_placeholder": "you{'@'}example.com",
       "password": "Password",
@@ -380,25 +298,13 @@
       "confirm_password": "Confirm password",
       "confirm_password_placeholder": "Repeat password",
 
-      "your_plan": "Your selected plan",
-      "total": "Total due",
       "free": "Free",
-      "change_plan": "Change plan",
 
       "agree_prefix": "I agree to the",
-      "terms": "Terms of Service",
       "and": "and",
-      "privacy": "Privacy Policy",
 
-      "back_home": "Back to homepage",
       "secure_note": "Your data is encrypted and never shared with third parties",
-      "submit": "Create my account",
       "already": "Already have an account?",
-      "login_link": "Sign in",
-      "selected_from_pricing": "Selected from pricing",
-      "back_to_pricing": "Back to pricing",
-      "logo": "Store Logo",
-      "logo_upload": "Tap to upload",
       "currency": "Currency",
       "currency_hint": "What currency will your store use?"
     },
@@ -406,23 +312,18 @@
       "required": "This field is required",
       "email": "Please enter a valid email",
       "min8": "Minimum 8 characters",
-      "min6": "Minimum 6 characters",
       "pw_match": "Passwords do not match",
       "agree": "You must agree to the terms",
       "phone_invalid": "Enter a valid phone number (e.g. 0123456789)",
-      "phone_max": "Phone number must not exceed 15 digits"
+      "phone_max": "Phone number must not exceed 10 digits"
     }
   },
   "legal": {
-    "back": "Back to Nexstack",
     "last_updated": "Last updated",
     "toc": "Table of contents",
     "questions": "Questions? Contact us at",
-    "view_privacy": "View Privacy Policy",
-    "view_terms": "View Terms of Service",
 
     "terms": {
-      "title": "Terms of Service",
       "updated": "January 1, 2025",
 
       "s1": {
@@ -438,7 +339,7 @@
       "s3": {
         "title": "Account Registration",
         "p1": "To use Nexstack you must create an account. You agree to provide accurate, current, and complete information during registration and to keep your information up to date.",
-        "p2": "You are responsible for maintaining the confidentiality of your account credentials and for all activity that occurs under your account. Notify us immediately at support@Nexstack.app if you suspect unauthorized access."
+        "p2": "You are responsible for maintaining the confidentiality of your account credentials and for all activity that occurs under your account. Notify us immediately at support{'@'}Nexstack.app if you suspect unauthorized access."
       },
       "s4": {
         "title": "Subscription & Payment",
@@ -457,7 +358,6 @@
     },
 
     "privacy": {
-      "title": "Privacy Policy",
       "updated": "January 1, 2025",
 
       "s1": {
@@ -483,118 +383,17 @@
       },
       "s5": {
         "title": "Data Retention & Security",
-        "p1": "We retain your data for as long as your account is active or as required by law. You may request deletion of your account and associated data at any time by contacting support@Nexstack.app.",
+        "p1": "We retain your data for as long as your account is active or as required by law. You may request deletion of your account and associated data at any time by contacting support{'@'}Nexstack.app.",
         "p2": "We implement industry-standard security measures including encryption in transit (TLS), encrypted storage, and access controls. No method of transmission over the internet is 100% secure; we cannot guarantee absolute security."
       },
       "s6": {
         "title": "Your Rights",
-        "p1": "You have the right to access, correct, or delete your personal data. You may also request a copy of your data in a portable format. To exercise these rights, contact us at support@Nexstack.app. We will respond to your request within 30 days."
+        "p1": "You have the right to access, correct, or delete your personal data. You may also request a copy of your data in a portable format. To exercise these rights, contact us at support{'@'}Nexstack.app. We will respond to your request within 30 days."
       },
       "s7": {
         "title": "Changes to This Policy",
         "p1": "We may update this Privacy Policy from time to time. We will notify you of significant changes via email or an in-app notice at least 14 days before they take effect. Continued use of the Service after the effective date constitutes acceptance of the updated policy."
       }
     }
-  },
-  "scan_menu": {
-    "tag": "Mobile Ordering",
-    "title": "Let Customers Order From Their Phone",
-    "subtitle": "Scan a QR code, browse the menu, and place orders no app download needed.",
-    "scan_hint": "Point at QR code",
-    "cta": "Get Started Free",
-    "learn_more": "See how it works",
-    "feat1": "Scan QR & Order Instantly",
-    "feat2": "Dine-In Ordering from Your Table",
-    "feat3": "Faster Service, Less Waiting Time",
-    "feat4": "Works on Mobile, Tablet & iPad"
-  },
-  "products_hub": {
-    "tag": "Products",
-    "title": "Everything I've built, in one place",
-    "sub": "Independent SaaS products, each solving one problem well. Pick one to see what it does and how to get started.",
-    "empty": "No products published yet check back soon."
-  },
-  "products_teaser": {
-    "tag": "What I build",
-    "title": "Independent products, built to last",
-    "sub": "Each one solves a specific problem for a specific kind of business. More are on the way.",
-    "view_all": "View all products"
-  },
-  "product_card": {
-    "learn_more": "Learn more",
-    "status": {
-      "live": "Live",
-      "beta": "Beta",
-      "coming_soon": "Coming Soon"
-    }
-  },
-  "product_detail": {
-    "not_found_title": "Product not found",
-    "not_found_desc": "This product doesn't exist or isn't published yet.",
-    "back_to_products": "Back to Products",
-    "all_products": "All products",
-    "learn_more": "Learn more",
-    "features_tag": "Features",
-    "features_title": "What {name} does",
-    "screenshots_tag": "See it in action",
-    "screenshots_title": "Screenshots",
-    "pricing_tag": "Pricing",
-    "get_started_title": "Get started",
-    "get_started_btn": "Get started",
-    "ready_title": "Ready to try {name}?",
-    "waitlist_btn": "Join Waitlist",
-    "visit_site": "Visit site",
-    "start_trial": "Start Free Trial",
-    "name_label": "Name",
-    "email_label": "Email",
-    "waitlist_success": "Thanks you're on the list. I'll email you when it's ready.",
-    "waitlist_error": "Something went wrong please try again."
-  },
-  "about_page": {
-    "tag": "About",
-    "greeting": "Hi, I'm Nong Phloeut",
-    "lead": "I'm an independent developer who builds and runs small, focused SaaS products Nexstack POS is the first, with more on the way. No agency, no account managers just me building tools I'd want to use myself, and supporting the businesses that run on them.",
-    "cta_products": "See what I've built",
-    "how_tag": "How I work",
-    "how_title": "What you can expect",
-    "values": {
-      "v1_title": "Direct support",
-      "v1_desc": "You're talking to the person who built the product, not a support queue.",
-      "v2_title": "Ship, then improve",
-      "v2_desc": "Products launch focused and improve steadily based on real usage, not guesswork.",
-      "v3_title": "Built for local businesses",
-      "v3_desc": "Designed with Cambodian small businesses in mind pricing, language, and workflow included."
-    },
-    "talk_title": "Let's talk",
-    "talk_desc": "Questions about a product, or curious what's next? Reach out directly I read and reply to every message myself.",
-    "social_email": "Email",
-    "social_telegram": "Telegram",
-    "social_facebook": "Facebook",
-    "social_tiktok": "TikTok"
-  },
-  "studio_pricing": {
-    "eyebrow": "Pricing",
-    "title": "Plans for Every Studio",
-    "subtitle": "Start free, upgrade as your studio grows.",
-    "billing_cycle": "Billing cycle",
-    "monthly": "Monthly",
-    "quarterly": "Quarterly",
-    "yearly": "Yearly",
-    "popular": "Most popular",
-    "per_month": "/ month",
-    "trial_days": "{days}-day free trial",
-    "unavailable": "Pricing is temporarily unavailable — please check back shortly.",
-    "cta_default": "Get started",
-    "cta_trial": "Start free trial",
-    "feature_users": "Up to {n} users",
-    "feature_users_unlimited": "Unlimited users",
-    "feature_storage": "{n} GB storage",
-    "feature_storage_unlimited": "Unlimited storage",
-    "feature_orders": "{n} orders / month",
-    "feature_orders_unlimited": "Unlimited orders",
-    "feature_online_gallery": "Online client galleries",
-    "feature_reports": "Reporting & analytics",
-    "feature_telegram": "Telegram notifications",
-    "feature_api": "API access"
   }
 }

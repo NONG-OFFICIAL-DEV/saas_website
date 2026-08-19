@@ -22,16 +22,55 @@ const routes = [
         component: () => import('@/views/products/ProductDetail.vue')
       },
       {
+        path: 'solutions',
+        name: 'solutions',
+        component: () => import('@/views/solutions/SolutionsHub.vue')
+      },
+      {
+        path: 'solutions/:slug',
+        name: 'solution-detail',
+        component: () => import('@/views/solutions/SolutionDetail.vue')
+      },
+      {
+        path: 'pricing',
+        name: 'pricing',
+        component: () => import('@/views/PricingPage.vue')
+      },
+      {
         path: 'about',
         name: 'about',
         component: () => import('@/views/AboutPage.vue')
+      },
+      {
+        path: 'get-started',
+        name: 'get-started',
+        component: () => import('@/views/GetStartedPage.vue')
+      },
+      {
+        path: 'login',
+        name: 'login',
+        component: () => import('@/views/ComingSoonPage.vue'),
+        props: { titleKey: 'button.log_in' }
+      },
+      {
+        path: 'docs',
+        name: 'docs',
+        component: () => import('@/views/ComingSoonPage.vue'),
+        props: { titleKey: 'resources.documentation' }
+      },
+      {
+        path: 'help',
+        name: 'help',
+        component: () => import('@/views/ComingSoonPage.vue'),
+        props: { titleKey: 'resources.help_center' }
+      },
+      {
+        path: 'blog',
+        name: 'blog',
+        component: () => import('@/views/ComingSoonPage.vue'),
+        props: { titleKey: 'resources.blog' }
       }
     ]
-  },
-  {
-    path: '/auth/register',
-    name: 'register',
-    component: () => import('@/views/Register.vue')
   },
   { path: '/terms', component: () => import('@/views/legal/TermsPage.vue') },
   {

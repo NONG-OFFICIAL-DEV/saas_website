@@ -18,6 +18,7 @@ class ProductResource extends JsonResource
             'status' => $this->status,
             'cta_type' => $this->cta_type,
             'cta_url' => $this->cta_url,
+            'pricing_mode' => $this->pricing_mode,
             'accent_color' => $this->accent_color,
             'logo_url' => $this->logo_url,
             'hero_image_url' => $this->hero_image_url,
@@ -35,11 +36,15 @@ class ProductResource extends JsonResource
             'seo_description' => $t?->seo_description,
 
             // Nested content — only present when eager-loaded by the controller.
-            // No pricing/plan data here by design — plans are owned and
-            // managed entirely by the existing SaaS billing system, not
-            // this CMS. The frontend fetches a product's plans from there.
+            // pricing_plans is CMS-authored marketing content ("starting at" cards,
+            // no checkout) and only meaningful when pricing_mode is 'cms'. Products
+            // with pricing_mode 'live' (nexstack-pos, studio-management) have their
+            // own real billing system and fetch live plans from there instead —
+            // see PriceSection.vue / StudioPriceSection.vue.
             'features' => ProductFeatureResource::collection($this->whenLoaded('features')),
             'screenshots' => ProductScreenshotResource::collection($this->whenLoaded('screenshots')),
+            'pricing_plans' => PricingPlanResource::collection($this->whenLoaded('pricingPlans')),
+            'faqs' => ProductFaqResource::collection($this->whenLoaded('faqs')),
 
             // Raw translations — only for the admin editor (needs every locale at once)
             'translations' => $this->whenLoaded('translations'),

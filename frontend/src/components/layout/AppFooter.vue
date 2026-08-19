@@ -88,7 +88,7 @@
           <li>
             <router-link to="/products" class="footer-nav-link">
               <span class="link-dot" />
-              {{ t('products_teaser.view_all') }}
+              {{ t('button.view_all_products') }}
             </router-link>
           </li>
         </ul>
@@ -143,7 +143,7 @@
         <h4 class="col-heading mt-social">{{ t('footer.follow_heading') }}</h4>
         <div class="social-links">
           <a
-            v-for="social in socialLinks"
+            v-for="social in footer.socials ?? []"
             :key="social.name"
             :href="social.href"
             :aria-label="social.name"
@@ -151,7 +151,7 @@
             target="_blank"
             rel="noopener"
           >
-            <component :is="social.icon" />
+            <SocialIcon :name="social.name.toLowerCase()" />
           </a>
         </div>
       </div>
@@ -162,9 +162,9 @@
       <div class="footer-bottom-inner">
         <span class="copy-text">{{ t('footer.copy') }}</span>
         <div class="bottom-links">
-          <a href="/privacy" target="_blank"  class="bottom-link">{{ t('footer.privacy') }}</a>
+          <a href="/privacy" target="_blank"  class="bottom-link">{{ t('common.privacy_policy') }}</a>
           <span class="bottom-sep">·</span>
-          <a href="/terms" target="_blank" class="bottom-link">{{ t('footer.terms') }}</a>
+          <a href="/terms" target="_blank" class="bottom-link">{{ t('common.terms_of_service') }}</a>
         </div>
       </div>
     </div>
@@ -172,12 +172,13 @@
 </template>
 
 <script setup>
-  import { h, computed, onMounted } from 'vue'
+  import { computed, onMounted } from 'vue'
   import { storeToRefs } from 'pinia'
   import { useI18n } from 'vue-i18n'
   import { useTheme } from 'vuetify'
   import { useProductsStore } from '@/stores/products'
   import { useSiteContentStore } from '@/stores/siteContent'
+  import SocialIcon from '@/components/icons/SocialIcon.vue'
 
   const { t } = useI18n()
   const theme = useTheme()
@@ -191,97 +192,15 @@
   })
 
   const isDark = computed(() => theme.global.name.value === 'dark')
-  // ── Inline SVG social icons ──────────────────────────────────────────
-  const IconTelegram = () =>
-    h(
-      'svg',
-      {
-        xmlns: 'http://www.w3.org/2000/svg',
-        viewBox: '0 0 24 24',
-        width: '17',
-        height: '17',
-        fill: 'currentColor'
-      },
-      [
-        h('path', {
-          d: 'M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.932z'
-        })
-      ]
-    )
-  const IconFacebook = () =>
-    h(
-      'svg',
-      {
-        xmlns: 'http://www.w3.org/2000/svg',
-        viewBox: '0 0 24 24',
-        width: '17',
-        height: '17',
-        fill: 'currentColor'
-      },
-      [
-        h('path', {
-          d: 'M24 12.073C24 5.446 18.627 0 12 0S0 5.446 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z'
-        })
-      ]
-    )
-  const IconTiktok = () =>
-    h(
-      'svg',
-      {
-        xmlns: 'http://www.w3.org/2000/svg',
-        viewBox: '0 0 24 24',
-        width: '17',
-        height: '17',
-        fill: 'currentColor'
-      },
-      [
-        h('path', {
-          d: 'M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.19 8.19 0 0 0 4.79 1.52V6.76a4.85 4.85 0 0 1-1.02-.07z'
-        })
-      ]
-    )
-
-  const IconGeneric = () =>
-    h(
-      'svg',
-      {
-        xmlns: 'http://www.w3.org/2000/svg',
-        viewBox: '0 0 24 24',
-        width: '17',
-        height: '17',
-        fill: 'none',
-        stroke: 'currentColor',
-        'stroke-width': '2',
-        'stroke-linecap': 'round',
-        'stroke-linejoin': 'round'
-      },
-      [
-        h('path', { d: 'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6' }),
-        h('polyline', { points: '15 3 21 3 21 9' }),
-        h('line', { x1: '10', y1: '14', x2: '21', y2: '3' })
-      ]
-    )
-
-  const ICON_MAP = {
-    telegram: IconTelegram,
-    facebook: IconFacebook,
-    tiktok: IconTiktok
-  }
-
-  // ── Social links come from the CMS (site_footer.socials) ────────────────
-  const socialLinks = computed(() =>
-    (footer.value.socials ?? []).map(s => ({
-      ...s,
-      icon: ICON_MAP[s.name.toLowerCase()] ?? IconGeneric
-    }))
-  )
 
   // ── Nav links ─────────────────────────────────────────────────────────
   const navLinks = [
-    { to: '/', key: 'nav.home' },
-    { to: '/products', key: 'nav.products' },
-    { to: '/about', key: 'nav.about' },
-    { href: '/#contact', key: 'landing.nav.contact' }
+    { to: '/', key: 'menu.home' },
+    { to: '/products', key: 'menu.products' },
+    { to: '/solutions', key: 'menu.solutions' },
+    { to: '/pricing', key: 'menu.pricing' },
+    { to: '/about', key: 'menu.about' },
+    { href: '/#contact', key: 'menu.contact' }
   ]
 </script>
 

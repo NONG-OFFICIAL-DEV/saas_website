@@ -17,10 +17,10 @@
           @click.native="cancel"
           variant="tonal"
         >
-          {{ $t('btn.cancel') }}
+          {{ $t('button.cancel') }}
         </v-btn>
         <v-btn elevation="0" class="bg-red" @click.native="agree">
-          {{ $t('btn.yes') }}
+          {{ $t('button.yes') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -40,8 +40,8 @@
         options: {
           type: 'error',
           width: 290,
-          agreeBtnText: this.$t('btn.delete'),
-          denyBtnText: this.$t('btn.cancel')
+          agreeBtnText: this.$t('button.delete'),
+          denyBtnText: this.$t('button.cancel')
         }
       }
     },

@@ -23,6 +23,7 @@ class UpdateProductRequest extends FormRequest
             'status' => ['sometimes', 'in:live,beta,coming_soon'],
             'cta_type' => ['sometimes', 'in:register,external_link,waitlist'],
             'cta_url' => ['nullable', 'string', 'max:255'],
+            'pricing_mode' => ['sometimes', 'in:live,cms'],
             'accent_color' => ['sometimes', 'string', 'max:20'],
             'logo_url' => ['nullable', 'string', 'max:500'],
             'hero_image_url' => ['nullable', 'string', 'max:500'],

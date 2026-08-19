@@ -21,7 +21,7 @@
           <div
             class="cycle-track"
             role="group"
-            :aria-label="t('pricing.billing_cycle')"
+            :aria-label="t('common.billing_cycle')"
           >
             <button
               v-for="c in unifiedCycles"
@@ -95,7 +95,7 @@
               variant="flat"
               prepend-icon="mdi-star"
             >
-              {{ t('pricing.popular') }}
+              {{ t('common.most_popular') }}
             </v-chip>
 
             <!-- Header -->
@@ -134,7 +134,7 @@
                   <span class="price-amount price-amount--free">0</span>
                 </div>
                 <div class="price-meta">
-                  <span class="price-per">{{ t('pricing.per_month') }}</span>
+                  <span class="price-per">{{ t('common.per_month') }}</span>
                   <v-chip
                     size="x-small"
                     color="primary"
@@ -221,9 +221,11 @@
             >
               {{
                 plan.cta ??
-                (te(`pricing.plans.${plan.code}.cta`)
-                  ? t(`pricing.plans.${plan.code}.cta`)
-                  : t('pricing.cta_default'))
+                (plan.code === 'enterprise'
+                  ? t('button.contact_sales')
+                  : plan.code === 'free'
+                    ? t('button.start_free')
+                    : t('button.get_started'))
               }}
             </v-btn>
           </div>
@@ -255,12 +257,11 @@
 <script setup>
   import { ref, computed, onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { useRouter } from 'vue-router'
-  import { useRegisterStore } from '@/stores/register'
+  import { usePosPlansStore } from '@/stores/posPlans'
+  import { getTrialLink } from '@/config/productTrials'
 
-  const { t, te, locale } = useI18n()
-  const router = useRouter()
-  const store = useRegisterStore()
+  const { t, locale } = useI18n()
+  const store = usePosPlansStore()
   const loading = ref(false)
 
   const PLAN_UI = {
@@ -332,12 +333,12 @@
     return Number(planCycleForSelected(plan)?.discount_percent ?? 0)
   }
 
+  // Registration itself happens on the real admin app, not this site —
+  // same handoff convention as Studio Management's pricing section.
   function goToRegister(plan) {
     if (!isPlanAvailableForCycle(plan)) return
-    router.push({
-      path: '/auth/register',
-      query: { plan: plan.id, months: selectedMonths.value, from: 'pricing' }
-    })
+    const { href } = getTrialLink('nexstack-pos', plan.code)
+    window.open(href, '_blank', 'noopener')
   }
 
   onMounted(async () => {

@@ -3,10 +3,10 @@
     <v-container>
       <div class="cta-block text-center" data-aos="zoom-in">
         <h2 class="cta-title text-white mb-3">
-          {{ t('cta.title') }}
+          {{ t('home.cta.title') }}
         </h2>
         <p class="cta-sub mb-8">
-          {{ t('cta.sub') }}
+          {{ t('home.cta.sub') }}
         </p>
 
         <div class="cta-actions">
@@ -18,7 +18,7 @@
             append-icon="mdi-arrow-right"
             to="/products"
           >
-            {{ t('cta.self.btn') }}
+            {{ t('button.view_products') }}
           </v-btn>
           <v-btn
             variant="outlined"
@@ -29,16 +29,16 @@
             target="_blank"
             rel="noopener"
           >
-            {{ t('cta.contact.btn') }}
+            {{ t('button.chat_telegram') }}
           </v-btn>
         </div>
 
         <div class="cta-reassurance">
-          <span>{{ t('cta.reassurance.no_fees') }}</span>
+          <span>{{ t('home.cta.reassurance.no_fees') }}</span>
           <span class="cta-dot" />
-          <span>{{ t('cta.reassurance.setup') }}</span>
+          <span>{{ t('home.cta.reassurance.setup') }}</span>
           <span class="cta-dot" />
-          <span>{{ t('cta.reassurance.cancel_anytime') }}</span>
+          <span>{{ t('home.cta.reassurance.cancel_anytime') }}</span>
         </div>
       </div>
     </v-container>

@@ -8,12 +8,15 @@ use App\Http\Controllers\Api\Admin\SiteContentController as AdminSiteContentCont
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Public\ProductController as PublicProductController;
 use App\Http\Controllers\Api\Public\SiteContentController as PublicSiteContentController;
+use App\Http\Controllers\Api\Public\SolutionController as PublicSolutionController;
 use Illuminate\Support\Facades\Route;
 
 // ── CMS: Public (no auth) — consumed by the marketing website ──────────────
 Route::prefix('v1/public')->group(function () {
     Route::get('products', [PublicProductController::class, 'index']);
     Route::get('products/{slug}', [PublicProductController::class, 'show']);
+    Route::get('solutions', [PublicSolutionController::class, 'index']);
+    Route::get('solutions/{slug}', [PublicSolutionController::class, 'show']);
     Route::get('site-content/{key}', [PublicSiteContentController::class, 'show']);
 });
 
