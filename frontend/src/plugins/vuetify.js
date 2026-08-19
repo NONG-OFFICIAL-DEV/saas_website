@@ -66,7 +66,7 @@ const vuetify = createVuetify({
     }
   },
   theme: {
-    defaultTheme: localStorage.getItem('theme') === 'light' ? 'light' : 'dark',
+    defaultTheme: localStorage.getItem('theme') === 'dark' ? 'dark' : 'light',
     themes: {
       light: {
         dark: false,
@@ -74,7 +74,7 @@ const vuetify = createVuetify({
           primary: '#3B5BDB', // Indigo Blue — main action color
           secondary: '#6C757D', // Neutral gray for secondary actions
           surface: '#FFFFFF',
-          background: '#F8F9FA',
+          background: '#FFFFFF',
           success: '#099268',
           warning: '#F76707',
           error: '#C92A2A',

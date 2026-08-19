@@ -358,19 +358,6 @@
     position: relative;
     overflow: hidden;
   }
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -120px;
-    right: -120px;
-    width: 360px;
-    height: 360px;
-    border-radius: 50%;
-    background: var(--accent, #6366f1);
-    opacity: 0.14;
-    filter: blur(80px);
-    pointer-events: none;
-  }
 
   .status-chip {
     background: color-mix(

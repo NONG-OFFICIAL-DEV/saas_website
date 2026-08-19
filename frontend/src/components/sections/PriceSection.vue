@@ -1,9 +1,6 @@
 <template>
   <section id="pricing" class="section-pad section-tint-peach">
     <v-container>
-      <div class="blob blob-1" aria-hidden="true" />
-      <div class="blob blob-2" aria-hidden="true" />
-
       <div class="pricing-container" data-aos="fade-up">
         <!-- ── Header ── -->
         <div class="text-center pricing-header">
@@ -352,29 +349,6 @@
 </script>
 
 <style scoped>
-  /* ── Blobs ── */
-  .blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    pointer-events: none;
-    opacity: 0.3;
-    z-index: 0;
-  }
-  .blob-1 {
-    width: 480px;
-    height: 480px;
-    background: rgba(var(--v-theme-primary), 0.16);
-    top: -80px;
-    left: -120px;
-  }
-  .blob-2 {
-    width: 360px;
-    height: 360px;
-    background: rgba(245, 158, 11, 0.1);
-    bottom: 0;
-    right: -60px;
-  }
 
   /* ── Outer container ── */
   .pricing-container {

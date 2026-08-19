@@ -81,27 +81,17 @@
   }
 
   /*
-   * ── Soft section-tint palette ──────────────────────────────────────
-   * Very low-opacity washes derived from the existing theme tokens
-   * (not new hues) so each major section reads as a distinct "zone"
-   * while the page stays mostly neutral. rgba() driven off the theme's
-   * own RGB-channel custom properties means these adapt automatically
-   * between light/dark — no separate dark-mode overrides needed.
+   * ── Section backgrounds ──────────────────────────────────────────────
+   * Every section is flat, uniform white (the page background) — no
+   * per-section color washes. These classes are kept as a no-op so
+   * existing section components don't need their markup changed.
    */
-  .section-tint-lavender {
-    background: rgba(var(--v-theme-primary), 0.05);
-  }
-  .section-tint-sky {
-    background: rgba(var(--v-theme-info), 0.06);
-  }
-  .section-tint-mint {
-    background: rgba(var(--v-theme-success), 0.055);
-  }
-  .section-tint-peach {
-    background: rgba(var(--v-theme-warning), 0.055);
-  }
+  .section-tint-lavender,
+  .section-tint-sky,
+  .section-tint-mint,
+  .section-tint-peach,
   .section-tint-neutral {
-    background: rgba(var(--v-theme-on-surface), 0.03);
+    background: transparent;
   }
 
   /*

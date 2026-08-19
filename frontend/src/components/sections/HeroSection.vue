@@ -1,10 +1,5 @@
 <template>
   <section class="hero-section section-tint-lavender">
-    <!-- Background orbs -->
-    <div class="hero-bg-orb orb-1" />
-    <div class="hero-bg-orb orb-2" />
-    <div class="hero-bg-orb orb-3" />
-
     <!-- Decorative 3D illustrations -->
     <div class="hero-geo hero-geo--right d-none d-md-block">
       <Geometric3D />
@@ -97,17 +92,6 @@ onMounted(() => store.fetchHero())
   padding: 120px 0 90px;
   overflow: hidden;
 }
-.hero-bg-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
-  z-index: 0;
-}
-.orb-1 { width: 500px; height: 500px; background: rgba(37,99,235,0.07);  top: -150px; right: -100px; }
-.orb-2 { width: 400px; height: 400px; background: rgba(245,158,11,0.05); bottom: -100px; left: -80px; }
-.orb-3 { width: 300px; height: 300px; background: rgba(99,102,241,0.06); top: 50%; left: 50%; transform: translate(-50%,-50%); }
-
 .hero-geo {
   position: absolute;
   z-index: 0;

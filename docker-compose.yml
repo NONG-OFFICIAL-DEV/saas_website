@@ -1,0 +1,56 @@
+services:
+  backend_service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: nongdev/saas-website-backend:latest
+    container_name: saas_website_backend
+    restart: always
+    networks:
+      - web
+      - internal_project_network
+    env_file:
+      - ./backend/.env
+    volumes:
+      - saas_website_backend_storage:/var/www/html/storage
+      - ./backend/bootstrap/cache:/var/www/html/bootstrap/cache
+
+  webserver:
+    build:
+      context: ./backend/nginx
+      dockerfile: Dockerfile
+    image: nongdev/saas-website-webserver:latest
+    container_name: saas_website_webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "86:86"
+    volumes:
+      - saas_website_backend_storage:/var/www/html/storage
+    networks:
+      - web
+      - internal_project_network
+    depends_on:
+      - backend_service
+
+  # container_name intentionally unchanged — the shared reverse proxy
+  # (reverse-proxy-caddy) already routes www.nexstacktech.com to this
+  # container name; renaming it here would break that route in production.
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: smart-store-website
+    image: nongdev/smart-store-website:latest
+    restart: always
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
+  internal_project_network:
+    driver: bridge
+
+volumes:
+  saas_website_backend_storage:

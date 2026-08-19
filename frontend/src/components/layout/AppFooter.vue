@@ -1,8 +1,5 @@
 <template>
   <footer class="site-footer">
-    <!-- Top gradient divider -->
-    <div class="footer-glow" aria-hidden="true" />
-
     <div class="footer-inner">
       <!-- ── Col 1 : Brand + contact ─────────────────────────────── -->
       <div class="footer-col col-brand">
@@ -213,21 +210,6 @@
     overflow: hidden;
   }
 
-  /* Soft primary glow at the top edge */
-  .footer-glow {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(var(--v-theme-primary), 0.6) 30%,
-      rgba(245, 158, 11, 0.5) 70%,
-      transparent
-    );
-  }
 
   /* ── Main grid ──────────────────────────────────────────────────────── */
   .footer-inner {

@@ -12,6 +12,8 @@ jobs:
   build-push:
     runs-on: ubuntu-latest
     env:
+      IMAGE_BACKEND: ${{ secrets.DOCKERHUB_USERNAME }}/saas-website-backend
+      IMAGE_WEBSERVER: ${{ secrets.DOCKERHUB_USERNAME }}/saas-website-webserver
       IMAGE_FRONTEND: ${{ secrets.DOCKERHUB_USERNAME }}/smart-store-website
       IMAGE_TAG: ${{ github.sha }}
     steps:
@@ -19,24 +21,46 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Docker login
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build & Push frontend image
+      - name: Build & Push backend
         run: |
-          echo ">>> Building frontend Docker image"
+          docker build \
+            -t $IMAGE_BACKEND:latest \
+            -t $IMAGE_BACKEND:$IMAGE_TAG \
+            ./backend
+
+          docker push $IMAGE_BACKEND:latest
+          docker push $IMAGE_BACKEND:$IMAGE_TAG
+
+      - name: Build & Push webserver (nginx)
+        run: |
+          docker build \
+            -t $IMAGE_WEBSERVER:latest \
+            -t $IMAGE_WEBSERVER:$IMAGE_TAG \
+            ./backend/nginx
+
+          docker push $IMAGE_WEBSERVER:latest
+          docker push $IMAGE_WEBSERVER:$IMAGE_TAG
+
+      - name: Build & Push frontend
+        run: |
           docker build \
             --build-arg VITE_APP_MODE=Production \
             --build-arg VITE_APP_API_BASE_URL=${{ secrets.APP_API_BASE_URL }} \
+            --build-arg VITE_APP_CMS_API_URL=${{ secrets.CMS_API_BASE_URL }} \
+            --build-arg VITE_APP_STUDIO_API_URL=https://photo-studio.nexstacktech.com/api/v1 \
+            --build-arg VITE_APP_STUDIO_APP_URL=https://photo-studio.nexstacktech.com \
+            --build-arg VITE_APP_ADMIN_APP_URL=https://admin.nexstacktech.com \
             --build-arg VITE_APP_I18N_LOCALE=km \
             --build-arg VITE_APP_I18N_FALLBACK_LOCALE=en \
             -t $IMAGE_FRONTEND:latest \
             -t $IMAGE_FRONTEND:$IMAGE_TAG \
-            .
+            ./frontend
 
-          echo ">>> Pushing images"
           docker push $IMAGE_FRONTEND:latest
           docker push $IMAGE_FRONTEND:$IMAGE_TAG
 
@@ -57,7 +81,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ubuntu
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          source: "docker-compose.yml" # Or the path to your file
+          source: "docker-compose.yml"
           target: "~/smart_store_website"
 
       # STEP 2: Run the deployment script
@@ -70,11 +94,24 @@ jobs:
           script: |
             set -e
             cd ~/smart_store_website
-            
+
             echo ">>> Pulling latest images"
             docker compose pull
 
-            echo ">>> Restarting containers"
-            # Using 'up -d' is usually better than 'down' followed by 'up' 
-            # as it reduces downtime.
+            echo ">>> Stopping old containers"
+            docker compose down --remove-orphans
+
+            echo ">>> Starting containers"
             docker compose up -d --remove-orphans
+
+            echo ">>> Waiting for backend to come up"
+            sleep 10
+
+            echo ">>> Running migrations"
+            docker exec saas_website_backend php artisan migrate --force
+
+            echo ">>> Optimizing"
+            docker exec saas_website_backend php artisan optimize
+
+            echo ">>> Pruning unused Docker images"
+            docker image prune -a --force
