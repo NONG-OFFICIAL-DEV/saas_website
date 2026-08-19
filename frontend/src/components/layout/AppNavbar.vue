@@ -193,15 +193,20 @@
     margin: 0 auto;
     height: 100%;
     padding: 0 24px;
-    display: flex;
+    display: grid;
+    /* Equal outer columns so the middle (nav) column is truly centered on
+       the bar, regardless of how wide the logo vs. controls end up being —
+       a plain flex `justify-content: space-between` can't do this since it
+       only pushes content to the extremes, not center the middle item. */
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
+    column-gap: 32px;
   }
 
   .logo-link {
     display: flex;
     align-items: center;
-    margin-right: 40px;
+    justify-self: start;
   }
   .logo-img {
     height: 34px;
@@ -212,8 +217,8 @@
   .desktop-links {
     display: none;
     align-items: center;
+    justify-self: center;
     gap: 32px;
-    margin-right: auto;
     height: 100%;
   }
   @media (min-width: 960px) {
