@@ -254,10 +254,11 @@
 <script setup>
   import { ref, computed, onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
+  import { useRouter } from 'vue-router'
   import { usePosPlansStore } from '@/stores/posPlans'
-  import { getTrialLink } from '@/config/productTrials'
 
   const { t, locale } = useI18n()
+  const router = useRouter()
   const store = usePosPlansStore()
   const loading = ref(false)
 
@@ -330,12 +331,14 @@
     return Number(planCycleForSelected(plan)?.discount_percent ?? 0)
   }
 
-  // Registration itself happens on the real admin app, not this site —
-  // same handoff convention as Studio Management's pricing section.
+  // Hands off to this site's own onboarding wizard, which calls Smart
+  // Store's real registration API server-side. Note: Smart Store's
+  // self-service endpoint always assigns the free plan regardless of which
+  // card was clicked (paid plans are chosen after logging in) — this isn't
+  // a limitation introduced here, it's how that product's own signup works.
   function goToRegister(plan) {
     if (!isPlanAvailableForCycle(plan)) return
-    const { href } = getTrialLink('nexstack-pos', plan.code)
-    window.open(href, '_blank', 'noopener')
+    router.push('/onboarding/nexstack-pos')
   }
 
   onMounted(async () => {

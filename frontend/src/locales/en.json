@@ -283,21 +283,18 @@
       "step1_label": "Choose plan",
       "tab_business": "Business info",
       "tab_account": "Account info",
-
       "first_name": "First name",
       "first_name_placeholder": "e.g. Sokha",
       "last_name": "Last name",
       "last_name_placeholder": "e.g. Chan",
       "pick_plan_title": "Choose your plan",
       "pick_plan_sub": "You can upgrade or change your plan anytime after signing up.",
-
       "pw_strength": {
         "weak": "Weak",
         "fair": "Fair",
         "good": "Good",
         "strong": "Strong"
       },
-
       "logo": "Store Logo",
       "store_name": "Store name",
       "store_name_placeholder": "e.g. My Coffee Shop",
@@ -312,12 +309,9 @@
       "password_placeholder": "Min. 8 characters",
       "confirm_password": "Confirm password",
       "confirm_password_placeholder": "Repeat password",
-
       "free": "Free",
-
       "agree_prefix": "I agree to the",
       "and": "and",
-
       "secure_note": "Your data is encrypted and never shared with third parties",
       "already": "Already have an account?",
       "currency": "Currency",
@@ -337,10 +331,8 @@
     "last_updated": "Last updated",
     "toc": "Table of contents",
     "questions": "Questions? Contact us at",
-
     "terms": {
       "updated": "January 1, 2025",
-
       "s1": {
         "title": "Acceptance of Terms",
         "p1": "By accessing or using Nexstack ('the Service'), you agree to be bound by these Terms of Service. If you do not agree to all of these terms, you may not use the Service.",
@@ -371,10 +363,8 @@
         "p1": "To the maximum extent permitted by law, Nexstack and its affiliates shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the Service, even if we have been advised of the possibility of such damages. Our total liability to you for any claim shall not exceed the amount you paid us in the three months preceding the claim."
       }
     },
-
     "privacy": {
       "updated": "January 1, 2025",
-
       "s1": {
         "title": "Introduction",
         "p1": "Nexstack ('we', 'us', or 'our') is committed to protecting your personal information. This Privacy Policy explains what data we collect, how we use it, and your rights regarding that data. By using our Service, you agree to the practices described in this policy."
@@ -410,5 +400,31 @@
         "p1": "We may update this Privacy Policy from time to time. We will notify you of significant changes via email or an in-app notice at least 14 days before they take effect. Continued use of the Service after the effective date constitutes acceptance of the updated policy."
       }
     }
+  },
+  "onboarding": {
+    "step_business": "Business info",
+    "step_owner": "Your account",
+    "title": "Set up your {name}",
+    "sub": "This only takes a minute — we'll create your account directly inside {name}.",
+    "business_name": "Business name",
+    "business_name_placeholder": "e.g. Golden Spoon Restaurant",
+    "business_type": "Business type",
+    "back": "Back",
+    "next": "Continue",
+    "submit": "Create my account",
+    "submitting": "Setting things up…",
+    "success_title": "Your {name} is ready!",
+    "success_sub": "Log in with the email and password you just created to start setting things up.",
+    "go_to_login": "Go to {name} login",
+    "start_over": "Choose a different product",
+    "generic_error": "Something went wrong. Please try again.",
+    "unknown_product": "We don't have a guided setup for that product yet."
+  },
+  "login_page": {
+    "tag": "Log In",
+    "title": "Which product do you want to log into?",
+    "sub": "Each product is its own app with its own account — pick yours below.",
+    "choose": "Log in to {name}",
+    "no_products": "No products are available to log into yet."
   }
 }

@@ -49,6 +49,7 @@ cmsApi.interceptors.response.use(
     const message = error.response?.data?.message || error.message
     const wrapped = new Error(message)
     wrapped.status = error.response?.status
+    wrapped.errors = error.response?.data?.errors
     return Promise.reject(wrapped)
   }
 )

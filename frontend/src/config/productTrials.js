@@ -23,6 +23,24 @@ const PRODUCT_TRIAL_LINKS = {
   })
 }
 
+// Every product here is a real, separate SaaS app with its own login page —
+// this site never authenticates anyone itself (see the onboarding wizard's
+// note in CLAUDE.md for why). Used by LoginPage.vue.
+const PRODUCT_LOGIN_LINKS = {
+  'nexstack-pos': `${ADMIN_APP_URL}/login`,
+  'studio-management': `${STUDIO_APP_URL}/login`
+}
+
+/**
+ * @param {string} slug
+ * @returns {string|null} that product's own login URL, or null if it
+ *   doesn't have one wired up yet (caller should fall back to its own
+ *   marketing page rather than guessing).
+ */
+export function getLoginLink(slug) {
+  return PRODUCT_LOGIN_LINKS[slug] ?? null
+}
+
 /**
  * @param {string} slug - the specific product the visitor picked (never a
  *   guess/fallback — callers must know which product they mean; there is no

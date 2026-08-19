@@ -47,10 +47,14 @@ const routes = [
         component: () => import('@/views/GetStartedPage.vue')
       },
       {
+        path: 'onboarding/:slug',
+        name: 'onboarding',
+        component: () => import('@/views/OnboardingWizard.vue')
+      },
+      {
         path: 'login',
         name: 'login',
-        component: () => import('@/views/ComingSoonPage.vue'),
-        props: { titleKey: 'button.log_in' }
+        component: () => import('@/views/LoginPage.vue')
       },
       {
         path: 'docs',

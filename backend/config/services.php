@@ -35,4 +35,17 @@ return [
         ],
     ],
 
+    // Onboarding orchestrator targets — each product owns its own tenant/
+    // auth/billing entirely; the platform only ever calls their existing
+    // public registration endpoints, never touches their databases.
+    'studio' => [
+        'base_url' => env('STUDIO_API_BASE_URL', 'https://photo-studio.nexstacktech.com'),
+        'login_url' => env('STUDIO_LOGIN_URL', 'https://photo-studio.nexstacktech.com/login'),
+    ],
+
+    'smart_store' => [
+        'base_url' => env('SMART_STORE_API_BASE_URL', 'https://admin.nexstacktech.com'),
+        'login_url' => env('SMART_STORE_LOGIN_URL', 'https://admin.nexstacktech.com/login'),
+    ],
+
 ];

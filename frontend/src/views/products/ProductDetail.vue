@@ -240,11 +240,16 @@
 
 <script setup>
   import { computed, onMounted, ref, watch } from 'vue'
-  import { useRoute } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { useProductsStore } from '@/stores/products'
   import { getTrialLink } from '@/config/productTrials'
   import { submitLead } from '@/api/leads'
+
+  // Products with a guided in-house onboarding wizard skip straight to it;
+  // anything else falls back to that product's own external signup (see
+  // config/productTrials.js).
+  const ONBOARDABLE_SLUGS = ['nexstack-pos', 'studio-management']
 
   import Geometric3D from '@/components/ui/Geometric3D.vue'
   import PriceSection from '@/components/sections/PriceSection.vue'
@@ -273,6 +278,7 @@
   }
 
   const route = useRoute()
+  const router = useRouter()
   const store = useProductsStore()
 
   const product = computed(() => store.currentProduct)
@@ -280,10 +286,13 @@
     () => DEEP_DIVE_EXTRAS[route.params.slug] ?? []
   )
 
-  // Default ("register") CTA hands off to that specific product's own
-  // signup — never a hardcoded route, so this is correct regardless of
-  // which product is on screen (see config/productTrials.js).
+  // Default ("register") CTA hands off to this site's own onboarding
+  // wizard for products that have one; otherwise falls back to that
+  // product's own external signup (see config/productTrials.js).
   const finalCtaLink = computed(() => {
+    if (ONBOARDABLE_SLUGS.includes(product.value.slug)) {
+      return { to: `/onboarding/${product.value.slug}` }
+    }
     const link = getTrialLink(product.value.slug)
     return link.href ? { href: link.href, target: '_blank', rel: 'noopener' } : { to: link.to }
   })
@@ -323,13 +332,11 @@
     document.getElementById('cta')?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  // Studio Management System is a real, separate SaaS app with its own
-  // accounts — a plan selection here hands off to that app's own register
-  // page (new tab, same convention as cta_type === 'external_link' below),
-  // it doesn't scroll to this site's waitlist form.
+  // Hands off to this site's own onboarding wizard, which calls Studio's
+  // real registration API server-side (carrying the chosen plan through),
+  // rather than scrolling to this site's waitlist form.
   function goToStudioRegister(planCode) {
-    const { href } = getTrialLink('studio-management', planCode)
-    window.open(href, '_blank', 'noopener')
+    router.push({ path: '/onboarding/studio-management', query: planCode ? { plan: planCode } : {} })
   }
 
   async function submitWaitlist() {

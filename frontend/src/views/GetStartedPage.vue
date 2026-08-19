@@ -48,18 +48,24 @@
   import { onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useProductsStore } from '@/stores/products'
-  import { getTrialLink } from '@/config/productTrials'
 
   const { t } = useI18n()
   const store = useProductsStore()
+
+  // Products with a guided in-house onboarding wizard skip straight to it;
+  // anything else falls back to that product's own marketing page (no
+  // guided setup exists for it yet).
+  const ONBOARDABLE_SLUGS = ['nexstack-pos', 'studio-management']
 
   onMounted(() => {
     store.fetchProducts()
   })
 
   function linkFor(product) {
-    const link = getTrialLink(product.slug)
-    return link.href ? { href: link.href, target: '_blank', rel: 'noopener' } : { to: link.to }
+    if (ONBOARDABLE_SLUGS.includes(product.slug)) {
+      return { to: `/onboarding/${product.slug}` }
+    }
+    return { to: `/products/${product.slug}` }
   }
 </script>
 

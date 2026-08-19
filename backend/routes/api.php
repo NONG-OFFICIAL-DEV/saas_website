@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\Admin\SolutionController as AdminSolutionController
 use App\Http\Controllers\Api\Admin\TestimonialController as AdminTestimonialController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Public\BlogPostController as PublicBlogPostController;
+use App\Http\Controllers\Api\Public\OnboardingController;
 use App\Http\Controllers\Api\Public\ProductController as PublicProductController;
 use App\Http\Controllers\Api\Public\SiteContentController as PublicSiteContentController;
 use App\Http\Controllers\Api\Public\SolutionController as PublicSolutionController;
@@ -27,6 +28,9 @@ Route::prefix('v1/public')->group(function () {
     Route::get('blog-posts', [PublicBlogPostController::class, 'index']);
     Route::get('blog-posts/{slug}', [PublicBlogPostController::class, 'show']);
     Route::get('site-content/{key}', [PublicSiteContentController::class, 'show']);
+
+    Route::get('onboarding/business-types', [OnboardingController::class, 'businessTypes']);
+    Route::post('onboarding/provision', [OnboardingController::class, 'provision'])->middleware('throttle:6,1');
 });
 
 // ── CMS: Auth ────────────────────────────────────────────────────────────
