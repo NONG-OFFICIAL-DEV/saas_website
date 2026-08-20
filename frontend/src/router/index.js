@@ -65,8 +65,7 @@ const routes = [
       {
         path: 'help',
         name: 'help',
-        component: () => import('@/views/ComingSoonPage.vue'),
-        props: { titleKey: 'resources.help_center' }
+        component: () => import('@/views/HelpCenterPage.vue')
       },
       {
         path: 'blog',
