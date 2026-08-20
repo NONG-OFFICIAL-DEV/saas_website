@@ -177,9 +177,19 @@
   const siteContentStore = useSiteContentStore()
   const { footer } = storeToRefs(siteContentStore)
 
-  onMounted(() => {
-    productsStore.fetchProducts()
-    siteContentStore.fetchFooter()
+  // Awaited (not onMounted) — the footer renders on every page, and pages
+  // differ in whether they themselves already awaited productsStore's
+  // fetch. Vue's SSR only re-evaluates a Suspense-wrapped subtree once its
+  // own async setup resolves; sibling layout chrome like this footer can
+  // render its <li v-for="productsStore.products"> BEFORE a page's own
+  // awaited fetch settles, while the serialized Pinia payload sent to the
+  // client reflects the store's later, populated state — producing a real
+  // hydration mismatch (confirmed in production: server rendered no <li>,
+  // client expected one). Awaiting it here directly makes the footer's own
+  // render consistent regardless of what any given page does.
+  await useAsyncData('layout-footer', async () => {
+    await Promise.all([productsStore.fetchProducts(), siteContentStore.fetchFooter()])
+    return true
   })
 
   const isDark = computed(() => theme.global.name.value === 'dark')

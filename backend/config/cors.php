@@ -5,13 +5,13 @@ return [
 
     'allowed_methods' => ['*'],
 
-    // Local Vite dev server ports (Vite falls back to the next free port,
-    // so a couple of neighbours are allowed) + placeholder for production.
+    // Frontend is now Nuxt (default dev port 3000, Vite's 5173/5174 no
+    // longer apply since that app was migrated away from) + production.
     'allowed_origins' => [
-        'http://localhost:5173',
-        'http://localhost:5174',
-        'http://127.0.0.1:5173',
-        'http://127.0.0.1:5174',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'https://www.nexstacktech.com',
+        'https://nexstacktech.com',
     ],
 
     'allowed_origins_patterns' => [],
