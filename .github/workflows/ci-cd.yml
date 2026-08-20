@@ -46,20 +46,17 @@ jobs:
           docker push $IMAGE_WEBSERVER:latest
           docker push $IMAGE_WEBSERVER:$IMAGE_TAG
 
+      # Nuxt reads its API URLs etc. from runtime config (NUXT_PUBLIC_* env
+      # vars, see frontend_nuxt/.env.example) instead of Vite build-time
+      # args — the same image now works across environments, so no
+      # --build-arg values are needed here. The server's docker-compose.yml
+      # supplies them via env_file: ./frontend_nuxt/.env.
       - name: Build & Push frontend
         run: |
           docker build \
-            --build-arg VITE_APP_MODE=Production \
-            --build-arg VITE_APP_API_BASE_URL=${{ secrets.APP_API_BASE_URL }} \
-            --build-arg VITE_APP_CMS_API_URL=${{ secrets.CMS_API_BASE_URL }} \
-            --build-arg VITE_APP_STUDIO_API_URL=https://photo-studio.nexstacktech.com/api/v1 \
-            --build-arg VITE_APP_STUDIO_APP_URL=https://photo-studio.nexstacktech.com \
-            --build-arg VITE_APP_ADMIN_APP_URL=https://admin.nexstacktech.com \
-            --build-arg VITE_APP_I18N_LOCALE=km \
-            --build-arg VITE_APP_I18N_FALLBACK_LOCALE=en \
             -t $IMAGE_FRONTEND:latest \
             -t $IMAGE_FRONTEND:$IMAGE_TAG \
-            ./frontend
+            ./frontend_nuxt
 
           docker push $IMAGE_FRONTEND:latest
           docker push $IMAGE_FRONTEND:$IMAGE_TAG
