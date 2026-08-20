@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Admin\BlogPostController as AdminBlogPostController;
 use App\Http\Controllers\Api\Admin\MediaController;
+use App\Http\Controllers\Api\Admin\OnboardingSubmissionController;
 use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Api\Admin\ProductFaqController;
 use App\Http\Controllers\Api\Admin\ProductFeatureController;
@@ -66,4 +67,7 @@ Route::prefix('v1/admin')->middleware('auth:sanctum')->group(function () {
     Route::get('media', [MediaController::class, 'index']);
     Route::post('media', [MediaController::class, 'store']);
     Route::delete('media/{media}', [MediaController::class, 'destroy']);
+
+    Route::get('onboarding-submissions', [OnboardingSubmissionController::class, 'index']);
+    Route::delete('onboarding-submissions/{onboarding_submission}', [OnboardingSubmissionController::class, 'destroy']);
 });

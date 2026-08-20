@@ -157,6 +157,11 @@ const routes = [
         path: 'site-content',
         name: 'admin-site-content',
         component: () => import('@/views/admin/AdminSiteContent.vue')
+      },
+      {
+        path: 'onboarding',
+        name: 'admin-onboarding',
+        component: () => import('@/views/admin/AdminOnboardingDashboard.vue')
       }
     ]
   }

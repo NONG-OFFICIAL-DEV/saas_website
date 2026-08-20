@@ -2,6 +2,7 @@
 
 namespace App\Services\Onboarding;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 
 /**
@@ -16,15 +17,23 @@ class StudioProvisioningAdapter
     {
         $baseUrl = config('services.studio.base_url');
 
-        $response = Http::timeout(15)->post("{$baseUrl}/api/v1/auth/register", [
-            'studio_name' => $data['business_name'],
-            'owner_name' => trim("{$data['owner_first_name']} {$data['owner_last_name']}"),
-            'email' => $data['email'],
-            'phone' => $data['phone'] ?? null,
-            'password' => $data['password'],
-            'password_confirmation' => $data['password_confirmation'] ?? $data['password'],
-            'plan_code' => $data['plan_code'] ?? null,
-        ]);
+        try {
+            $response = Http::timeout(15)->post("{$baseUrl}/api/v1/auth/register", [
+                'studio_name' => $data['business_name'],
+                'owner_name' => trim("{$data['owner_first_name']} {$data['owner_last_name']}"),
+                'email' => $data['email'],
+                'phone' => $data['phone'] ?? null,
+                'password' => $data['password'],
+                'password_confirmation' => $data['password_confirmation'] ?? $data['password'],
+                'plan_code' => $data['plan_code'] ?? null,
+            ]);
+        } catch (ConnectionException) {
+            return [
+                'success' => false,
+                'status' => 503,
+                'message' => 'Studio is temporarily unreachable. Please try again shortly.',
+            ];
+        }
 
         if ($response->successful()) {
             return [

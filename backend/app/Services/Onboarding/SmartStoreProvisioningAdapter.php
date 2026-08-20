@@ -2,6 +2,7 @@
 
 namespace App\Services\Onboarding;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 
 /**
@@ -16,15 +17,23 @@ class SmartStoreProvisioningAdapter
     {
         $baseUrl = config('services.smart_store.base_url');
 
-        $response = Http::timeout(15)->post("{$baseUrl}/api/v1/public/business-register", [
-            'owner_first_name' => $data['owner_first_name'],
-            'owner_last_name' => $data['owner_last_name'],
-            'owner_email' => $data['email'],
-            'owner_password' => $data['password'],
-            'owner_phone' => $data['phone'] ?? null,
-            'name' => $data['business_name'],
-            'business_type_id' => $data['business_type_id'],
-        ]);
+        try {
+            $response = Http::timeout(15)->post("{$baseUrl}/api/v1/public/business-register", [
+                'owner_first_name' => $data['owner_first_name'],
+                'owner_last_name' => $data['owner_last_name'],
+                'owner_email' => $data['email'],
+                'owner_password' => $data['password'],
+                'owner_phone' => $data['phone'] ?? null,
+                'name' => $data['business_name'],
+                'business_type_id' => $data['business_type_id'],
+            ]);
+        } catch (ConnectionException) {
+            return [
+                'success' => false,
+                'status' => 503,
+                'message' => 'Smart Store is temporarily unreachable. Please try again shortly.',
+            ];
+        }
 
         if ($response->successful()) {
             return [

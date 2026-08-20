@@ -102,6 +102,12 @@
       icon: 'mdi-file-document-edit-outline',
       title: 'Site Content',
       match: path => path === '/admin/site-content'
+    },
+    {
+      to: '/admin/onboarding',
+      icon: 'mdi-account-arrow-right-outline',
+      title: 'Onboarding',
+      match: path => path === '/admin/onboarding'
     }
   ]
 
