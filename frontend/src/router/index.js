@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAdminAuthStore } from '@/stores/adminAuth'
+import { useLoadingStore } from '@/stores/loadingStore'
 
 const routes = [
   {
@@ -224,6 +225,29 @@ const router = createRouter({
   }
 })
 
+// Thin top progress bar for route transitions — a lazy-loaded route's JS
+// chunk (and, for /admin, the auth check below) is a real network fetch
+// that can take a moment on a slow connection. This is the one legitimate
+// use of the 'bar' loader mode (see stores/loadingStore.js) — it never
+// blocks anything, just gives a subtle "something is happening" signal.
+//
+// Guarded by navigationInFlight rather than starting unconditionally: a
+// redirect (e.g. the admin-auth guard below bouncing to /admin/login)
+// makes Vue Router re-run the whole beforeEach chain for the new target,
+// which would call start() twice for what's really one navigation from
+// the user's perspective — but afterEach only fires once, on the
+// navigation that actually completes. Without this flag the bar would
+// permanently get stuck showing after any redirect.
+let navigationInFlight = false
+
+router.beforeEach(() => {
+  if (!navigationInFlight) {
+    navigationInFlight = true
+    useLoadingStore().start('bar')
+  }
+  return true
+})
+
 router.beforeEach(async to => {
   if (!to.path.startsWith('/admin')) return true
 
@@ -237,5 +261,14 @@ router.beforeEach(async to => {
   }
   return isLoggedIn ? true : { name: 'admin-login' }
 })
+
+function stopNavigationBar() {
+  if (!navigationInFlight) return
+  navigationInFlight = false
+  useLoadingStore().stop()
+}
+
+router.afterEach(stopNavigationBar)
+router.onError(stopNavigationBar)
 
 export default router

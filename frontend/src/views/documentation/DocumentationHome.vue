@@ -47,9 +47,7 @@
 
       <!-- ── Normal home content ── -->
       <template v-else>
-        <div v-if="store.loading" class="cards-grid" data-aos="fade-up">
-          <v-skeleton-loader v-for="i in 2" :key="i" type="card" rounded="lg" height="180" />
-        </div>
+        <InlineLoader v-if="store.loading" min-height="180px" />
 
         <div v-else class="cards-grid" data-aos="fade-up">
           <div v-for="category in productCategories" :key="category.id" class="product-card">
@@ -110,6 +108,7 @@
   import { computed, onMounted, ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useDocumentationStore } from '@/stores/documentation'
+  import InlineLoader from '@/components/global/InlineLoader.vue'
 
   const { t } = useI18n()
   const store = useDocumentationStore()

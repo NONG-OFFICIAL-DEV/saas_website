@@ -7,9 +7,7 @@
         <p class="section-sub hub-sub">{{ t('pricing_hub.sub') }}</p>
       </div>
 
-      <div v-if="store.loading" class="hub-grid" data-aos="fade-up">
-        <v-skeleton-loader v-for="i in 2" :key="i" type="card" rounded="lg" height="200" />
-      </div>
+      <InlineLoader v-if="store.loading" min-height="200px" />
 
       <div v-else class="hub-grid" data-aos="fade-up">
         <router-link
@@ -44,6 +42,7 @@
   import { onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useProductsStore } from '@/stores/products'
+  import InlineLoader from '@/components/global/InlineLoader.vue'
 
   const { t } = useI18n()
   const store = useProductsStore()

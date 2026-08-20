@@ -14,11 +14,13 @@ const api = axios.create({
 // calling it too early throws "no active Pinia".
 //
 // Every current caller of this client is a customer-facing flow (plans,
-// registration steps, waitlist leads) and already renders its own
-// skeleton/button spinner — a full-screen overlay stacked on top of those
-// is a worse experience, not a better one. So the default here is 'skip';
-// pass { meta: { loader: 'overlay' } } to opt a specific call back in if a
-// future call genuinely has no local loading UI of its own.
+// registration steps, waitlist leads) and already renders its own local
+// loading state (button spinner, inline indicator) — a global blocking
+// overlay stacked on top of those is a worse experience, not a better one.
+// So the default here is 'skip'; pass { meta: { loader: 'bar' } } to opt a
+// specific call back in if a future call genuinely has no local loading UI
+// of its own (see components/global/Loading.vue — a thin top progress bar,
+// not a full-screen overlay).
 api.interceptors.request.use(async config => {
   const loaderType = config.meta?.loader ?? 'skip'
   try {

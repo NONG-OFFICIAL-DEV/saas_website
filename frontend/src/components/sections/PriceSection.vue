@@ -39,16 +39,7 @@
           </div>
         </div>
 
-        <!-- ── Skeleton loading ── -->
-        <div v-if="loading" class="cards-grid">
-          <v-skeleton-loader
-            v-for="i in 4"
-            :key="i"
-            type="card"
-            rounded="lg"
-            height="420"
-          />
-        </div>
+        <InlineLoader v-if="loading" min-height="420px" />
 
         <!-- ── Empty / unavailable state ── -->
         <v-alert
@@ -256,6 +247,7 @@
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
   import { usePosPlansStore } from '@/stores/posPlans'
+  import InlineLoader from '@/components/global/InlineLoader.vue'
 
   const { t, locale } = useI18n()
   const router = useRouter()

@@ -1,8 +1,6 @@
 <template>
   <div v-if="store.loadingProduct" class="detail-loading">
-    <v-container>
-      <v-skeleton-loader type="heading, text, image, article" />
-    </v-container>
+    <InlineLoader min-height="240px" />
   </div>
 
   <div v-else-if="!store.currentProduct" class="not-found">
@@ -252,6 +250,7 @@
   const ONBOARDABLE_SLUGS = ['nexstack-pos', 'studio-management']
 
   import Geometric3D from '@/components/ui/Geometric3D.vue'
+  import InlineLoader from '@/components/global/InlineLoader.vue'
   import PriceSection from '@/components/sections/PriceSection.vue'
   import StudioPriceSection from '@/components/sections/StudioPriceSection.vue'
   import ProductFaqSection from '@/components/sections/ProductFaqSection.vue'

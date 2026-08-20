@@ -1,8 +1,6 @@
 <template>
   <div v-if="store.loadingArticle" class="detail-loading">
-    <v-container>
-      <v-skeleton-loader type="heading, text, paragraph, paragraph" />
-    </v-container>
+    <InlineLoader min-height="240px" />
   </div>
 
   <div v-else-if="!article" class="not-found">
@@ -102,6 +100,7 @@
   import { useDocumentationStore } from '@/stores/documentation'
   import DocsCategoryNav from '@/components/documentation/DocsCategoryNav.vue'
   import DocsTableOfContents from '@/components/documentation/DocsTableOfContents.vue'
+  import InlineLoader from '@/components/global/InlineLoader.vue'
 
   const route = useRoute()
   const { t } = useI18n()

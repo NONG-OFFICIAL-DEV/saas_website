@@ -1,8 +1,6 @@
 <template>
   <div v-if="store.loadingPost" class="detail-loading">
-    <v-container>
-      <v-skeleton-loader type="heading, text, image, article" />
-    </v-container>
+    <InlineLoader min-height="240px" />
   </div>
 
   <div v-else-if="!store.currentPost" class="not-found">
@@ -48,6 +46,7 @@
   import { useI18n } from 'vue-i18n'
   import { useBlogStore } from '@/stores/blog'
   import { useDate } from '@/composables/useDate'
+  import InlineLoader from '@/components/global/InlineLoader.vue'
 
   const { t } = useI18n()
   const route = useRoute()

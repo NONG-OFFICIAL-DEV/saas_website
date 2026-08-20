@@ -11,13 +11,14 @@ const studioApi = axios.create({
   }
 })
 
-// Same convention as cmsApi.js / api.js: pass { meta: { loader: 'skip' } }
-// to opt out of the global overlay for calls whose caller already renders
-// its own skeleton/spinner. useLoadingStore() is called inside the
-// interceptor (not at module scope) for the same reason as cmsApi.js —
-// this can be reached before main.js calls app.use(pinia).
+// No global blocking loader by default — same convention as cmsApi.js /
+// api.js. Every caller owns its own local loading state; pass
+// { meta: { loader: 'bar' } } only for a call with no local UI of its own.
+// useLoadingStore() is called inside the interceptor (not at module scope)
+// for the same reason as cmsApi.js — this can be reached before main.js
+// calls app.use(pinia).
 studioApi.interceptors.request.use(config => {
-  const loaderType = config.meta?.loader ?? 'overlay'
+  const loaderType = config.meta?.loader ?? 'skip'
   if (loaderType !== 'skip') {
     useLoadingStore().start(loaderType)
     config.meta = { ...config.meta, __loadingStarted: true }

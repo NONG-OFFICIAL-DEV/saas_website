@@ -7,9 +7,7 @@
         <p class="section-sub hub-sub">{{ t('solutions_hub.sub') }}</p>
       </div>
 
-      <div v-if="store.loading" class="hub-grid" data-aos="fade-up">
-        <v-skeleton-loader v-for="i in 6" :key="i" type="card" rounded="lg" height="200" />
-      </div>
+      <InlineLoader v-if="store.loading" min-height="200px" />
 
       <div v-else-if="store.solutions.length" class="hub-grid" data-aos="fade-up">
         <SolutionCard v-for="solution in store.solutions" :key="solution.id" :solution="solution" />
@@ -32,6 +30,7 @@
   import { useI18n } from 'vue-i18n'
   import { useSolutionsStore } from '@/stores/solutions'
   import SolutionCard from '@/components/solutions/SolutionCard.vue'
+  import InlineLoader from '@/components/global/InlineLoader.vue'
 
   const { t } = useI18n()
   const store = useSolutionsStore()

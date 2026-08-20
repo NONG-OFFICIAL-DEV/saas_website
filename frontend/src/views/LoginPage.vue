@@ -7,9 +7,7 @@
         <p class="section-sub header-sub">{{ t('login_page.sub') }}</p>
       </div>
 
-      <div v-if="store.loading" class="cards-grid" data-aos="fade-up">
-        <v-skeleton-loader v-for="i in 2" :key="i" type="card" rounded="lg" height="180" />
-      </div>
+      <InlineLoader v-if="store.loading" min-height="180px" />
 
       <div v-else-if="loginableProducts.length" class="cards-grid" data-aos="fade-up">
         <a
@@ -41,6 +39,7 @@
   import { useI18n } from 'vue-i18n'
   import { useProductsStore } from '@/stores/products'
   import { getLoginLink } from '@/config/productTrials'
+  import InlineLoader from '@/components/global/InlineLoader.vue'
 
   const { t } = useI18n()
   const store = useProductsStore()

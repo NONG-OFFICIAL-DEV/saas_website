@@ -7,9 +7,7 @@
         <p class="section-sub hub-sub">{{ t('blog_hub.sub') }}</p>
       </div>
 
-      <div v-if="store.loading" class="hub-grid" data-aos="fade-up">
-        <v-skeleton-loader v-for="i in 3" :key="i" type="card" rounded="lg" height="260" />
-      </div>
+      <InlineLoader v-if="store.loading" min-height="260px" />
 
       <div v-else-if="store.posts.length" class="hub-grid" data-aos="fade-up">
         <router-link
@@ -44,6 +42,7 @@
   import { useI18n } from 'vue-i18n'
   import { useBlogStore } from '@/stores/blog'
   import { useDate } from '@/composables/useDate'
+  import InlineLoader from '@/components/global/InlineLoader.vue'
 
   const { t } = useI18n()
   const store = useBlogStore()

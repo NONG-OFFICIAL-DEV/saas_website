@@ -1,8 +1,6 @@
 <template>
   <div v-if="store.loadingSolution" class="detail-loading">
-    <v-container>
-      <v-skeleton-loader type="heading, text, article" />
-    </v-container>
+    <InlineLoader min-height="240px" />
   </div>
 
   <div v-else-if="!store.currentSolution" class="not-found">
@@ -52,6 +50,7 @@
   import { useI18n } from 'vue-i18n'
   import { useSolutionsStore } from '@/stores/solutions'
   import ProductCard from '@/components/products/ProductCard.vue'
+  import InlineLoader from '@/components/global/InlineLoader.vue'
 
   const { t } = useI18n()
   const route = useRoute()

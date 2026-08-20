@@ -26,10 +26,8 @@
         </div>
       </div>
 
-      <!-- ── Skeleton loading ── -->
-      <div v-if="store.loading" class="cards-grid">
-        <v-skeleton-loader v-for="i in 4" :key="i" type="card" rounded="lg" height="380" />
-      </div>
+      <InlineLoader v-if="store.loading" min-height="380px" />
+
 
       <v-alert
         v-else-if="store.error"
@@ -115,6 +113,7 @@
   import { computed, onMounted, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useStudioPlansStore } from '@/stores/studioPlans'
+  import InlineLoader from '@/components/global/InlineLoader.vue'
 
   const { t } = useI18n()
   const store = useStudioPlansStore()

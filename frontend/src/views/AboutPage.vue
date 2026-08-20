@@ -44,9 +44,7 @@
           <p class="section-sub products-sub mx-auto">{{ about.products_description }}</p>
         </div>
 
-        <div v-if="productsStore.loading" class="products-grid" data-aos="fade-up">
-          <v-skeleton-loader v-for="i in 2" :key="i" type="card" rounded="lg" height="200" />
-        </div>
+        <InlineLoader v-if="productsStore.loading" min-height="200px" />
         <div v-else class="products-grid" data-aos="fade-up">
           <ProductCard v-for="product in productsStore.products" :key="product.id" :product="product" />
         </div>
@@ -168,6 +166,7 @@
   import Geometric3D from '@/components/ui/Geometric3D.vue'
   import SocialIcon from '@/components/icons/SocialIcon.vue'
   import ProductCard from '@/components/products/ProductCard.vue'
+  import InlineLoader from '@/components/global/InlineLoader.vue'
 
   const store = useSiteContentStore()
   const { about } = storeToRefs(store)

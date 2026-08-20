@@ -11,11 +11,11 @@ const cmsApi = axios.create({
   }
 })
 
-// Same convention as src/api/api.js: pass { meta: { loader: 'skip' } } in a
-// call's axios config to opt out — used by requests whose caller already
-// renders its own skeleton/spinner (a second full-screen overlay on top of
-// those would just be visual noise), for both the public site and the
-// admin panel. Anything else defaults to the global overlay.
+// No global blocking loader by default — every caller owns its own
+// local loading state (a button's :loading, a section's small spinner,
+// a table's "Refreshing…" indicator). Pass { meta: { loader: 'bar' } }
+// only for the rare call that genuinely has no local UI of its own and
+// needs the thin top progress bar (components/global/Loading.vue).
 //
 // useLoadingStore() is called inside the interceptors (not at module scope)
 // because this module is reachable through router/index.js's static import
@@ -27,7 +27,7 @@ cmsApi.interceptors.request.use(config => {
     config.headers.Authorization = `Bearer ${token}`
   }
 
-  const loaderType = config.meta?.loader ?? 'overlay'
+  const loaderType = config.meta?.loader ?? 'skip'
   if (loaderType !== 'skip') {
     useLoadingStore().start(loaderType)
     config.meta = { ...config.meta, __loadingStarted: true }
