@@ -6,7 +6,7 @@ import cmsApi from '@/services/cmsApi'
 // half when we send an update back.
 const DATA_KEYS = {
   hero: ['cta_secondary_url'],
-  about: ['email', 'socials'],
+  about: ['email', 'socials', 'profile_photo_url'],
   footer: ['email', 'phone', 'socials']
 }
 

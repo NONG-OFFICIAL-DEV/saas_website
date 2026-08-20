@@ -17,7 +17,7 @@ There is no lint or test script. `vitest.config.js` exists but `vitest` is not i
 Copy `.env.example` to `.env.development` (see `README.md`). Required vars:
 - `VITE_APP_API_BASE_URL` — base URL of the legacy REST backend (see "Two backends" below)
 - `VITE_APP_I18N_LOCALE` / `VITE_APP_I18N_FALLBACK_LOCALE` — usually `en`
-- `VITE_APP_CMS_API_URL` — base URL of the CMS backend (see below), e.g. `http://127.0.0.1:8001/api/v1`
+- `VITE_APP_CMS_API_URL` — base URL of the CMS backend (see below), e.g. `http://127.0.0.1:8000/api/v1`
 
 The Docker build (`Dockerfile`, `.github/workflows/ci-cd.yml`) only injects `VITE_APP_MODE`, `VITE_APP_API_BASE_URL`, and the i18n vars as build args — it does **not** currently pass `VITE_APP_CMS_API_URL`, so a container build will ship without a working CMS unless that's fixed.
 

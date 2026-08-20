@@ -38,6 +38,7 @@ class SiteContentSeeder extends Seeder
             'key' => 'about',
             'data' => [
                 'email' => 'phloeutnong@gmail.com',
+                'profile_photo_url' => '',
                 'socials' => [
                     ['name' => 'Email', 'href' => 'mailto:phloeutnong@gmail.com'],
                     ['name' => 'Telegram', 'href' => 'https://t.me/Nong_Phloeut'],
@@ -49,19 +50,47 @@ class SiteContentSeeder extends Seeder
         $about->translations()->create([
             'locale' => 'en',
             'content' => [
-                'tag' => 'About',
-                'greeting' => "Hi, I'm Nong Phloeut",
-                'bio' => "I'm an independent developer who builds and runs small, focused SaaS products — Nexstack POS is the first, with more on the way. No agency, no account managers — just me building tools I'd want to use myself, and supporting the businesses that run on them.",
-                'cta_label' => "See what I've built",
-                'how_tag' => 'How I work',
-                'how_title' => 'What you can expect',
-                'values' => [
-                    ['icon' => 'mdi-account-check-outline', 'title' => 'Direct support', 'description' => "You're talking to the person who built the product, not a support queue."],
-                    ['icon' => 'mdi-rocket-launch-outline', 'title' => 'Ship, then improve', 'description' => 'Products launch focused and improve steadily based on real usage, not guesswork.'],
-                    ['icon' => 'mdi-map-marker-outline', 'title' => 'Built for local businesses', 'description' => 'Designed with Cambodian small businesses in mind — pricing, language, and workflow included.'],
+                'hero_tag' => 'About',
+                'hero_heading' => 'Building simple software for real businesses.',
+                'hero_description' => "I'm an independent software developer focused on creating practical tools that help small businesses manage their daily operations more easily.",
+                'hero_cta_primary_label' => 'Explore My Products',
+                'hero_cta_secondary_label' => 'Contact Me',
+
+                'story_title' => 'Why I build these products',
+                'story_content' => "Many small businesses still rely on notebooks, spreadsheets, chat messages, or several disconnected tools to manage their daily operations.\n\nI wanted to build something simpler — software that business owners can understand, use, and grow with without needing technical knowledge.",
+
+                'approach_tag' => 'My Approach',
+                'approach_title' => 'How I build',
+                'approach_cards' => [
+                    ['icon' => 'mdi-lightbulb-outline', 'title' => 'Simple', 'description' => "Software should be easy to understand, even if you're not technical."],
+                    ['icon' => 'mdi-target', 'title' => 'Practical', 'description' => 'I focus on solving real business problems rather than adding unnecessary complexity.'],
+                    ['icon' => 'mdi-currency-usd', 'title' => 'Affordable', 'description' => 'I want useful business software to be accessible to small and growing businesses.'],
+                    ['icon' => 'mdi-refresh', 'title' => 'Always Improving', 'description' => 'Products evolve through real feedback, testing, and continuous improvement.'],
                 ],
-                'talk_title' => "Let's talk",
-                'talk_description' => "Questions about a product, or curious what's next? Reach out directly — I read and reply to every message myself.",
+
+                'audience_title' => 'Built for small businesses',
+                'audience_description' => "Technology shouldn't be the difficult part of running a business.",
+                'audience_examples' => [
+                    ['icon' => 'mdi-camera-outline', 'label' => 'Photography Studios', 'image_url' => 'https://jonathantaylorphotography.com/wp-content/uploads/2019/01/photography-studio-rental-bangkok.jpg'],
+                    ['icon' => 'mdi-coffee-outline', 'label' => 'Coffee Shops', 'image_url' => ''],
+                    ['icon' => 'mdi-silverware-fork-knife', 'label' => 'Restaurants', 'image_url' => ''],
+                    ['icon' => 'mdi-storefront-outline', 'label' => 'Retail Stores', 'image_url' => ''],
+                    ['icon' => 'mdi-store-outline', 'label' => 'Small Businesses', 'image_url' => ''],
+                ],
+
+                'products_tag' => 'What I Build',
+                'products_title' => 'What I build',
+                'products_description' => 'I create practical software designed around real business workflows.',
+
+                'profile_greeting' => "Hi, I'm Nong.",
+                'profile_name' => 'Nong Phloeut',
+                'profile_bio' => "I'm a software developer who enjoys turning real-world business problems into simple software products.",
+                'profile_skills' => [],
+
+                'cta_title' => 'Have a business problem I can help solve?',
+                'cta_description' => 'Whether you need a business management system or have an idea for custom software, feel free to get in touch.',
+                'cta_primary_label' => 'Contact Me',
+                'cta_secondary_label' => 'Explore Products',
             ],
         ]);
 
