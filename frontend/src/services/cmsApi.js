@@ -5,7 +5,7 @@ import axios from 'axios'
 // src/api/api.js, which talks to the legacy POS backend and shares nothing
 // with this one (different base URL, different token).
 const cmsApi = axios.create({
-  baseURL: import.meta.env.VITE_APP_CMS_API_URL || 'http://127.0.0.1:8001/api/v1',
+  baseURL: import.meta.env.VITE_APP_CMS_API_URL || 'http://127.0.0.1:8000/api/v1',
   headers: {
     'Content-Type': 'application/json'
   }

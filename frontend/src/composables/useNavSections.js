@@ -55,7 +55,7 @@ export function useNavSections() {
       type: 'dropdown',
       label: t('menu.resources'),
       items: [
-        { label: t('resources.documentation'), icon: 'mdi-book-open-outline', to: '/docs' },
+        { label: t('resources.documentation'), icon: 'mdi-book-open-outline', to: '/documentation' },
         { label: t('resources.help_center'), icon: 'mdi-lifebuoy', to: '/help' },
         { label: t('resources.blog'), icon: 'mdi-newspaper-variant-outline', to: '/blog' }
       ]

@@ -36,6 +36,7 @@ class ProductController extends Controller
             'accent_color' => $data['accent_color'] ?? '#6366F1',
             'logo_url' => $data['logo_url'] ?? null,
             'hero_image_url' => $data['hero_image_url'] ?? null,
+            'demo_video_url' => $data['demo_video_url'] ?? null,
             'lead_source' => $data['lead_source'] ?? null,
             'sort_order' => $data['sort_order'] ?? 0,
             'is_published' => $data['is_published'] ?? false,
@@ -82,7 +83,7 @@ class ProductController extends Controller
 
         $product->update(array_intersect_key($data, array_flip([
             'slug', 'status', 'cta_type', 'cta_url', 'accent_color',
-            'logo_url', 'hero_image_url', 'lead_source', 'sort_order', 'is_published',
+            'logo_url', 'hero_image_url', 'demo_video_url', 'lead_source', 'sort_order', 'is_published',
         ])));
 
         if (array_key_exists('name', $data)) {

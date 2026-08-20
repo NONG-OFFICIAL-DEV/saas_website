@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\BlogPostController as AdminBlogPostController;
+use App\Http\Controllers\Api\Admin\DocumentationArticleController as AdminDocumentationArticleController;
+use App\Http\Controllers\Api\Admin\DocumentationCategoryController as AdminDocumentationCategoryController;
 use App\Http\Controllers\Api\Admin\MediaController;
 use App\Http\Controllers\Api\Admin\OnboardingSubmissionController;
 use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
@@ -12,6 +14,7 @@ use App\Http\Controllers\Api\Admin\SolutionController as AdminSolutionController
 use App\Http\Controllers\Api\Admin\TestimonialController as AdminTestimonialController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Public\BlogPostController as PublicBlogPostController;
+use App\Http\Controllers\Api\Public\DocumentationController as PublicDocumentationController;
 use App\Http\Controllers\Api\Public\OnboardingController;
 use App\Http\Controllers\Api\Public\ProductController as PublicProductController;
 use App\Http\Controllers\Api\Public\SiteContentController as PublicSiteContentController;
@@ -32,6 +35,10 @@ Route::prefix('v1/public')->group(function () {
 
     Route::get('onboarding/business-types', [OnboardingController::class, 'businessTypes']);
     Route::post('onboarding/provision', [OnboardingController::class, 'provision'])->middleware('throttle:6,1');
+
+    Route::get('documentation-categories', [PublicDocumentationController::class, 'categories']);
+    Route::get('documentation-search', [PublicDocumentationController::class, 'search']);
+    Route::get('documentation-articles/{slug}', [PublicDocumentationController::class, 'article']);
 });
 
 // ── CMS: Auth ────────────────────────────────────────────────────────────
@@ -70,4 +77,7 @@ Route::prefix('v1/admin')->middleware('auth:sanctum')->group(function () {
 
     Route::get('onboarding-submissions', [OnboardingSubmissionController::class, 'index']);
     Route::delete('onboarding-submissions/{onboarding_submission}', [OnboardingSubmissionController::class, 'destroy']);
+
+    Route::apiResource('documentation-categories', AdminDocumentationCategoryController::class);
+    Route::apiResource('documentation-articles', AdminDocumentationArticleController::class);
 });

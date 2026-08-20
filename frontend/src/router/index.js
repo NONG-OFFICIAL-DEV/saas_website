@@ -58,9 +58,17 @@ const routes = [
       },
       {
         path: 'docs',
-        name: 'docs',
-        component: () => import('@/views/ComingSoonPage.vue'),
-        props: { titleKey: 'resources.documentation' }
+        redirect: '/documentation'
+      },
+      {
+        path: 'documentation',
+        name: 'documentation',
+        component: () => import('@/views/documentation/DocumentationHome.vue')
+      },
+      {
+        path: 'documentation/:slug',
+        name: 'documentation-article',
+        component: () => import('@/views/documentation/DocumentationArticle.vue')
       },
       {
         path: 'help',
@@ -162,6 +170,36 @@ const routes = [
         path: 'onboarding',
         name: 'admin-onboarding',
         component: () => import('@/views/admin/AdminOnboardingDashboard.vue')
+      },
+      {
+        path: 'documentation/categories',
+        name: 'admin-doc-categories',
+        component: () => import('@/views/admin/AdminDocCategoriesDashboard.vue')
+      },
+      {
+        path: 'documentation/categories/new',
+        name: 'admin-doc-category-new',
+        component: () => import('@/views/admin/AdminDocCategoryEditor.vue')
+      },
+      {
+        path: 'documentation/categories/:id/edit',
+        name: 'admin-doc-category-edit',
+        component: () => import('@/views/admin/AdminDocCategoryEditor.vue')
+      },
+      {
+        path: 'documentation/articles',
+        name: 'admin-doc-articles',
+        component: () => import('@/views/admin/AdminDocArticlesDashboard.vue')
+      },
+      {
+        path: 'documentation/articles/new',
+        name: 'admin-doc-article-new',
+        component: () => import('@/views/admin/AdminDocArticleEditor.vue')
+      },
+      {
+        path: 'documentation/articles/:id/edit',
+        name: 'admin-doc-article-edit',
+        component: () => import('@/views/admin/AdminDocArticleEditor.vue')
       }
     ]
   }

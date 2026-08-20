@@ -98,6 +98,18 @@
       match: path => path.startsWith('/admin/blog')
     },
     {
+      to: '/admin/documentation/categories',
+      icon: 'mdi-book-open-outline',
+      title: 'Doc Categories',
+      match: path => path.startsWith('/admin/documentation/categories')
+    },
+    {
+      to: '/admin/documentation/articles',
+      icon: 'mdi-file-document-outline',
+      title: 'Doc Articles',
+      match: path => path.startsWith('/admin/documentation/articles')
+    },
+    {
       to: '/admin/site-content',
       icon: 'mdi-file-document-edit-outline',
       title: 'Site Content',

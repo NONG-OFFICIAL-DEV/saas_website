@@ -26,6 +26,7 @@ class UpdateProductRequest extends FormRequest
             'accent_color' => ['sometimes', 'string', 'max:20'],
             'logo_url' => ['nullable', 'string', 'max:500'],
             'hero_image_url' => ['nullable', 'string', 'max:500'],
+            'demo_video_url' => ['nullable', 'string', 'max:500'],
             'lead_source' => ['nullable', 'string', 'max:100'],
             'sort_order' => ['sometimes', 'integer'],
             'is_published' => ['sometimes', 'boolean'],

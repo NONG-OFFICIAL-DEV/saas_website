@@ -90,6 +90,15 @@
             />
           </v-col>
 
+          <v-col cols="12" sm="6">
+            <v-text-field
+              v-model="form.demo_video_url"
+              label="Demo video URL"
+              hint="YouTube or Vimeo link — shown on the /docs page"
+              persistent-hint
+            />
+          </v-col>
+
           <v-col cols="12" sm="4">
             <v-select
               v-model="form.cta_type"
@@ -263,6 +272,7 @@
     description: '',
     logo_url: '',
     hero_image_url: '',
+    demo_video_url: '',
     accent_color: '#6366F1',
     status: 'coming_soon',
     cta_type: 'waitlist',
@@ -309,6 +319,7 @@
         description: data.description ?? '',
         logo_url: data.logo_url ?? '',
         hero_image_url: data.hero_image_url ?? '',
+        demo_video_url: data.demo_video_url ?? '',
         accent_color: data.accent_color ?? '#6366F1',
         status: data.status,
         cta_type: data.cta_type,

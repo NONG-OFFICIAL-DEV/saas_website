@@ -435,5 +435,40 @@
     "faq_empty": "No questions answered yet for this product.",
     "still_need_help": "Still need help?",
     "still_need_help_sub": "Message me directly — I read and reply to everything myself."
+  },
+  "docs_page": {
+    "tag": "Documentation",
+    "title": "See it in action",
+    "sub": "A short walkthrough of each product — written guides are on the way.",
+    "video_coming_soon": "Demo video coming soon.",
+    "watch_video": "Watch the demo",
+    "need_more_help": "Have a question the video didn't answer?",
+    "go_to_help": "Visit the Help Center"
+  },
+  "documentation_home": {
+    "tag": "Documentation",
+    "title": "How can we help?",
+    "sub": "Learn how to set up and use your Nexstack products.",
+    "search_placeholder": "Search documentation… e.g. \"How to create a booking\"",
+    "search_results_for": "Search results for “{query}”",
+    "no_results": "No articles matched your search.",
+    "view_documentation": "View Documentation",
+    "getting_started_tag": "Getting Started",
+    "getting_started_title": "New here? Start with these steps.",
+    "browse_all": "Browse all categories"
+  },
+  "documentation_article": {
+    "not_found_title": "Article not found",
+    "not_found_desc": "This article may have been moved or unpublished.",
+    "back_to_docs": "Back to Documentation",
+    "on_this_page": "On this page",
+    "was_helpful": "Was this article helpful?",
+    "yes": "Yes",
+    "no": "No",
+    "feedback_thanks": "Thanks for letting us know!",
+    "related_articles": "Related articles",
+    "previous": "Previous",
+    "next": "Next",
+    "in_this_category": "In this category"
   }
 }
