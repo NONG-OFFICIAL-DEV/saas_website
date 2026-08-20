@@ -6,10 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a monorepo with two independently deployed apps, wired together only at the network/API level (no shared package, no shared types):
 
-- `frontend/` — Vue 3 + Vuetify 3 + Vite marketing/SaaS site ("Nexstack"). Has its own detailed **`frontend/CLAUDE.md`** — read it before working in this directory; it documents the two-backend architecture, CMS data model, routing, and Vuetify theme conventions in depth. Don't duplicate that content here.
+- `frontend/` — Nuxt 4 + Vue 3 + Vuetify 3 + TypeScript marketing/SaaS site ("Nexstack"), server-rendered (Nitro node-server). Has its own detailed **`frontend/CLAUDE.md`** — read it before working in this directory; it documents the two-backend architecture, CMS data model, routing, SSR-specific conventions, and Vuetify theme conventions in depth. Don't duplicate that content here.
 - `backend/` — Laravel 13 (PHP 8.3) API. This is the **CMS backend** referenced from `frontend/CLAUDE.md` ("Two backends" section): it serves marketing content (products, solutions, testimonials, blog posts, site content blocks) and the admin panel's auth, and proxies onboarding provisioning to the real product backends (Studio, Smart Store). It is a separate system from the actual POS/Studio product backends.
 
-`docker-compose.yml` at the root builds three containers for production: `backend_service` (Laravel/PHP-FPM), `webserver` (nginx in front of it, `backend/nginx`), and `frontend` (the built Vue site). Deploys go through `.github/workflows/ci-cd.yml`.
+`docker-compose.yml` at the root builds three containers for production: `backend_service` (Laravel/PHP-FPM), `webserver` (nginx in front of it, `backend/nginx`), and `frontend` (the Nuxt app's Nitro node server). Deploys go through `.github/workflows/ci-cd.yml`.
 
 ## Commands
 
@@ -28,11 +28,11 @@ Run a single test: `php artisan test --filter=TestName` or `php artisan test tes
 
 Code style: `laravel/pint` is a dev dependency (`vendor/bin/pint` to fix, `vendor/bin/pint --test` to check) but there's no composer script wired up for it.
 
-### Frontend (`frontend/`, Vue 3 + Vite)
+### Frontend (`frontend/`, Nuxt 4)
 
 ```bash
-npm run dev       # start Vite dev server
-npm run build     # production build to dist/
+npm run dev       # start Nuxt dev server
+npm run build     # production build (Nitro node-server)
 npm run preview   # preview a production build locally
 ```
 

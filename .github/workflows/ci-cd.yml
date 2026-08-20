@@ -47,16 +47,16 @@ jobs:
           docker push $IMAGE_WEBSERVER:$IMAGE_TAG
 
       # Nuxt reads its API URLs etc. from runtime config (NUXT_PUBLIC_* env
-      # vars, see frontend_nuxt/.env.example) instead of Vite build-time
-      # args — the same image now works across environments, so no
-      # --build-arg values are needed here. The server's docker-compose.yml
-      # supplies them via env_file: ./frontend_nuxt/.env.
+      # vars, see frontend/.env.example) instead of Vite build-time args —
+      # the same image now works across environments, so no --build-arg
+      # values are needed here. The server's docker-compose.yml supplies
+      # them via env_file: ./frontend/.env.
       - name: Build & Push frontend
         run: |
           docker build \
             -t $IMAGE_FRONTEND:latest \
             -t $IMAGE_FRONTEND:$IMAGE_TAG \
-            ./frontend_nuxt
+            ./frontend
 
           docker push $IMAGE_FRONTEND:latest
           docker push $IMAGE_FRONTEND:$IMAGE_TAG

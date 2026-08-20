@@ -36,18 +36,18 @@ services:
   # container_name intentionally unchanged — the shared reverse proxy
   # (reverse-proxy-caddy) already routes www.nexstacktech.com to this
   # container name; renaming it here would break that route in production.
-  # Now builds from frontend_nuxt/ (Nuxt 4 + Node/Nitro) instead of the old
-  # Vite+Caddy static build — see frontend_nuxt/.env.example for the runtime
-  # config vars this needs (env_file below, created on the server).
+  # frontend/ is now Nuxt 4 + Node/Nitro instead of the old Vite+Caddy
+  # static build — see frontend/.env.example for the runtime config vars
+  # this needs (env_file below, created on the server).
   frontend:
     build:
-      context: ./frontend_nuxt
+      context: ./frontend
       dockerfile: Dockerfile
     container_name: smart-store-website
     image: nongdev/smart-store-website:latest
     restart: always
     env_file:
-      - ./frontend_nuxt/.env
+      - ./frontend/.env
     networks:
       - web
 
