@@ -11,7 +11,6 @@
     </div>
 
     <v-alert v-if="error" type="error" variant="tonal" rounded="lg" class="mb-4">{{ error }}</v-alert>
-    <v-alert v-if="savedNotice" type="success" variant="tonal" rounded="lg" class="mb-4">Saved.</v-alert>
 
     <div v-if="loading" class="editor-loading">
       <v-progress-circular indeterminate color="primary" />
@@ -72,7 +71,9 @@
   import { useRoute, useRouter } from 'vue-router'
   import { getDocCategoryForEdit, createDocCategory, updateDocCategory, listAllDocCategories } from '@/services/adminDocumentation'
   import { listAllProducts } from '@/services/adminProducts'
+  import { useNotif } from '@/composables/useNotif'
 
+  const notify = useNotif()
   const route = useRoute()
   const router = useRouter()
 
@@ -97,12 +98,6 @@
   const loading = ref(false)
   const saving = ref(false)
   const error = ref(null)
-  const savedNotice = ref(false)
-
-  function flashSaved() {
-    savedNotice.value = true
-    setTimeout(() => (savedNotice.value = false), 2000)
-  }
 
   async function load() {
     loading.value = true
@@ -158,9 +153,9 @@
       } else {
         await updateDocCategory(categoryId.value, payload)
       }
-      flashSaved()
+      notify('Category saved successfully', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to save category', { type: 'error' })
     } finally {
       saving.value = false
     }

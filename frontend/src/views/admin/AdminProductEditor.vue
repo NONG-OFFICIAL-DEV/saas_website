@@ -21,9 +21,6 @@
     <v-alert v-if="error" type="error" variant="tonal" rounded="lg" class="mb-4">
       {{ error }}
     </v-alert>
-    <v-alert v-if="savedNotice" type="success" variant="tonal" rounded="lg" class="mb-4">
-      Saved.
-    </v-alert>
 
     <div v-if="loading" class="editor-loading">
       <v-progress-circular indeterminate color="primary" />
@@ -257,7 +254,9 @@
     deleteFaq,
     uploadProductMedia
   } from '@/services/adminProducts'
+  import { useNotif } from '@/composables/useNotif'
 
+  const notify = useNotif()
   const route = useRoute()
   const router = useRouter()
 
@@ -292,14 +291,8 @@
   const loading = ref(false)
   const saving = ref(false)
   const error = ref(null)
-  const savedNotice = ref(false)
   const uploading = reactive({ logo: false, hero: false })
   const uploadingScreenshot = ref(false)
-
-  function flashSaved() {
-    savedNotice.value = true
-    setTimeout(() => (savedNotice.value = false), 2000)
-  }
 
   async function load() {
     if (!productId.value) return
@@ -355,9 +348,9 @@
       } else {
         await updateProduct(productId.value, payload)
       }
-      flashSaved()
+      notify('Product saved successfully', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to save product', { type: 'error' })
     } finally {
       saving.value = false
     }
@@ -371,7 +364,7 @@
     try {
       form[field] = await uploadProductMedia(file, form.slug || 'general')
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to upload image', { type: 'error' })
     } finally {
       uploading[key] = false
     }
@@ -388,7 +381,7 @@
       })
       features.value.push(created)
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to add feature', { type: 'error' })
     }
   }
   async function saveFeature(f) {
@@ -400,7 +393,7 @@
         sort_order: f.sort_order
       })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to save feature', { type: 'error' })
     }
   }
   async function removeFeature(f) {
@@ -408,8 +401,9 @@
     try {
       await deleteFeature(f.id)
       features.value = features.value.filter(x => x.id !== f.id)
+      notify('Feature deleted', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to delete feature', { type: 'error' })
     }
   }
 
@@ -427,7 +421,7 @@
       })
       screenshots.value.push(created)
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to upload screenshot', { type: 'error' })
     } finally {
       uploadingScreenshot.value = false
     }
@@ -440,7 +434,7 @@
         sort_order: s.sort_order
       })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to save screenshot', { type: 'error' })
     }
   }
   async function removeScreenshot(s) {
@@ -448,8 +442,9 @@
     try {
       await deleteScreenshot(s.id)
       screenshots.value = screenshots.value.filter(x => x.id !== s.id)
+      notify('Screenshot deleted', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to delete screenshot', { type: 'error' })
     }
   }
 
@@ -463,7 +458,7 @@
       })
       faqs.value.push(created)
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to add FAQ', { type: 'error' })
     }
   }
   async function saveFaq(f) {
@@ -474,7 +469,7 @@
         sort_order: f.sort_order
       })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to save FAQ', { type: 'error' })
     }
   }
   async function removeFaq(f) {
@@ -482,8 +477,9 @@
     try {
       await deleteFaq(f.id)
       faqs.value = faqs.value.filter(x => x.id !== f.id)
+      notify('FAQ deleted', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to delete FAQ', { type: 'error' })
     }
   }
 </script>

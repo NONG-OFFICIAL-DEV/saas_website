@@ -75,6 +75,9 @@
   import { onMounted, ref } from 'vue'
   import { listAllBlogPosts, deleteBlogPost } from '@/services/adminBlog'
   import { useDate } from '@/composables/useDate'
+  import { useNotif } from '@/composables/useNotif'
+
+  const notify = useNotif()
 
   const posts = ref([])
   const loading = ref(true)
@@ -98,8 +101,9 @@
     try {
       await deleteBlogPost(post.id)
       posts.value = posts.value.filter(p => p.id !== post.id)
+      notify('Blog post deleted', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to delete blog post', { type: 'error' })
     }
   }
 

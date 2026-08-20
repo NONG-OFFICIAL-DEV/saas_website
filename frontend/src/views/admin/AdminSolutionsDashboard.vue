@@ -74,6 +74,9 @@
 <script setup>
   import { onMounted, ref } from 'vue'
   import { listAllSolutions, deleteSolution } from '@/services/adminSolutions'
+  import { useNotif } from '@/composables/useNotif'
+
+  const notify = useNotif()
 
   const solutions = ref([])
   const loading = ref(true)
@@ -96,8 +99,9 @@
     try {
       await deleteSolution(solution.id)
       solutions.value = solutions.value.filter(s => s.id !== solution.id)
+      notify('Solution deleted', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to delete solution', { type: 'error' })
     }
   }
 

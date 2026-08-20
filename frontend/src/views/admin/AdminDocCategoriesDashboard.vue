@@ -53,6 +53,9 @@
 <script setup>
   import { onMounted, ref } from 'vue'
   import { listAllDocCategories, deleteDocCategory } from '@/services/adminDocumentation'
+  import { useNotif } from '@/composables/useNotif'
+
+  const notify = useNotif()
 
   const categories = ref([])
   const loading = ref(true)
@@ -75,8 +78,9 @@
     try {
       await deleteDocCategory(item.id)
       categories.value = categories.value.filter(c => c.id !== item.id)
+      notify('Category deleted', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to delete category', { type: 'error' })
     }
   }
 

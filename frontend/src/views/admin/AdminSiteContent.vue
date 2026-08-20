@@ -6,9 +6,6 @@
     <v-alert v-if="error" type="error" variant="tonal" rounded="lg" class="mb-4">
       {{ error }}
     </v-alert>
-    <v-alert v-if="savedNotice" type="success" variant="tonal" rounded="lg" class="mb-4">
-      Saved.
-    </v-alert>
 
     <div v-if="loading" class="page-loading">
       <v-progress-circular indeterminate color="primary" />
@@ -287,23 +284,19 @@
   import { onMounted, ref } from 'vue'
   import { getHero, updateHero, getAbout, updateAbout, getFooter, updateFooter } from '@/services/siteContent'
   import { uploadProductMedia } from '@/services/adminProducts'
+  import { useNotif } from '@/composables/useNotif'
 
+  const notify = useNotif()
   const tab = ref('hero')
   const loading = ref(true)
   const saving = ref(false)
   const uploadingPhoto = ref(false)
   const uploadingAudienceImage = ref(null)
   const error = ref(null)
-  const savedNotice = ref(false)
 
   const hero = ref({ stats: [] })
   const about = ref({ approach_cards: [], audience_examples: [], profile_skills: [], socials: [] })
   const footer = ref({ socials: [] })
-
-  function flashSaved() {
-    savedNotice.value = true
-    setTimeout(() => (savedNotice.value = false), 2000)
-  }
 
   onMounted(async () => {
     loading.value = true
@@ -327,9 +320,9 @@
     error.value = null
     try {
       await updateHero(hero.value.id, hero.value)
-      flashSaved()
+      notify('Hero section saved', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to save hero section', { type: 'error' })
     } finally {
       saving.value = false
     }
@@ -342,7 +335,7 @@
     try {
       about.value.profile_photo_url = await uploadProductMedia(file)
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to upload photo', { type: 'error' })
     } finally {
       uploadingPhoto.value = false
     }
@@ -355,7 +348,7 @@
     try {
       about.value.audience_examples[i].image_url = await uploadProductMedia(file)
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to upload image', { type: 'error' })
     } finally {
       uploadingAudienceImage.value = null
     }
@@ -366,9 +359,9 @@
     error.value = null
     try {
       await updateAbout(about.value.id, about.value)
-      flashSaved()
+      notify('About page saved', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to save About page', { type: 'error' })
     } finally {
       saving.value = false
     }
@@ -379,9 +372,9 @@
     error.value = null
     try {
       await updateFooter(footer.value.id, footer.value)
-      flashSaved()
+      notify('Footer saved', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to save footer', { type: 'error' })
     } finally {
       saving.value = false
     }

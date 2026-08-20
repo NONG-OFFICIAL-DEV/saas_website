@@ -21,9 +21,6 @@
     <v-alert v-if="error" type="error" variant="tonal" rounded="lg" class="mb-4">
       {{ error }}
     </v-alert>
-    <v-alert v-if="savedNotice" type="success" variant="tonal" rounded="lg" class="mb-4">
-      Saved.
-    </v-alert>
 
     <div v-if="loading" class="editor-loading">
       <v-progress-circular indeterminate color="primary" />
@@ -89,6 +86,9 @@
   import { getBlogPostForEdit, createBlogPost, updateBlogPost } from '@/services/adminBlog'
   import { uploadProductMedia } from '@/services/adminProducts'
   import { useDate } from '@/composables/useDate'
+  import { useNotif } from '@/composables/useNotif'
+
+  const notify = useNotif()
 
   const route = useRoute()
   const router = useRouter()
@@ -113,13 +113,7 @@
   const loading = ref(false)
   const saving = ref(false)
   const error = ref(null)
-  const savedNotice = ref(false)
   const uploadingCover = ref(false)
-
-  function flashSaved() {
-    savedNotice.value = true
-    setTimeout(() => (savedNotice.value = false), 2000)
-  }
 
   async function load() {
     if (!postId.value) return
@@ -158,7 +152,7 @@
     try {
       form.cover_image_url = await uploadProductMedia(file)
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to upload cover image', { type: 'error' })
     } finally {
       uploadingCover.value = false
     }
@@ -177,9 +171,9 @@
       } else {
         await updateBlogPost(postId.value, payload)
       }
-      flashSaved()
+      notify('Blog post saved successfully', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to save blog post', { type: 'error' })
     } finally {
       saving.value = false
     }

@@ -11,7 +11,6 @@
     </div>
 
     <v-alert v-if="error" type="error" variant="tonal" rounded="lg" class="mb-4">{{ error }}</v-alert>
-    <v-alert v-if="savedNotice" type="success" variant="tonal" rounded="lg" class="mb-4">Saved.</v-alert>
 
     <div v-if="loading" class="editor-loading">
       <v-progress-circular indeterminate color="primary" />
@@ -97,7 +96,9 @@
   } from '@/services/adminDocumentation'
   import { listAllProducts } from '@/services/adminProducts'
   import RichTextEditor from '@/components/admin/RichTextEditor.vue'
+  import { useNotif } from '@/composables/useNotif'
 
+  const notify = useNotif()
   const route = useRoute()
   const router = useRouter()
 
@@ -124,12 +125,6 @@
   const loading = ref(false)
   const saving = ref(false)
   const error = ref(null)
-  const savedNotice = ref(false)
-
-  function flashSaved() {
-    savedNotice.value = true
-    setTimeout(() => (savedNotice.value = false), 2000)
-  }
 
   // Picking a category defaults the product to that category's own
   // product (most articles belong entirely to one product) — still
@@ -199,9 +194,9 @@
       } else {
         await updateDocArticle(articleId.value, payload)
       }
-      flashSaved()
+      notify('Article saved successfully', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to save article', { type: 'error' })
     } finally {
       saving.value = false
     }

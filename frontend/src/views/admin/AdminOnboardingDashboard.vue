@@ -60,6 +60,9 @@
   import { useProductsStore } from '@/stores/products'
   import { useDate } from '@/composables/useDate'
   import { listOnboardingSubmissions, deleteOnboardingSubmission } from '@/services/adminOnboarding'
+  import { useNotif } from '@/composables/useNotif'
+
+  const notify = useNotif()
 
   const productsStore = useProductsStore()
   const { formatDate } = useDate()
@@ -90,8 +93,9 @@
     try {
       await deleteOnboardingSubmission(item.id)
       submissions.value = submissions.value.filter(s => s.id !== item.id)
+      notify('Submission removed', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to remove submission', { type: 'error' })
     }
   }
 

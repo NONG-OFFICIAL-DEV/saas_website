@@ -76,7 +76,9 @@
 <script setup>
   import { onMounted, ref } from 'vue'
   import { listAllProducts, deleteProduct } from '@/services/adminProducts'
+  import { useNotif } from '@/composables/useNotif'
 
+  const notify = useNotif()
   const products = ref([])
   const loading = ref(true)
   const error = ref(null)
@@ -100,8 +102,9 @@
     try {
       await deleteProduct(product.id)
       products.value = products.value.filter(p => p.id !== product.id)
+      notify('Product deleted', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to delete product', { type: 'error' })
     }
   }
 

@@ -51,6 +51,9 @@
 <script setup>
   import { onMounted, ref } from 'vue'
   import { listAllDocArticles, deleteDocArticle } from '@/services/adminDocumentation'
+  import { useNotif } from '@/composables/useNotif'
+
+  const notify = useNotif()
 
   const articles = ref([])
   const loading = ref(true)
@@ -79,8 +82,9 @@
     try {
       await deleteDocArticle(item.id)
       articles.value = articles.value.filter(a => a.id !== item.id)
+      notify('Article deleted', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to delete article', { type: 'error' })
     }
   }
 

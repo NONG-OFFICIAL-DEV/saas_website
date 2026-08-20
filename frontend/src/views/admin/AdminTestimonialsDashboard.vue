@@ -74,6 +74,9 @@
 <script setup>
   import { onMounted, ref } from 'vue'
   import { listAllTestimonials, deleteTestimonial } from '@/services/adminTestimonials'
+  import { useNotif } from '@/composables/useNotif'
+
+  const notify = useNotif()
 
   const testimonials = ref([])
   const loading = ref(true)
@@ -96,8 +99,9 @@
     try {
       await deleteTestimonial(item.id)
       testimonials.value = testimonials.value.filter(t => t.id !== item.id)
+      notify('Testimonial deleted', { type: 'success' })
     } catch (err) {
-      error.value = err.message
+      notify(err.message || 'Failed to delete testimonial', { type: 'error' })
     }
   }
 
