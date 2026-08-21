@@ -1,13 +1,13 @@
 <template>
   <section class="section-pad docs-home">
-    <v-container>
+    <Container>
       <div class="header text-center" data-aos="fade-up">
         <span class="section-tag">{{ t('documentation_home.tag') }}</span>
         <h1 class="section-title">{{ t('documentation_home.title') }}</h1>
         <p class="section-sub header-sub">{{ t('documentation_home.sub') }}</p>
 
         <div class="search-box">
-          <v-icon icon="mdi-magnify" size="20" />
+          <Icon name="mdi-magnify" size="20" />
           <input
             v-model="query"
             type="text"
@@ -22,9 +22,7 @@
         <div class="search-results" data-aos="fade-up">
           <p class="results-heading">{{ t('documentation_home.search_results_for', { query }) }}</p>
 
-          <div v-if="store.searching" class="results-loading">
-            <v-progress-circular indeterminate color="primary" size="28" />
-          </div>
+          <InlineLoader v-if="store.searching" class="results-loading" size="28" min-height="0" />
           <div v-else-if="!store.searchResults.length" class="no-results">
             {{ t('documentation_home.no_results') }}
           </div>
@@ -52,13 +50,13 @@
         <div v-else class="cards-grid" data-aos="fade-up">
           <div v-for="category in productCategories" :key="category.id" class="product-card">
             <div class="product-icon">
-              <v-icon :icon="category.icon || 'mdi-apps'" size="26" />
+              <Icon :name="category.icon || 'mdi-apps'" size="26" />
             </div>
             <h3 class="product-name">{{ category.name }}</h3>
             <p class="product-desc">{{ category.description }}</p>
             <NuxtLink :to="firstArticleLink(category)" class="product-cta">
               {{ t('documentation_home.view_documentation') }}
-              <v-icon icon="mdi-arrow-right" size="16" />
+              <Icon name="mdi-arrow-right" size="16" />
             </NuxtLink>
             <a
               v-if="category.product?.demo_video_url"
@@ -67,7 +65,7 @@
               rel="noopener"
               class="product-video-link"
             >
-              <v-icon icon="mdi-play-circle-outline" size="15" /> Watch demo
+              <Icon name="mdi-play-circle-outline" size="15" /> Watch demo
             </a>
           </div>
         </div>
@@ -94,13 +92,13 @@
               :to="firstArticleLink(category)"
               class="category-chip"
             >
-              <v-icon :icon="category.icon || 'mdi-folder-outline'" size="18" />
+              <Icon :name="category.icon || 'mdi-folder-outline'" size="18" />
               {{ category.name }}
             </NuxtLink>
           </div>
         </div>
       </template>
-    </v-container>
+    </Container>
   </section>
 </template>
 
@@ -160,14 +158,14 @@
     margin: 0 auto;
     padding: 14px 20px;
     border-radius: 999px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
-    background: rgb(var(--v-theme-surface));
-    box-shadow: 0 10px 26px rgba(var(--v-theme-on-surface), 0.06);
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+    background: var(--card);
+    box-shadow: 0 10px 26px color-mix(in srgb, var(--foreground) 6%, transparent);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
     transition: border-color 0.2s, box-shadow 0.2s;
   }
   .search-box:focus-within {
-    border-color: rgb(var(--v-theme-primary));
+    border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.14);
   }
   .search-input {
@@ -176,7 +174,7 @@
     outline: none;
     background: transparent;
     font-size: 0.95rem;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
   }
 
   .cards-grid {
@@ -192,16 +190,16 @@
     gap: 10px;
     padding: 28px 26px;
     border-radius: 20px;
-    background: rgb(var(--v-theme-surface));
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.07);
-    box-shadow: 0 12px 28px rgba(var(--v-theme-on-surface), 0.06);
+    background: var(--card);
+    border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--foreground) 6%, transparent);
     text-decoration: none;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     transition: transform 0.22s ease, box-shadow 0.22s ease;
   }
   .product-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 18px 36px rgba(var(--v-theme-on-surface), 0.1);
+    box-shadow: 0 18px 36px color-mix(in srgb, var(--foreground) 10%, transparent);
   }
   .product-icon {
     width: 46px;
@@ -211,7 +209,7 @@
     align-items: center;
     justify-content: center;
     background: rgba(99, 102, 241, 0.12);
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
   }
   .product-name {
     font-size: 1.1rem;
@@ -220,7 +218,7 @@
   }
   .product-desc {
     font-size: 0.88rem;
-    color: rgba(var(--v-theme-on-surface), 0.6);
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
     line-height: 1.6;
     margin: 0;
     flex-grow: 1;
@@ -231,7 +229,7 @@
     gap: 6px;
     font-size: 0.86rem;
     font-weight: 700;
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     text-decoration: none;
   }
   .product-video-link {
@@ -241,11 +239,11 @@
     margin-top: -2px;
     font-size: 0.8rem;
     font-weight: 600;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     text-decoration: none;
   }
   .product-video-link:hover {
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
   }
 
   .getting-started {
@@ -273,19 +271,19 @@
     gap: 14px;
     padding: 14px 18px;
     border-radius: 14px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
-    background: rgb(var(--v-theme-surface));
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+    background: var(--card);
     text-decoration: none;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     transition: border-color 0.2s;
   }
   .gs-step:hover {
-    border-color: rgb(var(--v-theme-primary));
+    border-color: var(--primary);
   }
   .gs-num {
     font-size: 0.78rem;
     font-weight: 800;
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
   }
   .gs-text {
     font-weight: 600;
@@ -309,15 +307,15 @@
     gap: 8px;
     padding: 10px 18px;
     border-radius: 999px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+    border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
     text-decoration: none;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     font-size: 0.86rem;
     font-weight: 600;
   }
   .category-chip:hover {
-    border-color: rgb(var(--v-theme-primary));
-    color: rgb(var(--v-theme-primary));
+    border-color: var(--primary);
+    color: var(--primary);
   }
 
   .search-results {
@@ -326,7 +324,7 @@
   }
   .results-heading {
     font-size: 0.9rem;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     margin: 0 0 20px;
   }
   .results-loading,
@@ -334,27 +332,27 @@
     display: flex;
     justify-content: center;
     padding: 40px 0;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
   }
   .result-card {
     display: block;
     padding: 18px 22px;
     margin-bottom: 12px;
     border-radius: 14px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     text-decoration: none;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     transition: border-color 0.2s;
   }
   .result-card:hover {
-    border-color: rgb(var(--v-theme-primary));
+    border-color: var(--primary);
   }
   .result-meta {
     font-size: 0.74rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: rgba(var(--v-theme-on-surface), 0.45);
+    color: color-mix(in srgb, var(--foreground) 45%, transparent);
     margin-bottom: 4px;
   }
   .result-title {
@@ -364,7 +362,7 @@
   }
   .result-excerpt {
     font-size: 0.86rem;
-    color: rgba(var(--v-theme-on-surface), 0.6);
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
     margin: 0;
   }
 </style>

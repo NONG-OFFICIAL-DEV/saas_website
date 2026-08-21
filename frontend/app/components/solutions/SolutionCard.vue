@@ -3,7 +3,7 @@
     <div class="card-glow" aria-hidden="true" />
 
     <div class="icon-wrap">
-      <v-icon :icon="solution.icon || 'mdi-apps'" size="26" />
+      <Icon :name="solution.icon || 'mdi-apps'" size="26" />
     </div>
 
     <h3 class="solution-name">{{ solution.name }}</h3>
@@ -11,7 +11,7 @@
 
     <div class="card-cta">
       <span>{{ t('button.learn_more') }}</span>
-      <v-icon icon="mdi-arrow-right" size="16" />
+      <Icon name="mdi-arrow-right" size="16" />
     </div>
   </NuxtLink>
 </template>
@@ -34,17 +34,17 @@
     gap: 12px;
     padding: 28px 26px;
     border-radius: 20px;
-    background: rgb(var(--v-theme-surface));
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.07);
-    box-shadow: 0 12px 28px rgba(var(--v-theme-on-surface), 0.06);
+    background: var(--card);
+    border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--foreground) 6%, transparent);
     text-decoration: none;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     overflow: hidden;
   }
   .solution-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(var(--v-theme-on-surface), 0.1);
+    box-shadow: 0 20px 40px color-mix(in srgb, var(--foreground) 10%, transparent);
   }
 
   .card-glow {
@@ -54,7 +54,7 @@
     width: 140px;
     height: 140px;
     border-radius: 50%;
-    background: rgb(var(--v-theme-primary));
+    background: var(--primary);
     opacity: 0.1;
     filter: blur(36px);
     pointer-events: none;
@@ -69,8 +69,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(var(--v-theme-primary), 0.12);
-    color: rgb(var(--v-theme-primary));
+    background: color-mix(in srgb, var(--primary) 12%, transparent);
+    color: var(--primary);
   }
 
   .solution-name {
@@ -84,7 +84,7 @@
     position: relative;
     z-index: 1;
     font-size: 0.86rem;
-    color: rgba(var(--v-theme-on-surface), 0.6);
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
     line-height: 1.55;
     margin: 0;
     flex-grow: 1;
@@ -98,7 +98,7 @@
     gap: 6px;
     font-size: 0.82rem;
     font-weight: 700;
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     margin-top: 4px;
     transition: gap 0.15s;
   }

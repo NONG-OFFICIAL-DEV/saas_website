@@ -5,27 +5,20 @@
         <h1 class="dash-title">Testimonials</h1>
         <p class="dash-sub">Manage the business-owner quotes shown on the homepage.</p>
       </div>
-      <v-btn
-        color="primary"
-        variant="flat"
-        rounded="lg"
-        prepend-icon="mdi-plus"
-        to="/admin/testimonials/new"
-      >
+      <Button as="NuxtLink" to="/admin/testimonials/new">
+        <Icon name="mdi-plus" size="18" />
         New testimonial
-      </v-btn>
+      </Button>
     </div>
 
-    <v-alert v-if="error" type="error" variant="tonal" rounded="lg" class="mb-4">
-      {{ error }}
-    </v-alert>
+    <Alert v-if="error" variant="destructive" class="mb-4">
+      <AlertDescription>{{ error }}</AlertDescription>
+    </Alert>
 
-    <div v-if="loading" class="dash-loading">
-      <v-progress-circular indeterminate color="primary" />
-    </div>
+    <InlineLoader v-if="loading" min-height="80px" />
 
     <div v-else-if="!testimonials.length" class="dash-empty">
-      <v-icon icon="mdi-comment-quote-outline" size="36" />
+      <Icon name="mdi-comment-quote-outline" size="36" />
       <p>No testimonials yet.</p>
     </div>
 
@@ -43,28 +36,17 @@
         <span>{{ item.product?.name ?? '—' }}</span>
         <span>{{ item.rating ? `${item.rating} / 5` : '—' }}</span>
         <span>
-          <v-chip
-            size="x-small"
-            variant="flat"
-            :color="item.is_published ? 'success' : 'default'"
-          >
+          <Badge :class="item.is_published ? 'bg-success text-success-foreground' : ''" :variant="item.is_published ? undefined : 'secondary'">
             {{ item.is_published ? 'Published' : 'Draft' }}
-          </v-chip>
+          </Badge>
         </span>
         <span class="dash-actions">
-          <v-btn
-            size="small"
-            variant="text"
-            icon="mdi-pencil-outline"
-            :to="`/admin/testimonials/${item.id}/edit`"
-          />
-          <v-btn
-            size="small"
-            variant="text"
-            icon="mdi-delete-outline"
-            color="error"
-            @click="confirmDelete(item)"
-          />
+          <Button as="NuxtLink" size="icon-sm" variant="ghost" :to="`/admin/testimonials/${item.id}/edit`">
+            <Icon name="mdi-pencil-outline" size="16" />
+          </Button>
+          <Button size="icon-sm" variant="ghost" class="text-destructive hover:text-destructive" @click="confirmDelete(item)">
+            <Icon name="mdi-delete-outline" size="16" />
+          </Button>
         </span>
       </div>
     </div>
@@ -74,6 +56,9 @@
 <script setup lang="ts">
   definePageMeta({ layout: 'admin' })
 
+  import { Alert, AlertDescription } from '~/components/ui/alert'
+  import { Badge } from '~/components/ui/badge'
+  import { Button } from '~/components/ui/button'
   import { listAllTestimonials, deleteTestimonial } from '~/services/adminTestimonials'
   import type { Testimonial } from '~/types'
 
@@ -125,22 +110,21 @@
   }
   .dash-sub {
     font-size: 0.86rem;
-    color: rgba(var(--v-theme-on-surface), 0.6);
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
     margin: 0;
   }
 
-  .dash-loading,
   .dash-empty {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
     padding: 60px 0;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
   }
 
   .dash-table {
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     border-radius: 14px;
     overflow: hidden;
   }
@@ -150,19 +134,19 @@
     align-items: center;
     gap: 12px;
     padding: 14px 18px;
-    border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.06);
+    border-bottom: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
     font-size: 0.86rem;
   }
   .dash-row:last-child {
     border-bottom: none;
   }
   .dash-row--head {
-    background: rgba(var(--v-theme-on-surface), 0.03);
+    background: color-mix(in srgb, var(--foreground) 3%, transparent);
     font-size: 0.72rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
   }
   .dash-name {
     font-weight: 700;

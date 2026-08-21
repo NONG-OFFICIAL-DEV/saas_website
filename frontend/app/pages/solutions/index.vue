@@ -1,6 +1,6 @@
 <template>
   <section class="section-pad">
-    <v-container>
+    <Container>
       <div class="hub-header text-center" data-aos="fade-up">
         <span class="section-tag">{{ t('solutions_hub.tag') }}</span>
         <h1 class="section-title">{{ t('solutions_hub.title') }}</h1>
@@ -13,19 +13,21 @@
         <SolutionCard v-for="solution in store.solutions" :key="solution.id" :solution="solution" />
       </div>
 
-      <v-alert v-else-if="store.error" type="error" variant="tonal" rounded="lg" class="mt-6">
-        {{ store.error }}
-      </v-alert>
+      <Alert v-else-if="store.error" variant="destructive" class="mt-6">
+        <AlertDescription>{{ store.error }}</AlertDescription>
+      </Alert>
 
       <div v-else class="empty-state">
-        <v-icon icon="mdi-lightbulb-outline" size="40" />
+        <Icon name="mdi-lightbulb-outline" size="40" />
         <p>{{ t('solutions_hub.empty') }}</p>
       </div>
-    </v-container>
+    </Container>
   </section>
 </template>
 
 <script setup lang="ts">
+  import { Alert, AlertDescription } from '~/components/ui/alert'
+
   const { t } = useI18n()
   const store = useSolutionsStore()
 
@@ -59,6 +61,6 @@
     align-items: center;
     gap: 10px;
     padding: 64px 0;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
   }
 </style>

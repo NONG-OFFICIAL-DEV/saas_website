@@ -1,10 +1,10 @@
 <template>
   <section class="section-pad onboarding">
-    <v-container>
+    <Container>
       <div v-if="!productMeta" class="unknown-state text-center" data-aos="fade-up">
-        <v-icon icon="mdi-compass-off-outline" size="44" />
+        <Icon name="mdi-compass-off-outline" size="44" />
         <p class="section-sub">{{ t('onboarding.unknown_product') }}</p>
-        <v-btn color="primary" rounded="lg" to="/get-started">{{ t('onboarding.start_over') }}</v-btn>
+        <Button as="NuxtLink" to="/get-started">{{ t('onboarding.start_over') }}</Button>
       </div>
 
       <template v-else>
@@ -15,12 +15,12 @@
 
         <!-- Success screen -->
         <div v-if="step === 'success'" class="success-card text-center" data-aos="fade-up">
-          <v-icon icon="mdi-check-circle" size="56" color="success" />
+          <Icon name="mdi-check-circle" size="56" color="success" />
           <h2 class="success-title">{{ t('onboarding.success_title', { name: productMeta.name }) }}</h2>
           <p class="section-sub success-sub">{{ t('onboarding.success_sub') }}</p>
-          <v-btn color="primary" size="large" rounded="lg" :href="loginUrl ?? undefined">
+          <Button as="a" size="lg" :href="loginUrl ?? undefined">
             {{ t('onboarding.go_to_login', { name: productMeta.name }) }}
-          </v-btn>
+          </Button>
         </div>
 
         <!-- Wizard -->
@@ -30,93 +30,131 @@
             <span :class="['step-tab', { active: step === 'owner' }]">2. {{ t('onboarding.step_owner') }}</span>
           </div>
 
-          <v-alert v-if="error" type="error" variant="tonal" rounded="lg" class="mb-4">{{ error }}</v-alert>
+          <Alert v-if="error" variant="destructive" class="mb-4">
+            <AlertDescription>{{ error }}</AlertDescription>
+          </Alert>
 
           <div v-if="step === 'business'" class="step-fields">
-            <v-text-field
-              v-model="form.business_name"
-              :label="t('onboarding.business_name')"
-              :placeholder="t('onboarding.business_name_placeholder')"
-              :error-messages="fieldError('name')"
-              required
-            />
-            <v-select
-              v-if="productMeta.needsBusinessType"
-              v-model="form.business_type_id"
-              :label="t('onboarding.business_type')"
-              :items="businessTypes"
-              item-title="name"
-              item-value="id"
-              :loading="loadingBusinessTypes"
-              :error-messages="fieldError('business_type_id')"
-              required
-            />
-            <v-text-field
-              v-model="form.phone"
-              :label="t('auth.register.phone')"
-              :placeholder="t('auth.register.phone_placeholder')"
-            />
+            <div class="field">
+              <Label for="business_name">{{ t('onboarding.business_name') }}</Label>
+              <Input
+                id="business_name"
+                v-model="form.business_name"
+                :placeholder="t('onboarding.business_name_placeholder')"
+                :class="fieldError('name') ? 'border-destructive' : ''"
+                required
+              />
+              <p v-if="fieldError('name')" class="field-error">{{ fieldError('name') }}</p>
+            </div>
+
+            <div v-if="productMeta.needsBusinessType" class="field">
+              <Label>{{ t('onboarding.business_type') }}</Label>
+              <Select v-model="form.business_type_id">
+                <SelectTrigger class="w-full" :disabled="loadingBusinessTypes" :class="fieldError('business_type_id') ? 'border-destructive' : ''">
+                  <SelectValue :placeholder="t('onboarding.business_type')" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem v-for="bt in businessTypes" :key="bt.id" :value="bt.id">{{ bt.name }}</SelectItem>
+                </SelectContent>
+              </Select>
+              <p v-if="fieldError('business_type_id')" class="field-error">{{ fieldError('business_type_id') }}</p>
+            </div>
+
+            <div class="field">
+              <Label for="phone">{{ t('auth.register.phone') }}</Label>
+              <Input id="phone" v-model="form.phone" :placeholder="t('auth.register.phone_placeholder')" />
+            </div>
           </div>
 
           <div v-else class="step-fields">
             <div class="two-col">
-              <v-text-field
-                v-model="form.owner_first_name"
-                :label="t('auth.register.first_name')"
-                :placeholder="t('auth.register.first_name_placeholder')"
+              <div class="field">
+                <Label for="owner_first_name">{{ t('auth.register.first_name') }}</Label>
+                <Input
+                  id="owner_first_name"
+                  v-model="form.owner_first_name"
+                  :placeholder="t('auth.register.first_name_placeholder')"
+                  required
+                />
+              </div>
+              <div class="field">
+                <Label for="owner_last_name">{{ t('auth.register.last_name') }}</Label>
+                <Input
+                  id="owner_last_name"
+                  v-model="form.owner_last_name"
+                  :placeholder="t('auth.register.last_name_placeholder')"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <Label for="email">{{ t('auth.register.email') }}</Label>
+              <Input
+                id="email"
+                v-model="form.email"
+                type="email"
+                :placeholder="t('auth.register.email_placeholder')"
+                :class="(fieldError('email') || fieldError('owner_email')) ? 'border-destructive' : ''"
                 required
               />
-              <v-text-field
-                v-model="form.owner_last_name"
-                :label="t('auth.register.last_name')"
-                :placeholder="t('auth.register.last_name_placeholder')"
+              <p v-if="fieldError('email') || fieldError('owner_email')" class="field-error">
+                {{ fieldError('email') || fieldError('owner_email') }}
+              </p>
+            </div>
+
+            <div class="field">
+              <Label for="password">{{ t('auth.register.password') }}</Label>
+              <Input
+                id="password"
+                v-model="form.password"
+                type="password"
+                :placeholder="t('auth.register.password_placeholder')"
+                :class="(fieldError('password') || fieldError('owner_password')) ? 'border-destructive' : ''"
+                required
+              />
+              <p v-if="fieldError('password') || fieldError('owner_password')" class="field-error">
+                {{ fieldError('password') || fieldError('owner_password') }}
+              </p>
+            </div>
+
+            <div class="field">
+              <Label for="password_confirmation">{{ t('auth.register.confirm_password') }}</Label>
+              <Input
+                id="password_confirmation"
+                v-model="form.password_confirmation"
+                type="password"
+                :placeholder="t('auth.register.confirm_password_placeholder')"
                 required
               />
             </div>
-            <v-text-field
-              v-model="form.email"
-              type="email"
-              :label="t('auth.register.email')"
-              :placeholder="t('auth.register.email_placeholder')"
-              :error-messages="fieldError('email') || fieldError('owner_email')"
-              required
-            />
-            <v-text-field
-              v-model="form.password"
-              type="password"
-              :label="t('auth.register.password')"
-              :placeholder="t('auth.register.password_placeholder')"
-              :error-messages="fieldError('password') || fieldError('owner_password')"
-              required
-            />
-            <v-text-field
-              v-model="form.password_confirmation"
-              type="password"
-              :label="t('auth.register.confirm_password')"
-              :placeholder="t('auth.register.confirm_password_placeholder')"
-              required
-            />
           </div>
 
           <div class="step-actions">
-            <v-btn v-if="step === 'owner'" variant="text" rounded="lg" @click="step = 'business'">
+            <Button v-if="step === 'owner'" type="button" variant="ghost" @click="step = 'business'">
               {{ t('onboarding.back') }}
-            </v-btn>
-            <v-spacer />
-            <v-btn v-if="step === 'business'" color="primary" rounded="lg" @click="goToOwnerStep">
+            </Button>
+            <div class="flex-1" />
+            <Button v-if="step === 'business'" type="button" @click="goToOwnerStep">
               {{ t('onboarding.next') }}
-            </v-btn>
-            <v-btn v-else type="submit" color="primary" rounded="lg" :loading="submitting">
+            </Button>
+            <Button v-else type="submit" :disabled="submitting">
+              <Icon v-if="submitting" name="mdi-loading" size="16" class="animate-spin" />
               {{ submitting ? t('onboarding.submitting') : t('onboarding.submit') }}
-            </v-btn>
+            </Button>
           </div>
         </form>
       </template>
-    </v-container>
+    </Container>
   </section>
 </template>
 
 <script setup lang="ts">
+  import { Alert, AlertDescription } from '~/components/ui/alert'
+  import { Button } from '~/components/ui/button'
+  import { Input } from '~/components/ui/input'
+  import { Label } from '~/components/ui/label'
+  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
   import { getOnboardingBusinessTypes, provisionOnboarding } from '~/services/onboarding'
 
   const { t } = useI18n()
@@ -257,9 +295,9 @@
     margin: 0 auto;
     padding: 36px;
     border-radius: 22px;
-    background: rgb(var(--v-theme-surface));
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.07);
-    box-shadow: 0 14px 32px rgba(var(--v-theme-on-surface), 0.07);
+    background: var(--card);
+    border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+    box-shadow: 0 14px 32px color-mix(in srgb, var(--foreground) 7%, transparent);
   }
 
   .step-tabs {
@@ -268,16 +306,26 @@
     margin-bottom: 24px;
     font-size: 0.82rem;
     font-weight: 700;
-    color: rgba(var(--v-theme-on-surface), 0.4);
+    color: color-mix(in srgb, var(--foreground) 40%, transparent);
   }
   .step-tab.active {
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
   }
 
   .step-fields {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 16px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field-error {
+    font-size: 0.75rem;
+    color: var(--destructive);
+    margin: 0;
   }
   .two-col {
     display: grid;
@@ -313,6 +361,6 @@
     align-items: center;
     gap: 14px;
     padding: 60px 0;
-    color: rgba(var(--v-theme-on-surface), 0.6);
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
   }
 </style>

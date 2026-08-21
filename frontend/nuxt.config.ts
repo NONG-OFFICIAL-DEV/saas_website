@@ -1,7 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import tailwindcss from '@tailwindcss/vite'
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
+
+  vite: {
+    plugins: [tailwindcss()]
+  },
 
   // Several pages/composables await more than one composable (useAsyncData,
   // etc.) in sequence within the same setup — without this, only the FIRST
@@ -12,9 +18,12 @@ export default defineNuxtConfig({
     asyncContext: true
   },
 
-  modules: ['vuetify-nuxt-module', '@pinia/nuxt', '@nuxtjs/i18n', '@nuxtjs/sitemap'],
+  modules: ['@pinia/nuxt', '@nuxtjs/i18n', '@nuxtjs/sitemap'],
 
-  css: ['@mdi/font/css/materialdesignicons.css'],
+  // @mdi/font stays (see Icon.vue) — the app's own ~90 icon call sites keep
+  // Material Design Icons rather than switching icon sets, so the visual
+  // design doesn't shift as part of this Tailwind/shadcn-vue migration.
+  css: ['@mdi/font/css/materialdesignicons.css', '~/assets/css/tailwind.css'],
 
   // The original app used flat, un-prefixed component names throughout
   // (AppNavbar, HeroSection, ProductCard, ...) regardless of which
@@ -22,7 +31,16 @@ export default defineNuxtConfig({
   // these by directory (LayoutAppNavbar, SectionsHeroSection, ...) — turn
   // that off so every template can keep referencing components by their
   // original name with zero changes.
-  components: [{ path: '~/components', pathPrefix: false }],
+  //
+  // components/ui/** (shadcn-vue's generated primitives) is excluded from
+  // this auto-scan entirely — each ui/x/ folder has both an index.ts
+  // barrel and the Xxx.vue file itself, which collide under a flattened
+  // naming scheme. shadcn-vue's own convention is explicit imports from
+  // the barrel anyway (e.g. `import { Button } from '~/components/ui/button'`),
+  // not auto-import, so this matches its intended usage.
+  components: [
+    { path: '~/components', pathPrefix: false, ignore: ['**/ui/**'] }
+  ],
 
   // The admin CMS is auth-gated (Sanctum token in localStorage), has zero
   // SEO value, and depends on the Tiptap rich-text editor (a real DOM
@@ -78,82 +96,5 @@ export default defineNuxtConfig({
     defaultLocale: 'en',
     strategy: 'no_prefix',
     langDir: 'locales'
-  },
-
-  vuetify: {
-    moduleOptions: {
-      // App code still imports the icon font directly (matches the
-      // current app's @mdi/font usage) rather than the module's own
-      // CDN/icon-set fetching.
-      styles: true
-    },
-    vuetifyOptions: {
-      defaults: {
-        VBtn: {
-          rounded: 'lg'
-        },
-        VSelect: {
-          density: 'comfortable',
-          variant: 'outlined',
-          color: 'primary'
-        },
-        VTextField: {
-          variant: 'outlined',
-          density: 'comfortable',
-          color: 'primary'
-        },
-        VTextarea: {
-          variant: 'outlined',
-          density: 'comfortable',
-          color: 'primary',
-          autoGrow: true,
-          rows: 3
-        },
-        VAutocomplete: {
-          variant: 'outlined',
-          density: 'comfortable',
-          color: 'primary'
-        },
-        VDataTableServer: {
-          class: 'rounded-lg'
-        }
-      },
-      theme: {
-        // TODO(Phase 4/5 - ThemeToggle): the original app reads
-        // localStorage.getItem('theme') at module scope (defaulting to
-        // 'dark') to persist the user's choice. That's an SSR hazard here,
-        // so this is hardcoded for now until ThemeToggle.vue is ported with
-        // a client-safe (cookie/plugin-based) persistence pattern.
-        defaultTheme: 'dark',
-        themes: {
-          light: {
-            dark: false,
-            colors: {
-              primary: '#3B5BDB',
-              secondary: '#6C757D',
-              surface: '#FFFFFF',
-              background: '#FFFFFF',
-              success: '#099268',
-              warning: '#F76707',
-              error: '#C92A2A',
-              info: '#1971C2'
-            }
-          },
-          dark: {
-            dark: true,
-            colors: {
-              primary: '#748FFC',
-              secondary: '#ADB5BD',
-              surface: '#1E1E2E',
-              background: '#151521',
-              success: '#2F9E44',
-              warning: '#F59F00',
-              error: '#E03131',
-              info: '#228BE6'
-            }
-          }
-        }
-      }
-    }
   }
 })

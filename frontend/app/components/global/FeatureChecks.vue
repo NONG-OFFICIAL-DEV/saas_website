@@ -2,7 +2,7 @@
   <div class="feature-checks">
     <div v-for="item in items" :key="item" class="check-item">
       <div class="check-icon">
-        <v-icon icon="mdi-check" size="13" color="primary" />
+        <Icon name="mdi-check" size="13" color="primary" />
       </div>
       <span>{{ item }}</span>
     </div>

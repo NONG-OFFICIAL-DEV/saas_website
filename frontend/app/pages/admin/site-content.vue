@@ -3,211 +3,289 @@
     <h1 class="page-title">Site Content</h1>
     <p class="page-sub">Edit the homepage hero, About page, and footer.</p>
 
-    <v-alert v-if="error" type="error" variant="tonal" rounded="lg" class="mb-4">
-      {{ error }}
-    </v-alert>
+    <Alert v-if="error" variant="destructive" class="mb-4">
+      <AlertDescription>{{ error }}</AlertDescription>
+    </Alert>
 
-    <div v-if="loading" class="page-loading">
-      <v-progress-circular indeterminate color="primary" />
-    </div>
+    <InlineLoader v-if="loading" min-height="120px" />
 
-    <v-tabs v-else v-model="tab" class="mb-6">
-      <v-tab value="hero">Hero</v-tab>
-      <v-tab value="about">About</v-tab>
-      <v-tab value="footer">Footer</v-tab>
-    </v-tabs>
+    <Tabs v-else v-model="tab" class="w-full">
+      <TabsList class="mb-6">
+        <TabsTrigger value="hero">Hero</TabsTrigger>
+        <TabsTrigger value="about">About</TabsTrigger>
+        <TabsTrigger value="footer">Footer</TabsTrigger>
+      </TabsList>
 
-    <v-window v-if="!loading" v-model="tab">
       <!-- ── Hero ── -->
-      <v-window-item value="hero">
+      <TabsContent value="hero">
         <section class="editor-section">
-          <v-row dense>
-            <v-col cols="12" sm="6">
-              <v-text-field v-model="hero.badge_text" label="Badge text" />
-            </v-col>
-            <v-col cols="12" sm="6" />
-            <v-col cols="12" sm="6">
-              <v-text-field v-model="hero.headline" label="Headline" />
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-text-field v-model="hero.subheadline" label="Subheadline" />
-            </v-col>
-            <v-col cols="12">
-              <v-textarea v-model="hero.description" label="Description" rows="2" auto-grow />
-            </v-col>
-            <v-col cols="12">
-              <v-text-field v-model="hero.trust_line" label="Trust line" />
-            </v-col>
-            <v-col cols="12" sm="4">
-              <v-text-field v-model="hero.cta_primary_label" label="Primary CTA label" />
-            </v-col>
-            <v-col cols="12" sm="4">
-              <v-text-field v-model="hero.cta_secondary_label" label="Secondary CTA label" />
-            </v-col>
-            <v-col cols="12" sm="4">
-              <v-text-field v-model="hero.cta_secondary_url" label="Secondary CTA URL" />
-            </v-col>
-          </v-row>
+          <Row dense>
+            <Col cols="12" sm="6">
+              <div class="field">
+                <Label>Badge text</Label>
+                <Input v-model="hero.badge_text" />
+              </div>
+            </Col>
+            <Col cols="12" sm="6" />
+            <Col cols="12" sm="6">
+              <div class="field">
+                <Label>Headline</Label>
+                <Input v-model="hero.headline" />
+              </div>
+            </Col>
+            <Col cols="12" sm="6">
+              <div class="field">
+                <Label>Subheadline</Label>
+                <Input v-model="hero.subheadline" />
+              </div>
+            </Col>
+            <Col cols="12">
+              <div class="field">
+                <Label>Description</Label>
+                <Textarea v-model="hero.description" rows="2" />
+              </div>
+            </Col>
+            <Col cols="12">
+              <div class="field">
+                <Label>Trust line</Label>
+                <Input v-model="hero.trust_line" />
+              </div>
+            </Col>
+            <Col cols="12" sm="4">
+              <div class="field">
+                <Label>Primary CTA label</Label>
+                <Input v-model="hero.cta_primary_label" />
+              </div>
+            </Col>
+            <Col cols="12" sm="4">
+              <div class="field">
+                <Label>Secondary CTA label</Label>
+                <Input v-model="hero.cta_secondary_label" />
+              </div>
+            </Col>
+            <Col cols="12" sm="4">
+              <div class="field">
+                <Label>Secondary CTA URL</Label>
+                <Input v-model="hero.cta_secondary_url" />
+              </div>
+            </Col>
+          </Row>
 
           <h3 class="sub-heading">Stats</h3>
           <div v-for="(s, i) in hero.stats" :key="i" class="repeat-row">
-            <v-text-field v-model="s.num" label="Value" density="compact" />
-            <v-text-field v-model="s.label" label="Label" density="compact" />
-            <v-btn icon="mdi-close" size="small" variant="text" @click="hero.stats.splice(i, 1)" />
+            <Input v-model="s.num" placeholder="Value" />
+            <Input v-model="s.label" placeholder="Label" />
+            <Button size="icon-sm" variant="ghost" @click="hero.stats.splice(i, 1)">
+              <Icon name="mdi-close" size="16" />
+            </Button>
           </div>
-          <v-btn size="small" variant="tonal" prepend-icon="mdi-plus" @click="hero.stats.push({ num: '', label: '' })">
+          <Button size="sm" variant="secondary" @click="hero.stats.push({ num: '', label: '' })">
+            <Icon name="mdi-plus" size="16" />
             Add stat
-          </v-btn>
+          </Button>
 
           <div class="save-row">
-            <v-btn color="primary" variant="flat" rounded="lg" :loading="saving" @click="saveHero">Save</v-btn>
+            <Button :disabled="saving" @click="saveHero">
+              <Icon v-if="saving" name="mdi-loading" size="16" class="animate-spin" />
+              Save
+            </Button>
           </div>
         </section>
-      </v-window-item>
+      </TabsContent>
 
       <!-- ── About ── -->
-      <v-window-item value="about">
+      <TabsContent value="about">
         <section class="editor-section">
           <h3 class="sub-heading sub-heading--first">Hero</h3>
-          <v-row dense>
-            <v-col cols="12" sm="6">
-              <v-text-field v-model="about.hero_tag" label="Eyebrow tag" />
-            </v-col>
-            <v-col cols="12" sm="6" />
-            <v-col cols="12">
-              <v-text-field v-model="about.hero_heading" label="Heading" />
-            </v-col>
-            <v-col cols="12">
-              <v-textarea v-model="about.hero_description" label="Description" rows="2" auto-grow />
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-text-field v-model="about.hero_cta_primary_label" label="Primary CTA label" />
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-text-field v-model="about.hero_cta_secondary_label" label="Secondary CTA label" />
-            </v-col>
-          </v-row>
+          <Row dense>
+            <Col cols="12" sm="6">
+              <div class="field">
+                <Label>Eyebrow tag</Label>
+                <Input v-model="about.hero_tag" />
+              </div>
+            </Col>
+            <Col cols="12" sm="6" />
+            <Col cols="12">
+              <div class="field">
+                <Label>Heading</Label>
+                <Input v-model="about.hero_heading" />
+              </div>
+            </Col>
+            <Col cols="12">
+              <div class="field">
+                <Label>Description</Label>
+                <Textarea v-model="about.hero_description" rows="2" />
+              </div>
+            </Col>
+            <Col cols="12" sm="6">
+              <div class="field">
+                <Label>Primary CTA label</Label>
+                <Input v-model="about.hero_cta_primary_label" />
+              </div>
+            </Col>
+            <Col cols="12" sm="6">
+              <div class="field">
+                <Label>Secondary CTA label</Label>
+                <Input v-model="about.hero_cta_secondary_label" />
+              </div>
+            </Col>
+          </Row>
 
           <h3 class="sub-heading">Story ("Why I build these products")</h3>
-          <v-row dense>
-            <v-col cols="12">
-              <v-text-field v-model="about.story_title" label="Title" />
-            </v-col>
-            <v-col cols="12">
-              <v-textarea
-                v-model="about.story_content"
-                label="Content (separate paragraphs with a blank line)"
-                rows="4"
-                auto-grow
-              />
-            </v-col>
-          </v-row>
+          <Row dense>
+            <Col cols="12">
+              <div class="field">
+                <Label>Title</Label>
+                <Input v-model="about.story_title" />
+              </div>
+            </Col>
+            <Col cols="12">
+              <div class="field">
+                <Label>Content (separate paragraphs with a blank line)</Label>
+                <Textarea v-model="about.story_content" rows="4" />
+              </div>
+            </Col>
+          </Row>
 
           <h3 class="sub-heading">What I Build (section intro — products themselves come from the Products page)</h3>
-          <v-row dense>
-            <v-col cols="12" sm="4">
-              <v-text-field v-model="about.products_tag" label="Eyebrow tag" />
-            </v-col>
-            <v-col cols="12" sm="4">
-              <v-text-field v-model="about.products_title" label="Title" />
-            </v-col>
-            <v-col cols="12" sm="4">
-              <v-text-field v-model="about.products_description" label="Description" />
-            </v-col>
-          </v-row>
+          <Row dense>
+            <Col cols="12" sm="4">
+              <div class="field">
+                <Label>Eyebrow tag</Label>
+                <Input v-model="about.products_tag" />
+              </div>
+            </Col>
+            <Col cols="12" sm="4">
+              <div class="field">
+                <Label>Title</Label>
+                <Input v-model="about.products_title" />
+              </div>
+            </Col>
+            <Col cols="12" sm="4">
+              <div class="field">
+                <Label>Description</Label>
+                <Input v-model="about.products_description" />
+              </div>
+            </Col>
+          </Row>
 
           <h3 class="sub-heading">Approach ("How I build" — 4 cards)</h3>
-          <v-row dense>
-            <v-col cols="12" sm="6">
-              <v-text-field v-model="about.approach_tag" label="Eyebrow tag" />
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-text-field v-model="about.approach_title" label="Title" />
-            </v-col>
-          </v-row>
+          <Row dense>
+            <Col cols="12" sm="6">
+              <div class="field">
+                <Label>Eyebrow tag</Label>
+                <Input v-model="about.approach_tag" />
+              </div>
+            </Col>
+            <Col cols="12" sm="6">
+              <div class="field">
+                <Label>Title</Label>
+                <Input v-model="about.approach_title" />
+              </div>
+            </Col>
+          </Row>
           <div v-for="(c, i) in about.approach_cards" :key="i" class="repeat-row repeat-row--wide">
-            <v-text-field v-model="c.icon" label="Icon (mdi-...)" density="compact" />
-            <v-text-field v-model="c.title" label="Title" density="compact" />
-            <v-text-field v-model="c.description" label="Description" density="compact" />
-            <v-btn icon="mdi-close" size="small" variant="text" @click="about.approach_cards.splice(i, 1)" />
+            <Input v-model="c.icon" placeholder="Icon (mdi-...)" />
+            <Input v-model="c.title" placeholder="Title" />
+            <Input v-model="c.description" placeholder="Description" />
+            <Button size="icon-sm" variant="ghost" @click="about.approach_cards.splice(i, 1)">
+              <Icon name="mdi-close" size="16" />
+            </Button>
           </div>
-          <v-btn
-            size="small"
-            variant="tonal"
-            prepend-icon="mdi-plus"
+          <Button
+            size="sm"
+            variant="secondary"
             @click="about.approach_cards.push({ icon: 'mdi-check-circle-outline', title: '', description: '' })"
           >
+            <Icon name="mdi-plus" size="16" />
             Add card
-          </v-btn>
+          </Button>
 
           <h3 class="sub-heading">Who I Build For</h3>
-          <v-row dense>
-            <v-col cols="12" sm="6">
-              <v-text-field v-model="about.audience_title" label="Title" />
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-text-field v-model="about.audience_description" label="Description" />
-            </v-col>
-          </v-row>
+          <Row dense>
+            <Col cols="12" sm="6">
+              <div class="field">
+                <Label>Title</Label>
+                <Input v-model="about.audience_title" />
+              </div>
+            </Col>
+            <Col cols="12" sm="6">
+              <div class="field">
+                <Label>Description</Label>
+                <Input v-model="about.audience_description" />
+              </div>
+            </Col>
+          </Row>
           <div v-for="(ex, i) in about.audience_examples" :key="i" class="repeat-row repeat-row--audience">
-            <v-text-field v-model="ex.label" label="Label" density="compact" />
-            <v-text-field v-model="ex.icon" label="Fallback icon (mdi-...)" density="compact" />
-            <v-text-field v-model="ex.image_url" label="Image URL" density="compact" />
-            <v-file-input
-              label="Upload image"
+            <Input v-model="ex.label" placeholder="Label" />
+            <Input v-model="ex.icon" placeholder="Fallback icon (mdi-...)" />
+            <Input v-model="ex.image_url" placeholder="Image URL" />
+            <FileInput
               accept="image/*"
-              prepend-icon=""
-              density="compact"
               :loading="uploadingAudienceImage === i"
               @change="(e: Event) => handleAudienceImageUpload(e, i)"
             />
-            <v-btn icon="mdi-close" size="small" variant="text" @click="about.audience_examples.splice(i, 1)" />
+            <Button size="icon-sm" variant="ghost" @click="about.audience_examples.splice(i, 1)">
+              <Icon name="mdi-close" size="16" />
+            </Button>
           </div>
-          <v-btn
-            size="small"
-            variant="tonal"
-            prepend-icon="mdi-plus"
+          <Button
+            size="sm"
+            variant="secondary"
             @click="about.audience_examples.push({ icon: 'mdi-store-outline', label: '', image_url: '' })"
           >
+            <Icon name="mdi-plus" size="16" />
             Add example
-          </v-btn>
+          </Button>
 
           <h3 class="sub-heading">Personal Profile (all fields optional — hidden on the page when blank)</h3>
-          <v-row dense>
-            <v-col cols="12" sm="6">
-              <v-text-field v-model="about.profile_photo_url" label="Photo URL" />
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-file-input
-                label="Upload photo"
-                accept="image/*"
-                prepend-icon=""
-                :loading="uploadingPhoto"
-                @change="handlePhotoUpload"
-              />
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-text-field v-model="about.profile_greeting" label="Greeting (e.g. Hi, I'm Nong.)" />
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-text-field v-model="about.profile_name" label="Name" />
-            </v-col>
-            <v-col cols="12">
-              <v-textarea v-model="about.profile_bio" label="Bio" rows="3" auto-grow />
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-text-field v-model="about.email" label="Contact email" />
-            </v-col>
-          </v-row>
+          <Row dense>
+            <Col cols="12" sm="6">
+              <div class="field">
+                <Label>Photo URL</Label>
+                <Input v-model="about.profile_photo_url" />
+              </div>
+            </Col>
+            <Col cols="12" sm="6">
+              <FileInput label="Upload photo" accept="image/*" :loading="uploadingPhoto" @change="handlePhotoUpload" />
+            </Col>
+            <Col cols="12" sm="6">
+              <div class="field">
+                <Label>Greeting (e.g. Hi, I'm Nong.)</Label>
+                <Input v-model="about.profile_greeting" />
+              </div>
+            </Col>
+            <Col cols="12" sm="6">
+              <div class="field">
+                <Label>Name</Label>
+                <Input v-model="about.profile_name" />
+              </div>
+            </Col>
+            <Col cols="12">
+              <div class="field">
+                <Label>Bio</Label>
+                <Textarea v-model="about.profile_bio" rows="3" />
+              </div>
+            </Col>
+            <Col cols="12" sm="6">
+              <div class="field">
+                <Label>Contact email</Label>
+                <Input v-model="about.email" />
+              </div>
+            </Col>
+          </Row>
 
           <h4 class="sub-heading sub-heading--sm">Skills</h4>
           <div v-for="(skill, i) in about.profile_skills" :key="i" class="repeat-row repeat-row--skill">
-            <v-text-field v-model="about.profile_skills[i]" label="Skill" density="compact" />
-            <v-btn icon="mdi-close" size="small" variant="text" @click="about.profile_skills.splice(i, 1)" />
+            <Input v-model="about.profile_skills[i]" placeholder="Skill" />
+            <Button size="icon-sm" variant="ghost" @click="about.profile_skills.splice(i, 1)">
+              <Icon name="mdi-close" size="16" />
+            </Button>
           </div>
-          <v-btn size="small" variant="tonal" prepend-icon="mdi-plus" @click="about.profile_skills.push('')">
+          <Button size="sm" variant="secondary" @click="about.profile_skills.push('')">
+            <Icon name="mdi-plus" size="16" />
             Add skill
-          </v-btn>
+          </Button>
 
           <h4 class="sub-heading sub-heading--sm">Social links (GitHub, LinkedIn, etc.)</h4>
           <p class="hint">
@@ -215,74 +293,113 @@
             anything else gets a generic link icon.
           </p>
           <div v-for="(s, i) in about.socials" :key="i" class="repeat-row">
-            <v-text-field v-model="s.name" label="Name" density="compact" />
-            <v-text-field v-model="s.href" label="URL" density="compact" />
-            <v-btn icon="mdi-close" size="small" variant="text" @click="about.socials.splice(i, 1)" />
+            <Input v-model="s.name" placeholder="Name" />
+            <Input v-model="s.href" placeholder="URL" />
+            <Button size="icon-sm" variant="ghost" @click="about.socials.splice(i, 1)">
+              <Icon name="mdi-close" size="16" />
+            </Button>
           </div>
-          <v-btn size="small" variant="tonal" prepend-icon="mdi-plus" @click="about.socials.push({ name: '', href: '' })">
+          <Button size="sm" variant="secondary" @click="about.socials.push({ name: '', href: '' })">
+            <Icon name="mdi-plus" size="16" />
             Add social link
-          </v-btn>
+          </Button>
 
           <h3 class="sub-heading">CTA</h3>
-          <v-row dense>
-            <v-col cols="12">
-              <v-text-field v-model="about.cta_title" label="Heading" />
-            </v-col>
-            <v-col cols="12">
-              <v-textarea v-model="about.cta_description" label="Description" rows="2" auto-grow />
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-text-field v-model="about.cta_primary_label" label="Primary CTA label" />
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-text-field v-model="about.cta_secondary_label" label="Secondary CTA label" />
-            </v-col>
-          </v-row>
+          <Row dense>
+            <Col cols="12">
+              <div class="field">
+                <Label>Heading</Label>
+                <Input v-model="about.cta_title" />
+              </div>
+            </Col>
+            <Col cols="12">
+              <div class="field">
+                <Label>Description</Label>
+                <Textarea v-model="about.cta_description" rows="2" />
+              </div>
+            </Col>
+            <Col cols="12" sm="6">
+              <div class="field">
+                <Label>Primary CTA label</Label>
+                <Input v-model="about.cta_primary_label" />
+              </div>
+            </Col>
+            <Col cols="12" sm="6">
+              <div class="field">
+                <Label>Secondary CTA label</Label>
+                <Input v-model="about.cta_secondary_label" />
+              </div>
+            </Col>
+          </Row>
 
           <div class="save-row">
-            <v-btn color="primary" variant="flat" rounded="lg" :loading="saving" @click="saveAbout">Save</v-btn>
+            <Button :disabled="saving" @click="saveAbout">
+              <Icon v-if="saving" name="mdi-loading" size="16" class="animate-spin" />
+              Save
+            </Button>
           </div>
         </section>
-      </v-window-item>
+      </TabsContent>
 
       <!-- ── Footer ── -->
-      <v-window-item value="footer">
+      <TabsContent value="footer">
         <section class="editor-section">
-          <v-row dense>
-            <v-col cols="12" sm="4">
-              <v-text-field v-model="footer.email" label="Email" />
-            </v-col>
-            <v-col cols="12" sm="4">
-              <v-text-field v-model="footer.phone" label="Phone" />
-            </v-col>
-            <v-col cols="12" sm="4">
-              <v-text-field v-model="footer.address" label="Address" />
-            </v-col>
-          </v-row>
+          <Row dense>
+            <Col cols="12" sm="4">
+              <div class="field">
+                <Label>Email</Label>
+                <Input v-model="footer.email" />
+              </div>
+            </Col>
+            <Col cols="12" sm="4">
+              <div class="field">
+                <Label>Phone</Label>
+                <Input v-model="footer.phone" />
+              </div>
+            </Col>
+            <Col cols="12" sm="4">
+              <div class="field">
+                <Label>Address</Label>
+                <Input v-model="footer.address" />
+              </div>
+            </Col>
+          </Row>
 
           <h3 class="sub-heading">Social links</h3>
           <p class="hint">Names "Telegram" / "Facebook" / "TikTok" get their matching icon automatically; anything else gets a generic link icon.</p>
           <div v-for="(s, i) in footer.socials" :key="i" class="repeat-row">
-            <v-text-field v-model="s.name" label="Name" density="compact" />
-            <v-text-field v-model="s.href" label="URL" density="compact" />
-            <v-btn icon="mdi-close" size="small" variant="text" @click="footer.socials.splice(i, 1)" />
+            <Input v-model="s.name" placeholder="Name" />
+            <Input v-model="s.href" placeholder="URL" />
+            <Button size="icon-sm" variant="ghost" @click="footer.socials.splice(i, 1)">
+              <Icon name="mdi-close" size="16" />
+            </Button>
           </div>
-          <v-btn size="small" variant="tonal" prepend-icon="mdi-plus" @click="footer.socials.push({ name: '', href: '' })">
+          <Button size="sm" variant="secondary" @click="footer.socials.push({ name: '', href: '' })">
+            <Icon name="mdi-plus" size="16" />
             Add social link
-          </v-btn>
+          </Button>
 
           <div class="save-row">
-            <v-btn color="primary" variant="flat" rounded="lg" :loading="saving" @click="saveFooter">Save</v-btn>
+            <Button :disabled="saving" @click="saveFooter">
+              <Icon v-if="saving" name="mdi-loading" size="16" class="animate-spin" />
+              Save
+            </Button>
           </div>
         </section>
-      </v-window-item>
-    </v-window>
+      </TabsContent>
+    </Tabs>
   </div>
 </template>
 
 <script setup lang="ts">
   definePageMeta({ layout: 'admin' })
 
+  import { Alert, AlertDescription } from '~/components/ui/alert'
+  import { Button } from '~/components/ui/button'
+  import { Input } from '~/components/ui/input'
+  import { Label } from '~/components/ui/label'
+  import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
+  import { Textarea } from '~/components/ui/textarea'
   import { getHero, updateHero, getAbout, updateAbout, getFooter, updateFooter } from '~/services/siteContent'
   import { uploadProductMedia } from '~/services/adminProducts'
   import type { HeroContent, AboutContent, FooterContent } from '~/types'
@@ -402,20 +519,25 @@
   }
   .page-sub {
     font-size: 0.86rem;
-    color: rgba(var(--v-theme-on-surface), 0.6);
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
     margin: 0 0 24px;
   }
-  .page-loading {
+  .field {
     display: flex;
-    justify-content: center;
-    padding: 60px 0;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field-error {
+    font-size: 0.75rem;
+    color: var(--destructive);
+    margin: 0;
   }
 
   .editor-section {
     padding: 24px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     border-radius: 14px;
-    background: rgba(var(--v-theme-surface), 0.6);
+    background: color-mix(in srgb, var(--card) 60%, transparent);
   }
 
   .sub-heading {
@@ -432,7 +554,7 @@
   }
   .hint {
     font-size: 0.8rem;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     margin: 0 0 12px;
   }
 

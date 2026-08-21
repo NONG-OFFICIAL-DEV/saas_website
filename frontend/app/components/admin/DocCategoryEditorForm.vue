@@ -3,70 +3,106 @@
     <div class="editor-header">
       <div>
         <NuxtLink to="/admin/documentation/categories" class="back-link">
-          <v-icon icon="mdi-arrow-left" size="16" /> Back to categories
+          <Icon name="mdi-arrow-left" size="16" /> Back to categories
         </NuxtLink>
         <h1 class="editor-title">{{ isNew ? 'New category' : form.name || 'Edit category' }}</h1>
       </div>
-      <v-btn color="primary" variant="flat" rounded="lg" :loading="saving" @click="handleSave">Save</v-btn>
+      <Button :disabled="saving" @click="handleSave">
+        <Icon v-if="saving" name="mdi-loading" size="16" class="animate-spin" />
+        Save
+      </Button>
     </div>
 
-    <v-alert v-if="error" type="error" variant="tonal" rounded="lg" class="mb-4">{{ error }}</v-alert>
+    <Alert v-if="error" variant="destructive" class="mb-4">
+      <AlertDescription>{{ error }}</AlertDescription>
+    </Alert>
 
-    <div v-if="loading" class="editor-loading">
-      <v-progress-circular indeterminate color="primary" />
-    </div>
+    <InlineLoader v-if="loading" min-height="120px" />
 
     <section v-else class="editor-section">
-      <v-row dense>
-        <v-col cols="12" sm="6">
-          <v-text-field v-model="form.name" label="Name" required />
-        </v-col>
-        <v-col cols="12" sm="6">
-          <v-text-field v-model="form.slug" label="Slug" hint="Lowercase, hyphenated" persistent-hint />
-        </v-col>
+      <Row dense>
+        <Col cols="12" sm="6">
+          <div class="field">
+            <Label for="name">Name *</Label>
+            <Input id="name" v-model="form.name" />
+          </div>
+        </Col>
+        <Col cols="12" sm="6">
+          <div class="field">
+            <Label for="slug">Slug</Label>
+            <Input id="slug" v-model="form.slug" />
+            <p class="field-hint">Lowercase, hyphenated</p>
+          </div>
+        </Col>
 
-        <v-col cols="12">
-          <v-textarea v-model="form.description" label="Description" rows="2" auto-grow />
-        </v-col>
+        <Col cols="12">
+          <div class="field">
+            <Label for="description">Description</Label>
+            <Textarea id="description" v-model="form.description" rows="2" />
+          </div>
+        </Col>
 
-        <v-col cols="12" sm="4">
-          <v-text-field v-model="form.icon" label="Icon (mdi-...)" />
-        </v-col>
-        <v-col cols="12" sm="4">
-          <v-select
-            v-model="form.product_id"
-            label="Product (optional)"
-            :items="allProducts"
-            item-title="name"
-            item-value="id"
-            clearable
-            hint="Leave empty for a general category"
-            persistent-hint
-          />
-        </v-col>
-        <v-col cols="12" sm="4">
-          <v-select
-            v-model="form.parent_id"
-            label="Parent category (optional)"
-            :items="parentOptions"
-            item-title="name"
-            item-value="id"
-            clearable
-          />
-        </v-col>
+        <Col cols="12" sm="4">
+          <div class="field">
+            <Label for="icon">Icon (mdi-...)</Label>
+            <Input id="icon" v-model="form.icon" />
+          </div>
+        </Col>
+        <Col cols="12" sm="4">
+          <div class="field">
+            <Label>Product (optional)</Label>
+            <Select v-model="productIdModel">
+              <SelectTrigger class="w-full">
+                <SelectValue placeholder="Product (optional)" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__none__">— None —</SelectItem>
+                <SelectItem v-for="p in allProducts" :key="p.id" :value="p.id">{{ p.name }}</SelectItem>
+              </SelectContent>
+            </Select>
+            <p class="field-hint">Leave empty for a general category</p>
+          </div>
+        </Col>
+        <Col cols="12" sm="4">
+          <div class="field">
+            <Label>Parent category (optional)</Label>
+            <Select v-model="parentIdModel">
+              <SelectTrigger class="w-full">
+                <SelectValue placeholder="Parent category (optional)" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__none__">— None —</SelectItem>
+                <SelectItem v-for="c in parentOptions" :key="c.id" :value="c.id">{{ c.name }}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </Col>
 
-        <v-col cols="12" sm="6">
-          <v-text-field v-model.number="form.sort_order" type="number" label="Sort order" />
-        </v-col>
-        <v-col cols="12" sm="6" class="d-flex align-center">
-          <v-switch v-model="form.is_active" color="primary" label="Active (visible on the public site)" hide-details />
-        </v-col>
-      </v-row>
+        <Col cols="12" sm="6">
+          <div class="field">
+            <Label for="sort_order">Sort order</Label>
+            <Input id="sort_order" v-model.number="form.sort_order" type="number" />
+          </div>
+        </Col>
+        <Col cols="12" sm="6" class="flex items-center">
+          <div class="switch-row">
+            <Switch v-model="form.is_active" />
+            <Label>Active (visible on the public site)</Label>
+          </div>
+        </Col>
+      </Row>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
+  import { Alert, AlertDescription } from '~/components/ui/alert'
+  import { Button } from '~/components/ui/button'
+  import { Input } from '~/components/ui/input'
+  import { Label } from '~/components/ui/label'
+  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
+  import { Switch } from '~/components/ui/switch'
+  import { Textarea } from '~/components/ui/textarea'
   import { getDocCategoryForEdit, createDocCategory, updateDocCategory, listAllDocCategories } from '~/services/adminDocumentation'
   import { listAllProducts } from '~/services/adminProducts'
   import type { Product, DocumentationCategory } from '~/types'
@@ -91,6 +127,18 @@
   const allProducts = ref<Product[]>([])
   const allCategories = ref<DocumentationCategory[]>([])
   const parentOptions = computed(() => allCategories.value.filter((c) => c.id !== categoryId.value))
+
+  // Reka UI's Select has no built-in "clear" affordance like Vuetify's
+  // `clearable` — a sentinel "__none__" item plays that role, mapped back
+  // to null (Vuetify's actual cleared value) through this computed.
+  const productIdModel = computed({
+    get: () => form.product_id ?? '__none__',
+    set: (v: string) => { form.product_id = v === '__none__' ? null : v }
+  })
+  const parentIdModel = computed({
+    get: () => form.parent_id ?? '__none__',
+    set: (v: string) => { form.parent_id = v === '__none__' ? null : v }
+  })
 
   const loading = ref(false)
   const saving = ref(false)
@@ -173,7 +221,7 @@
     align-items: center;
     gap: 4px;
     font-size: 0.8rem;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     text-decoration: none;
     margin-bottom: 6px;
   }
@@ -182,16 +230,26 @@
     font-weight: 800;
     margin: 0;
   }
-  .editor-loading {
-    display: flex;
-    justify-content: center;
-    padding: 60px 0;
-  }
   .editor-section {
     padding: 24px;
     margin-bottom: 24px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     border-radius: 14px;
-    background: rgba(var(--v-theme-surface), 0.6);
+    background: color-mix(in srgb, var(--card) 60%, transparent);
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field-hint {
+    font-size: 0.75rem;
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
+    margin: 0;
+  }
+  .switch-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 </style>

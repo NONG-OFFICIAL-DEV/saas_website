@@ -8,7 +8,7 @@
         class="dock-btn dock-btn--telegram"
         :aria-label="t('button.chat_telegram')"
       >
-        <v-icon icon="mdi-send-outline" size="18" />
+        <Icon name="mdi-send-outline" size="18" />
         <span class="dock-label">{{ t('button.chat_telegram') }}</span>
       </a>
       <NuxtLink
@@ -16,7 +16,7 @@
         class="dock-btn dock-btn--demo"
         :aria-label="t('button.start_free_trial')"
       >
-        <v-icon icon="mdi-rocket-launch-outline" size="18" />
+        <Icon name="mdi-rocket-launch-outline" size="18" />
         <span class="dock-label">{{ t('button.start_free_trial') }}</span>
       </NuxtLink>
     </div>
@@ -56,7 +56,7 @@
   font-size: 0.82rem;
   font-weight: 700;
   text-decoration: none;
-  box-shadow: 0 10px 28px rgba(var(--v-theme-on-surface), 0.18);
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--foreground) 18%, transparent);
   transition: transform 0.15s ease;
   white-space: nowrap;
 }
@@ -69,7 +69,7 @@
   color: #fff;
 }
 .dock-btn--demo {
-  background: rgb(var(--v-theme-primary));
+  background: var(--primary);
   color: #fff;
 }
 
@@ -82,9 +82,9 @@
     flex-direction: row;
     gap: 6px;
     padding: 10px 10px calc(10px + env(safe-area-inset-bottom));
-    background: rgba(var(--v-theme-surface), 0.96);
+    background: color-mix(in srgb, var(--card) 96%, transparent);
     backdrop-filter: blur(14px);
-    border-top: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    border-top: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
   }
   .dock-btn {
     flex: 1;
@@ -101,7 +101,7 @@
     white-space: nowrap;
     min-width: 0;
   }
-  .dock-btn :deep(.v-icon) {
+  .dock-btn :deep(.mdi) {
     font-size: 16px;
     flex-shrink: 0;
   }

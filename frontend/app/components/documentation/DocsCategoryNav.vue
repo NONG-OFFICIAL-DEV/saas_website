@@ -2,7 +2,7 @@
   <nav class="cat-nav">
     <div v-for="category in categories" :key="category.id" class="cat-group">
       <NuxtLink :to="firstArticleLink(category)" class="cat-title">
-        <v-icon :icon="category.icon || 'mdi-folder-outline'" size="15" />
+        <Icon :name="category.icon || 'mdi-folder-outline'" size="15" />
         {{ category.name }}
       </NuxtLink>
 
@@ -70,7 +70,7 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
     text-decoration: none;
     padding: 4px 0;
   }
@@ -81,17 +81,17 @@
   .cat-article {
     padding: 6px 0 6px 21px;
     font-size: 0.86rem;
-    color: rgba(var(--v-theme-on-surface), 0.7);
+    color: color-mix(in srgb, var(--foreground) 70%, transparent);
     text-decoration: none;
     border-left: 2px solid transparent;
   }
   .cat-article:hover {
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
   }
   .cat-article.active {
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     font-weight: 700;
-    border-left-color: rgb(var(--v-theme-primary));
+    border-left-color: var(--primary);
   }
   .cat-subgroup {
     margin-left: 8px;

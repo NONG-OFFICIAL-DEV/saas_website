@@ -27,11 +27,17 @@ export const useDocumentationStore = defineStore('documentation', () => {
     }
   }
 
+  // Deliberately does NOT null out currentArticle before fetching — see the
+  // equivalent note in stores/products.ts's fetchProductBySlug. A genuine
+  // fetch error still propagates (no catch here, matching the original
+  // behavior) so the caller's own error handling still clears stale state.
   async function fetchArticleBySlug(slug: string) {
     loadingArticle.value = true
-    currentArticle.value = null
     try {
       currentArticle.value = await getDocumentationArticle(slug)
+    } catch (err) {
+      currentArticle.value = null
+      throw err
     } finally {
       loadingArticle.value = false
     }

@@ -14,7 +14,7 @@
           :alt="product.name"
           class="logo-img"
         />
-        <v-icon v-else icon="mdi-apps" size="28" />
+        <Icon v-else name="mdi-apps" size="28" />
       </div>
 
       <span class="status-chip" :class="`status-chip--${product.status}`">
@@ -28,7 +28,7 @@
 
     <div class="card-cta">
       <span>{{ t('button.learn_more') }}</span>
-      <v-icon icon="mdi-arrow-right" size="16" />
+      <Icon name="mdi-arrow-right" size="16" />
     </div>
   </NuxtLink>
 </template>
@@ -51,13 +51,13 @@
     gap: 14px;
     padding: 30px 28px;
     border-radius: 22px;
-    background: rgb(var(--v-theme-surface));
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.07);
+    background: var(--card);
+    border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
     box-shadow:
-      0 14px 32px rgba(var(--v-theme-on-surface), 0.07),
-      0 2px 8px rgba(var(--v-theme-on-surface), 0.04);
+      0 14px 32px color-mix(in srgb, var(--foreground) 7%, transparent),
+      0 2px 8px color-mix(in srgb, var(--foreground) 4%, transparent);
     text-decoration: none;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     transition:
       transform 0.25s ease,
       box-shadow 0.25s ease,
@@ -67,7 +67,7 @@
   .product-card:hover {
     transform: translateY(-6px);
     box-shadow:
-      0 22px 48px rgba(var(--v-theme-on-surface), 0.12),
+      0 22px 48px color-mix(in srgb, var(--foreground) 12%, transparent),
       0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
     border-color: color-mix(in srgb, var(--accent) 45%, transparent);
   }
@@ -149,16 +149,16 @@
     50% { opacity: 0.4; }
   }
   .status-chip--live {
-    background: rgba(var(--v-theme-success), 0.14);
-    color: rgb(var(--v-theme-success));
+    background: color-mix(in srgb, var(--success) 14%, transparent);
+    color: var(--success);
   }
   .status-chip--beta {
-    background: rgba(var(--v-theme-info), 0.14);
-    color: rgb(var(--v-theme-info));
+    background: color-mix(in srgb, var(--info) 14%, transparent);
+    color: var(--info);
   }
   .status-chip--coming_soon {
-    background: rgba(var(--v-theme-on-surface), 0.08);
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    background: color-mix(in srgb, var(--foreground) 8%, transparent);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
   }
 
   .product-name {
@@ -174,7 +174,7 @@
     position: relative;
     z-index: 1;
     font-size: 0.88rem;
-    color: rgba(var(--v-theme-on-surface), 0.62);
+    color: color-mix(in srgb, var(--foreground) 62%, transparent);
     line-height: 1.6;
     margin: 0;
     flex-grow: 1;

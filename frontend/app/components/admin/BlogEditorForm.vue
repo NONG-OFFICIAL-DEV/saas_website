@@ -3,84 +3,113 @@
     <div class="editor-header">
       <div>
         <NuxtLink to="/admin/blog" class="back-link">
-          <v-icon icon="mdi-arrow-left" size="16" /> Back to blog
+          <Icon name="mdi-arrow-left" size="16" /> Back to blog
         </NuxtLink>
         <h1 class="editor-title">{{ isNew ? 'New post' : form.title || 'Edit post' }}</h1>
       </div>
-      <v-btn
-        color="primary"
-        variant="flat"
-        rounded="lg"
-        :loading="saving"
-        @click="handleSave"
-      >
+      <Button :disabled="saving" @click="handleSave">
+        <Icon v-if="saving" name="mdi-loading" size="16" class="animate-spin" />
         Save
-      </v-btn>
+      </Button>
     </div>
 
-    <v-alert v-if="error" type="error" variant="tonal" rounded="lg" class="mb-4">
-      {{ error }}
-    </v-alert>
+    <Alert v-if="error" variant="destructive" class="mb-4">
+      <AlertDescription>{{ error }}</AlertDescription>
+    </Alert>
 
-    <div v-if="loading" class="editor-loading">
-      <v-progress-circular indeterminate color="primary" />
-    </div>
+    <InlineLoader v-if="loading" min-height="120px" />
 
     <template v-else>
       <section class="editor-section">
         <h2 class="section-heading">Details</h2>
-        <v-row dense>
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.slug" label="Slug" hint="e.g. qr-ordering-worth-it" persistent-hint required />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.title" label="Title" required />
-          </v-col>
+        <Row dense>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="slug">Slug</Label>
+              <Input id="slug" v-model="form.slug" required />
+              <p class="field-hint">e.g. qr-ordering-worth-it</p>
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="title">Title</Label>
+              <Input id="title" v-model="form.title" required />
+            </div>
+          </Col>
 
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.author_name" label="Author name" />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.published_at" type="date" label="Published date" />
-          </v-col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="author_name">Author name</Label>
+              <Input id="author_name" v-model="form.author_name" />
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="published_at">Published date</Label>
+              <Input id="published_at" v-model="form.published_at" type="date" />
+            </div>
+          </Col>
 
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.cover_image_url" label="Cover image URL" />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-file-input
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="cover_image_url">Cover image URL</Label>
+              <Input id="cover_image_url" v-model="form.cover_image_url" />
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <FileInput
               label="Upload cover image"
               accept="image/*"
-              prepend-icon=""
               :loading="uploadingCover"
               @change="handleCoverUpload"
             />
-          </v-col>
+          </Col>
 
-          <v-col cols="12">
-            <v-text-field v-model="form.excerpt" label="Excerpt (blog list card summary)" />
-          </v-col>
-          <v-col cols="12">
-            <v-textarea v-model="form.content" label="Content" rows="10" auto-grow required />
-          </v-col>
+          <Col cols="12">
+            <div class="field">
+              <Label for="excerpt">Excerpt (blog list card summary)</Label>
+              <Input id="excerpt" v-model="form.excerpt" />
+            </div>
+          </Col>
+          <Col cols="12">
+            <div class="field">
+              <Label for="content">Content</Label>
+              <Textarea id="content" v-model="form.content" rows="10" required />
+            </div>
+          </Col>
 
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.seo_title" label="SEO title" />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.seo_description" label="SEO description" />
-          </v-col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="seo_title">SEO title</Label>
+              <Input id="seo_title" v-model="form.seo_title" />
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="seo_description">SEO description</Label>
+              <Input id="seo_description" v-model="form.seo_description" />
+            </div>
+          </Col>
 
-          <v-col cols="12">
-            <v-switch v-model="form.is_published" color="primary" label="Published (visible on the public site)" hide-details />
-          </v-col>
-        </v-row>
+          <Col cols="12">
+            <div class="switch-row">
+              <Switch id="is_published" :model-value="form.is_published" @update:model-value="(v) => (form.is_published = v)" />
+              <Label for="is_published">Published (visible on the public site)</Label>
+            </div>
+          </Col>
+        </Row>
       </section>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
+  import { Alert, AlertDescription } from '~/components/ui/alert'
+  import { Button } from '~/components/ui/button'
+  import { Input } from '~/components/ui/input'
+  import { Label } from '~/components/ui/label'
+  import { Switch } from '~/components/ui/switch'
+  import { Textarea } from '~/components/ui/textarea'
   // Explicit import — Vuetify also exports its own `useDate` (date-adapter
   // composable) which Nuxt's auto-import would otherwise resolve instead.
   import { useDate } from '~/composables/useDate'
@@ -191,7 +220,7 @@
     align-items: center;
     gap: 4px;
     font-size: 0.8rem;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     text-decoration: none;
     margin-bottom: 6px;
   }
@@ -201,18 +230,28 @@
     margin: 0;
   }
 
-  .editor-loading {
+  .field {
     display: flex;
-    justify-content: center;
-    padding: 60px 0;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field-hint {
+    font-size: 0.75rem;
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
+    margin: 0;
+  }
+  .switch-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 
   .editor-section {
     padding: 24px;
     margin-bottom: 24px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     border-radius: 14px;
-    background: rgba(var(--v-theme-surface), 0.6);
+    background: color-mix(in srgb, var(--card) 60%, transparent);
   }
   .section-heading {
     font-size: 1rem;

@@ -3,77 +3,108 @@
     <div class="editor-header">
       <div>
         <NuxtLink to="/admin/solutions" class="back-link">
-          <v-icon icon="mdi-arrow-left" size="16" /> Back to solutions
+          <Icon name="mdi-arrow-left" size="16" /> Back to solutions
         </NuxtLink>
         <h1 class="editor-title">{{ isNew ? 'New solution' : form.name || 'Edit solution' }}</h1>
       </div>
-      <v-btn
-        color="primary"
-        variant="flat"
-        rounded="lg"
-        :loading="saving"
-        @click="handleSave"
-      >
+      <Button :disabled="saving" @click="handleSave">
+        <Icon v-if="saving" name="mdi-loading" size="16" class="animate-spin" />
         Save
-      </v-btn>
+      </Button>
     </div>
 
-    <v-alert v-if="error" type="error" variant="tonal" rounded="lg" class="mb-4">
-      {{ error }}
-    </v-alert>
+    <Alert v-if="error" variant="destructive" class="mb-4">
+      <AlertDescription>{{ error }}</AlertDescription>
+    </Alert>
 
-    <div v-if="loading" class="editor-loading">
-      <v-progress-circular indeterminate color="primary" />
-    </div>
+    <InlineLoader v-if="loading" min-height="120px" />
 
     <template v-else>
       <section class="editor-section">
         <h2 class="section-heading">Details</h2>
-        <v-row dense>
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.slug" label="Slug" hint="e.g. coffee-shop" persistent-hint required />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.name" label="Name" required />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.icon" label="Icon (mdi-...)" />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field v-model.number="form.sort_order" type="number" label="Sort order" />
-          </v-col>
-          <v-col cols="12">
-            <v-text-field v-model="form.tagline" label="Tagline" />
-          </v-col>
-          <v-col cols="12">
-            <v-textarea v-model="form.description" label="Description" rows="3" auto-grow />
-          </v-col>
+        <Row dense>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="slug">Slug</Label>
+              <Input id="slug" v-model="form.slug" required />
+              <p class="field-hint">e.g. coffee-shop</p>
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="name">Name</Label>
+              <Input id="name" v-model="form.name" required />
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="icon">Icon (mdi-...)</Label>
+              <Input id="icon" v-model="form.icon" />
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="sort_order">Sort order</Label>
+              <Input id="sort_order" v-model.number="form.sort_order" type="number" />
+            </div>
+          </Col>
+          <Col cols="12">
+            <div class="field">
+              <Label for="tagline">Tagline</Label>
+              <Input id="tagline" v-model="form.tagline" />
+            </div>
+          </Col>
+          <Col cols="12">
+            <div class="field">
+              <Label for="description">Description</Label>
+              <Textarea id="description" v-model="form.description" rows="3" />
+            </div>
+          </Col>
 
-          <v-col cols="12">
-            <v-select
-              v-model="form.product_ids"
-              label="Linked products"
-              :items="allProducts"
-              item-title="name"
-              item-value="id"
-              multiple
-              chips
-              closable-chips
-              hint="Which product(s) does this solution recommend?"
-              persistent-hint
-            />
-          </v-col>
+          <Col cols="12">
+            <div class="field">
+              <Label>Linked products</Label>
+              <div v-if="form.product_ids.length" class="chips-row">
+                <Badge v-for="pid in form.product_ids" :key="pid" variant="secondary">
+                  {{ productName(pid) }}
+                  <Icon name="mdi-close" size="12" class="cursor-pointer ml-1" @click="toggleProduct(pid)" />
+                </Badge>
+              </div>
+              <div class="checklist">
+                <label v-for="p in allProducts" :key="p.id" class="checklist-item">
+                  <input
+                    type="checkbox"
+                    class="accent-primary size-4 rounded border-input"
+                    :checked="form.product_ids.includes(p.id)"
+                    @change="toggleProduct(p.id)"
+                  />
+                  {{ p.name }}
+                </label>
+              </div>
+              <p class="field-hint">Which product(s) does this solution recommend?</p>
+            </div>
+          </Col>
 
-          <v-col cols="12">
-            <v-switch v-model="form.is_published" color="primary" label="Published (visible on the public site)" hide-details />
-          </v-col>
-        </v-row>
+          <Col cols="12">
+            <div class="switch-row">
+              <Switch :model-value="form.is_published" @update:model-value="(v: boolean) => (form.is_published = v)" />
+              <Label>Published (visible on the public site)</Label>
+            </div>
+          </Col>
+        </Row>
       </section>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
+  import { Alert, AlertDescription } from '~/components/ui/alert'
+  import { Badge } from '~/components/ui/badge'
+  import { Button } from '~/components/ui/button'
+  import { Input } from '~/components/ui/input'
+  import { Label } from '~/components/ui/label'
+  import { Switch } from '~/components/ui/switch'
+  import { Textarea } from '~/components/ui/textarea'
   import { getSolutionForEdit, createSolution, updateSolution } from '~/services/adminSolutions'
   import { listAllProducts } from '~/services/adminProducts'
   import type { Product } from '~/types'
@@ -131,6 +162,16 @@
   }
   onMounted(load)
 
+  function productName(id: string) {
+    return allProducts.value.find((p) => p.id === id)?.name ?? id
+  }
+
+  function toggleProduct(id: string) {
+    const idx = form.product_ids.indexOf(id)
+    if (idx === -1) form.product_ids.push(id)
+    else form.product_ids.splice(idx, 1)
+  }
+
   async function handleSave() {
     saving.value = true
     error.value = null
@@ -167,7 +208,7 @@
     align-items: center;
     gap: 4px;
     font-size: 0.8rem;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     text-decoration: none;
     margin-bottom: 6px;
   }
@@ -177,22 +218,56 @@
     margin: 0;
   }
 
-  .editor-loading {
-    display: flex;
-    justify-content: center;
-    padding: 60px 0;
-  }
 
   .editor-section {
     padding: 24px;
     margin-bottom: 24px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     border-radius: 14px;
-    background: rgba(var(--v-theme-surface), 0.6);
+    background: color-mix(in srgb, var(--card) 60%, transparent);
   }
   .section-heading {
     font-size: 1rem;
     font-weight: 800;
     margin: 0 0 16px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field-hint {
+    font-size: 0.75rem;
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
+    margin: 0;
+  }
+  .chips-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .switch-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 </style>

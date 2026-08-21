@@ -1,6 +1,6 @@
 <template>
   <section id="pricing" class="section-pad section-tint-peach">
-    <v-container>
+    <Container>
       <div class="pricing-container" data-aos="fade-up">
         <!-- ── Header ── -->
         <div class="text-center pricing-header">
@@ -39,21 +39,19 @@
           </div>
         </div>
 
-        <InlineLoader v-if="loading" min-height="420px" />
+        <InlineLoader v-if="store.loading" min-height="420px" />
 
         <!-- ── Empty / unavailable state ── -->
-        <v-alert
+        <Alert
           v-else-if="!visiblePlans.length"
-          type="info"
-          variant="tonal"
-          rounded="lg"
-          icon="mdi-clock-outline"
-          class="mx-auto"
-          max-width="480"
+          class="flex items-center gap-2 border-info/30 bg-info/10 text-info mx-auto max-w-[480px]"
         >
-          Pricing is temporarily unavailable — please check back shortly or
-          {{ ' ' }}<a href="/#contact">contact me</a> for current plans.
-        </v-alert>
+          <Icon name="mdi-clock-outline" size="18" />
+          <AlertDescription>
+            Pricing is temporarily unavailable — please check back shortly or
+            {{ ' ' }}<a href="/#contact">contact me</a> for current plans.
+          </AlertDescription>
+        </Alert>
 
         <!-- ── Plan cards ── -->
         <!--
@@ -75,30 +73,25 @@
           >
             <div v-if="plan.popular" class="glow-ring" aria-hidden="true" />
 
-            <v-chip
+            <Badge
               v-if="plan.popular"
-              class="popular-badge"
-              color="primary"
-              size="x-small"
-              variant="flat"
-              prepend-icon="mdi-star"
+              class="popular-badge bg-primary text-primary-foreground border-transparent"
             >
+              <Icon name="mdi-star" size="12" />
               {{ t('common.most_popular') }}
-            </v-chip>
+            </Badge>
 
             <!-- Header -->
             <div class="plan-header">
-              <v-avatar
-                :color="PLAN_UI[plan.code]?.color ?? 'grey'"
-                variant="tonal"
-                size="40"
-                rounded="lg"
+              <span
+                class="plan-icon-badge"
+                :style="planIconStyle(PLAN_UI[plan.code]?.color ?? 'muted')"
               >
-                <v-icon
-                  :icon="PLAN_UI[plan.code]?.icon ?? 'mdi-help-circle-outline'"
+                <Icon
+                  :name="PLAN_UI[plan.code]?.icon ?? 'mdi-help-circle-outline'"
                   size="18"
                 />
-              </v-avatar>
+              </span>
               <div class="plan-header__text">
                 <div class="plan-name">{{ plan.name }}</div>
                 <div class="plan-tagline">
@@ -111,7 +104,7 @@
             <div class="price-block">
               <template v-if="!isPlanAvailableForCycle(plan)">
                 <div class="price-unavailable">
-                  <v-icon icon="mdi-information-outline" size="14" />
+                  <Icon name="mdi-information-outline" size="14" />
                   <span>{{ t('pricing.free_monthly_only') }}</span>
                 </div>
               </template>
@@ -123,14 +116,10 @@
                 </div>
                 <div class="price-meta">
                   <span class="price-per">{{ t('common.per_month') }}</span>
-                  <v-chip
-                    size="x-small"
-                    color="primary"
-                    variant="tonal"
-                    prepend-icon="mdi-gift-outline"
-                  >
+                  <Badge class="bg-primary/10 text-primary border-transparent">
+                    <Icon name="mdi-gift-outline" size="12" />
                     14-day trial
-                  </v-chip>
+                  </Badge>
                 </div>
               </template>
 
@@ -153,21 +142,16 @@
                     }}
                   </span>
                   <Transition name="fade">
-                    <v-chip
-                      v-if="getSavingsPct(plan) > 0"
-                      size="x-small"
-                      color="success"
-                      variant="tonal"
-                      prepend-icon="mdi-tag-outline"
-                    >
+                    <Badge v-if="getSavingsPct(plan) > 0" class="bg-success/10 text-success border-transparent">
+                      <Icon name="mdi-tag-outline" size="12" />
                       {{ t('pricing.save_pct', { pct: getSavingsPct(plan) }) }}
-                    </v-chip>
+                    </Badge>
                   </Transition>
                 </div>
               </template>
             </div>
 
-            <v-divider />
+            <div class="plan-divider" />
 
             <!-- Features -->
             <ul class="feature-list">
@@ -176,14 +160,12 @@
                 :key="f.id ?? f.key"
                 class="feature-item"
               >
-                <v-avatar
-                  :color="PLAN_UI[plan.code]?.color ?? 'primary'"
-                  variant="tonal"
-                  size="18"
-                  rounded="sm"
+                <span
+                  class="plan-check-badge"
+                  :style="planIconStyle(PLAN_UI[plan.code]?.color ?? 'primary')"
                 >
-                  <v-icon icon="mdi-check" size="10" />
-                </v-avatar>
+                  <Icon name="mdi-check" size="10" />
+                </span>
                 <span class="feature-text">
                   {{ (locale === 'en' || locale === 'km' ? f[locale] : undefined) ?? f.en ?? f.key }}
                 </span>
@@ -191,18 +173,14 @@
             </ul>
 
             <!-- CTA -->
-            <v-btn
-              :color="plan.popular ? 'primary' : undefined"
-              :variant="plan.popular ? 'flat' : 'outlined'"
-              rounded="lg"
-              size="small"
-              block
+            <Button
+              :variant="plan.popular ? 'default' : 'outline'"
+              size="sm"
+              class="plan-cta w-full"
               :disabled="!isPlanAvailableForCycle(plan)"
-              append-icon="mdi-arrow-right"
-              class="plan-cta"
               :style="
                 plan.popular
-                  ? 'box-shadow: 0 6px 20px rgba(var(--v-theme-primary),0.35)'
+                  ? 'box-shadow: 0 6px 20px color-mix(in srgb, var(--primary) 35%, transparent)'
                   : ''
               "
               @click="goToRegister(plan)"
@@ -214,49 +192,54 @@
                     ? t('button.start_free')
                     : t('button.get_started')
               }}
-            </v-btn>
+              <Icon name="mdi-arrow-right" size="16" />
+            </Button>
           </div>
         </div>
 
         <!-- ── Discount note ── -->
-        <v-alert
+        <Alert
           v-if="visiblePlans.length"
-          variant="tonal"
-          color="primary"
-          density="compact"
-          rounded="lg"
-          icon="mdi-percent-outline"
+          class="flex items-center gap-2 border-primary/30 bg-primary/10 text-primary"
         >
-          {{ t('pricing.discount_note_3m') }} &nbsp;·&nbsp;
-          {{ t('pricing.discount_note_1y') }}
-        </v-alert>
+          <Icon name="mdi-percent-outline" size="16" />
+          <AlertDescription>
+            {{ t('pricing.discount_note_3m') }} &nbsp;·&nbsp;
+            {{ t('pricing.discount_note_1y') }}
+          </AlertDescription>
+        </Alert>
 
         <!-- ── Footer ── -->
         <div v-if="visiblePlans.length" class="pricing-footer">
-          <v-icon icon="mdi-lock-outline" size="13" />
+          <Icon name="mdi-lock-outline" size="13" />
           {{ t('pricing.footer_note') }}
         </div>
       </div>
-    </v-container>
+    </Container>
   </section>
 </template>
 
 <script setup lang="ts">
+  import { Alert, AlertDescription } from '~/components/ui/alert'
+  import { Badge } from '~/components/ui/badge'
+  import { Button } from '~/components/ui/button'
   import type { PosPlan, BillingCycle } from '~/types'
 
   const { t, locale } = useI18n()
   const store = usePosPlansStore()
-  const loading = ref(false)
 
+  // Color values are this site's own design-token names (see
+  // app/assets/css/tailwind.css), not Vuetify's built-in palette —
+  // `planIconStyle()` below reads them into a `color-mix()` background.
   const PLAN_UI: Record<string, { icon: string; color: string; tagline: string }> = {
     free: {
       icon: 'mdi-gift-outline',
-      color: 'grey',
+      color: 'muted-foreground',
       tagline: 'Get started for free'
     },
     starter: {
       icon: 'mdi-star-half-full',
-      color: 'blue',
+      color: 'info',
       tagline: 'For small teams'
     },
     pro: { icon: 'mdi-star', color: 'primary', tagline: 'Most popular choice' },
@@ -264,6 +247,19 @@
       icon: 'mdi-crown',
       color: 'warning',
       tagline: 'For large organisations'
+    }
+  }
+
+  // Replaces Vuetify's <v-avatar color="x" variant="tonal"> for the
+  // square icon badges here (plan header icon, feature-list check bullet)
+  // — shadcn's Avatar is hardcoded circular (rounded-full), which doesn't
+  // match these square/rounded-lg badges, so a plain styled span is used
+  // instead, matching the `.feature-icon`/`.benefit-icon` pattern used
+  // elsewhere in this migration.
+  function planIconStyle(colorToken: string) {
+    return {
+      background: `color-mix(in srgb, var(--${colorToken}) 14%, transparent)`,
+      color: `var(--${colorToken})`
     }
   }
 
@@ -327,14 +323,11 @@
     navigateTo('/onboarding/nexstack-pos')
   }
 
-  onMounted(async () => {
-    loading.value = true
-    try {
-      await store.fetchPlans()
-    } finally {
-      loading.value = false
-    }
-  })
+  // Awaited (not onMounted) so live pricing is present in the server-rendered
+  // HTML instead of flashing an "unavailable"/empty state before a client-only
+  // fetch resolves. store.fetchPlans() already no-ops on repeat calls once
+  // plans are cached, so this only ever does real work on first load.
+  await useAsyncData('pos-plans', () => store.fetchPlans())
 </script>
 
 <style scoped>
@@ -384,7 +377,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    background: rgba(var(--v-theme-on-surface), 0.06);
+    background: color-mix(in srgb, var(--foreground) 6%, transparent);
     border-radius: 999px;
     padding: 4px;
     gap: 2px;
@@ -413,7 +406,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
     cursor: pointer;
     transition:
       background 0.2s,
@@ -423,9 +416,9 @@
   }
 
   .cycle-btn--active {
-    background: rgb(var(--v-theme-primary));
+    background: var(--primary);
     color: #fff;
-    box-shadow: 0 2px 12px rgba(var(--v-theme-primary), 0.4);
+    box-shadow: 0 2px 12px color-mix(in srgb, var(--primary) 40%, transparent);
   }
 
   .cycle-btn__badge {
@@ -439,8 +432,8 @@
     color: inherit;
   }
   .cycle-btn:not(.cycle-btn--active) .cycle-btn__badge {
-    background: rgba(var(--v-theme-success), 0.15);
-    color: rgb(var(--v-theme-success));
+    background: color-mix(in srgb, var(--success) 15%, transparent);
+    color: var(--success);
   }
 
   /* ── Plan cards grid ───────────────────────────────────────────────────────────
@@ -516,10 +509,10 @@
     position: relative;
     border-radius: 22px;
     padding: 28px 24px;
-    background: rgba(var(--v-theme-surface), 0.85);
+    background: color-mix(in srgb, var(--card) 85%, transparent);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.07);
-    box-shadow: 0 12px 28px rgba(var(--v-theme-on-surface), 0.06);
+    border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--foreground) 6%, transparent);
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -532,7 +525,7 @@
   }
   .plan-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 20px 44px rgba(var(--v-theme-on-surface), 0.1);
+    box-shadow: 0 20px 44px color-mix(in srgb, var(--foreground) 10%, transparent);
   }
   @keyframes card-rise {
     from {
@@ -545,18 +538,18 @@
     }
   }
   .plan-card--featured {
-    border-color: rgba(var(--v-theme-primary), 0.4);
-    background: rgba(var(--v-theme-surface), 0.94);
+    border-color: color-mix(in srgb, var(--primary) 40%, transparent);
+    background: color-mix(in srgb, var(--card) 94%, transparent);
     box-shadow:
-      0 0 0 1px rgba(var(--v-theme-primary), 0.18),
-      0 14px 44px rgba(var(--v-theme-primary), 0.1);
+      0 0 0 1px color-mix(in srgb, var(--primary) 18%, transparent),
+      0 14px 44px color-mix(in srgb, var(--primary) 10%, transparent);
   }
 
   .glow-ring {
     position: absolute;
     inset: -2px;
     border-radius: 24px;
-    background: linear-gradient(135deg, rgb(var(--v-theme-primary)), #f59e0b);
+    background: linear-gradient(135deg, var(--primary), #f59e0b);
     z-index: -1;
     opacity: 0.18;
     filter: blur(8px);
@@ -569,7 +562,7 @@
     transform: translateX(-50%);
     white-space: nowrap;
     z-index: 1;
-    box-shadow: 0 3px 14px rgba(var(--v-theme-primary), 0.38);
+    box-shadow: 0 3px 14px color-mix(in srgb, var(--primary) 38%, transparent);
   }
 
   /* ── Card header ── */
@@ -577,6 +570,28 @@
     display: flex;
     align-items: center;
     gap: 12px;
+  }
+  .plan-icon-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .plan-check-badge {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .plan-divider {
+    height: 1px;
+    background: color-mix(in srgb, var(--foreground) 10%, transparent);
   }
   .plan-header__text {
     display: flex;
@@ -594,7 +609,7 @@
   }
   .plan-tagline {
     font-size: 0.75rem;
-    color: rgba(var(--v-theme-on-surface), 0.48);
+    color: color-mix(in srgb, var(--foreground) 48%, transparent);
   }
 
   /* ── Price block ── */
@@ -613,17 +628,17 @@
   .price-currency {
     font-size: 1rem;
     font-weight: 700;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
     margin-top: 5px;
   }
   .price-amount {
     font-size: 3rem;
     font-weight: 900;
     letter-spacing: -3px;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
   }
   .price-amount--free {
-    color: rgb(var(--v-theme-success));
+    color: var(--success);
   }
   .price-meta {
     display: flex;
@@ -633,7 +648,7 @@
   }
   .price-per {
     font-size: 0.75rem;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
   }
   .price-unavailable {
     display: flex;
@@ -641,7 +656,7 @@
     gap: 6px;
     font-size: 0.78rem;
     font-style: italic;
-    color: rgba(var(--v-theme-on-surface), 0.45);
+    color: color-mix(in srgb, var(--foreground) 45%, transparent);
   }
 
   /* ── Features ── */
@@ -666,9 +681,8 @@
 
   /* ── CTA ── */
   .plan-cta {
-    /* v-btn's `block` prop sets flex: 1 0 auto internally (meant for a
-       horizontal row) — inside this vertical flex column that makes the
-       button itself stretch to fill leftover height. Pin it back down;
+    /* Inside this vertical flex column, an unconstrained button would
+       stretch to fill leftover height. Pin it back down;
        .feature-list's flex-grow: 1 is what should absorb that space. */
     flex: none !important;
     margin-top: auto;
@@ -680,13 +694,13 @@
     align-items: center;
     gap: 6px;
     font-size: 0.75rem;
-    color: rgba(var(--v-theme-on-surface), 0.42);
+    color: color-mix(in srgb, var(--foreground) 42%, transparent);
   }
 
   /* ── Section text ── */
   .section-sub {
     font-size: 1rem;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     line-height: 1.65;
     margin: 0;
   }

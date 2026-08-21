@@ -1,16 +1,15 @@
 <template>
   <section class="hero-section section-tint-lavender">
     <!-- Decorative 3D illustrations -->
-    <div class="hero-geo hero-geo--right d-none d-md-block">
+    <div class="hero-geo hero-geo--right hidden md:block">
       <Geometric3D />
     </div>
-    <div class="hero-geo hero-geo--left d-none d-lg-block">
+    <div class="hero-geo hero-geo--left hidden lg:block">
       <Geometric3D />
     </div>
 
-    <v-container>
-      <v-row justify="center">
-        <v-col cols="12" md="9" lg="7" class="text-center">
+    <Container>
+      <div class="w-full md:w-9/12 lg:w-7/12 mx-auto text-center">
 
           <!-- Badge -->
           <div class="hero-badge mb-7" data-aos="fade-down" data-aos-delay="0">
@@ -30,27 +29,21 @@
           </p>
 
           <!-- CTA buttons -->
-          <div class="d-flex gap-3 justify-center flex-wrap" data-aos="fade-up" data-aos-delay="300">
-            <v-btn
-              color="primary"
-              rounded="lg"
-              variant="flat"
-              class="hero-btn px-10"
-              append-icon="mdi-arrow-right"
-              to="/products"
-            >
+          <div class="flex gap-3 justify-center flex-wrap" data-aos="fade-up" data-aos-delay="300">
+            <Button as="NuxtLink" to="/products" class="hero-btn px-10">
               {{ hero.cta_primary_label }}
-            </v-btn>
-            <v-btn
-              rounded="lg"
-              variant="outlined"
+              <Icon name="mdi-arrow-right" size="18" />
+            </Button>
+            <Button
+              as="a"
+              variant="outline"
               class="px-10"
               :href="hero.cta_secondary_url as string"
               target="_blank"
               rel="noopener"
             >
               {{ hero.cta_secondary_label }}
-            </v-btn>
+            </Button>
           </div>
 
           <!-- Trust line -->
@@ -59,22 +52,23 @@
           </p>
 
           <!-- Stats row -->
-          <v-row justify="center" dense class="mt-16" data-aos="fade-up" data-aos-delay="400">
-            <v-col v-for="s in (hero.stats as { num: string; label: string }[])" :key="s.label" cols="6" sm="3">
+          <Row dense class="mt-16" data-aos="fade-up" data-aos-delay="400">
+            <Col v-for="s in (hero.stats as { num: string; label: string }[])" :key="s.label" cols="6" sm="3">
               <div class="stat-pill">
                 <div class="stat-num">{{ s.num }}</div>
                 <div class="stat-label">{{ s.label }}</div>
               </div>
-            </v-col>
-          </v-row>
+            </Col>
+          </Row>
 
-        </v-col>
-      </v-row>
-    </v-container>
+      </div>
+    </Container>
   </section>
 </template>
 
 <script setup lang="ts">
+  import { Button } from '~/components/ui/button'
+
   // Data is fetched by the parent page (app/pages/index.vue) via an awaited
   // useAsyncData call, so it's present in the server-rendered HTML — this
   // component only ever reads the store reactively.
@@ -115,7 +109,7 @@
   gap: 8px;
   background: rgba(37, 99, 235, 0.08);
   border: 1px solid rgba(37, 99, 235, 0.18);
-  color: rgb(var(--v-theme-primary));
+  color: var(--primary);
   font-size: 0.8rem;
   font-weight: 700;
   padding: 7px 18px;
@@ -124,7 +118,7 @@
 }
 .pulse-dot {
   width: 7px; height: 7px;
-  background: rgb(var(--v-theme-primary));
+  background: var(--primary);
   border-radius: 50%;
   display: inline-block;
   animation: pulse 2s infinite;
@@ -173,18 +167,18 @@
   z-index: 1;
 }
 .stat-pill {
-  background: rgb(var(--v-theme-surface));
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.06);
+  background: var(--card);
+  border: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
   border-radius: 18px;
   padding: 16px 8px;
   text-align: center;
-  box-shadow: 0 8px 20px rgba(var(--v-theme-on-surface), 0.05);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--foreground) 5%, transparent);
 }
 .stat-num {
   font-size: 1.9rem;
   font-weight: 900;
   letter-spacing: -1px;
-  color: rgb(var(--v-theme-primary));
+  color: var(--primary);
 }
 .stat-label {
   font-size: 0.72rem;

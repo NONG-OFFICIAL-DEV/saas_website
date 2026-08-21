@@ -48,18 +48,8 @@
 </template>
 
 <script setup lang="ts">
-  import { useTheme } from 'vuetify'
-
   const { t } = useI18n()
-  const theme = useTheme()
-
-  const isDark = computed(() => theme.global.name.value === 'dark')
-
-  function toggleTheme() {
-    const next = isDark.value ? 'light' : 'dark'
-    theme.global.name.value = next
-    localStorage.setItem('theme', next)
-  }
+  const { isDark, toggle: toggleTheme } = useColorMode()
 </script>
 
 <style scoped>
@@ -69,9 +59,9 @@
     border: none;
     background: transparent;
     cursor: pointer;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
   }
   .theme-btn:hover {
-    background: rgba(var(--v-theme-on-surface), 0.05);
+    background: color-mix(in srgb, var(--foreground) 5%, transparent);
   }
 </style>

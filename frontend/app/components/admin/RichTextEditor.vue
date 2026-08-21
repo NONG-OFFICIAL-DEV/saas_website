@@ -4,24 +4,24 @@
       <button type="button" class="rte-btn" :class="{ active: editor.isActive('heading', { level: 2 }) }" title="Heading 2" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()">H2</button>
       <button type="button" class="rte-btn" :class="{ active: editor.isActive('heading', { level: 3 }) }" title="Heading 3" @click="editor.chain().focus().toggleHeading({ level: 3 }).run()">H3</button>
       <span class="rte-sep" />
-      <button type="button" class="rte-btn" :class="{ active: editor.isActive('bold') }" title="Bold" @click="editor.chain().focus().toggleBold().run()"><v-icon icon="mdi-format-bold" size="16" /></button>
-      <button type="button" class="rte-btn" :class="{ active: editor.isActive('italic') }" title="Italic" @click="editor.chain().focus().toggleItalic().run()"><v-icon icon="mdi-format-italic" size="16" /></button>
-      <button type="button" class="rte-btn" :class="{ active: editor.isActive('code') }" title="Inline code" @click="editor.chain().focus().toggleCode().run()"><v-icon icon="mdi-code-tags" size="16" /></button>
+      <button type="button" class="rte-btn" :class="{ active: editor.isActive('bold') }" title="Bold" @click="editor.chain().focus().toggleBold().run()"><Icon name="mdi-format-bold" size="16" /></button>
+      <button type="button" class="rte-btn" :class="{ active: editor.isActive('italic') }" title="Italic" @click="editor.chain().focus().toggleItalic().run()"><Icon name="mdi-format-italic" size="16" /></button>
+      <button type="button" class="rte-btn" :class="{ active: editor.isActive('code') }" title="Inline code" @click="editor.chain().focus().toggleCode().run()"><Icon name="mdi-code-tags" size="16" /></button>
       <span class="rte-sep" />
-      <button type="button" class="rte-btn" :class="{ active: editor.isActive('bulletList') }" title="Bullet list" @click="editor.chain().focus().toggleBulletList().run()"><v-icon icon="mdi-format-list-bulleted" size="16" /></button>
-      <button type="button" class="rte-btn" :class="{ active: editor.isActive('orderedList') }" title="Numbered list" @click="editor.chain().focus().toggleOrderedList().run()"><v-icon icon="mdi-format-list-numbered" size="16" /></button>
-      <button type="button" class="rte-btn" :class="{ active: editor.isActive('blockquote') }" title="Quote" @click="editor.chain().focus().toggleBlockquote().run()"><v-icon icon="mdi-format-quote-close" size="16" /></button>
-      <button type="button" class="rte-btn" :class="{ active: editor.isActive('codeBlock') }" title="Code block" @click="editor.chain().focus().toggleCodeBlock().run()"><v-icon icon="mdi-code-braces" size="16" /></button>
+      <button type="button" class="rte-btn" :class="{ active: editor.isActive('bulletList') }" title="Bullet list" @click="editor.chain().focus().toggleBulletList().run()"><Icon name="mdi-format-list-bulleted" size="16" /></button>
+      <button type="button" class="rte-btn" :class="{ active: editor.isActive('orderedList') }" title="Numbered list" @click="editor.chain().focus().toggleOrderedList().run()"><Icon name="mdi-format-list-numbered" size="16" /></button>
+      <button type="button" class="rte-btn" :class="{ active: editor.isActive('blockquote') }" title="Quote" @click="editor.chain().focus().toggleBlockquote().run()"><Icon name="mdi-format-quote-close" size="16" /></button>
+      <button type="button" class="rte-btn" :class="{ active: editor.isActive('codeBlock') }" title="Code block" @click="editor.chain().focus().toggleCodeBlock().run()"><Icon name="mdi-code-braces" size="16" /></button>
       <span class="rte-sep" />
-      <button type="button" class="rte-btn" :class="{ active: editor.isActive('link') }" title="Link" @click="handleSetLink"><v-icon icon="mdi-link-variant" size="16" /></button>
-      <button type="button" class="rte-btn" title="Image" :disabled="uploadingImage" @click="triggerImagePick"><v-icon icon="mdi-image-outline" size="16" /></button>
-      <button type="button" class="rte-btn" title="Table" @click="editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()"><v-icon icon="mdi-table" size="16" /></button>
-      <button type="button" class="rte-btn" title="Video (YouTube/Vimeo)" @click="handleInsertVideo"><v-icon icon="mdi-youtube" size="16" /></button>
+      <button type="button" class="rte-btn" :class="{ active: editor.isActive('link') }" title="Link" @click="handleSetLink"><Icon name="mdi-link-variant" size="16" /></button>
+      <button type="button" class="rte-btn" title="Image" :disabled="uploadingImage" @click="triggerImagePick"><Icon name="mdi-image-outline" size="16" /></button>
+      <button type="button" class="rte-btn" title="Table" @click="editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()"><Icon name="mdi-table" size="16" /></button>
+      <button type="button" class="rte-btn" title="Video (YouTube/Vimeo)" @click="handleInsertVideo"><Icon name="mdi-youtube" size="16" /></button>
       <span class="rte-sep" />
       <button type="button" class="rte-btn rte-btn--tip" :class="{ active: editor.isActive('callout', { variant: 'tip' }) }" title="Tip callout" @click="editor.chain().focus().setCallout('tip').run()">💡</button>
       <button type="button" class="rte-btn rte-btn--important" :class="{ active: editor.isActive('callout', { variant: 'important' }) }" title="Important callout" @click="editor.chain().focus().setCallout('important').run()">⚠️</button>
       <button type="button" class="rte-btn rte-btn--note" :class="{ active: editor.isActive('callout', { variant: 'note' }) }" title="Note callout" @click="editor.chain().focus().setCallout('note').run()">ℹ️</button>
-      <button v-if="editor.isActive('callout')" type="button" class="rte-btn" title="Remove callout" @click="editor.chain().focus().unsetCallout().run()"><v-icon icon="mdi-close" size="16" /></button>
+      <button v-if="editor.isActive('callout')" type="button" class="rte-btn" title="Remove callout" @click="editor.chain().focus().unsetCallout().run()"><Icon name="mdi-close" size="16" /></button>
     </div>
 
     <input ref="fileInput" type="file" accept="image/*" class="d-none" @change="handleImagePicked" />
@@ -116,7 +116,7 @@
 
 <style scoped>
   .rte {
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.15);
+    border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
     border-radius: 10px;
     overflow: hidden;
   }
@@ -127,13 +127,13 @@
     align-items: center;
     gap: 2px;
     padding: 6px 8px;
-    border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.1);
-    background: rgba(var(--v-theme-on-surface), 0.03);
+    border-bottom: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
+    background: color-mix(in srgb, var(--foreground) 3%, transparent);
   }
   .rte-sep {
     width: 1px;
     height: 20px;
-    background: rgba(var(--v-theme-on-surface), 0.12);
+    background: color-mix(in srgb, var(--foreground) 12%, transparent);
     margin: 0 4px;
   }
   .rte-btn {
@@ -146,17 +146,17 @@
     border: none;
     border-radius: 6px;
     background: transparent;
-    color: rgba(var(--v-theme-on-surface), 0.7);
+    color: color-mix(in srgb, var(--foreground) 70%, transparent);
     cursor: pointer;
     font-size: 0.78rem;
     font-weight: 700;
   }
   .rte-btn:hover {
-    background: rgba(var(--v-theme-on-surface), 0.08);
+    background: color-mix(in srgb, var(--foreground) 8%, transparent);
   }
   .rte-btn.active {
-    background: rgba(var(--v-theme-primary), 0.14);
-    color: rgb(var(--v-theme-primary));
+    background: color-mix(in srgb, var(--primary) 14%, transparent);
+    color: var(--primary);
   }
   .rte-btn:disabled {
     opacity: 0.5;
@@ -177,7 +177,7 @@
     content: attr(data-placeholder);
     float: left;
     height: 0;
-    color: rgba(var(--v-theme-on-surface), 0.4);
+    color: color-mix(in srgb, var(--foreground) 40%, transparent);
     pointer-events: none;
   }
   .rte-content :deep(h2) {
@@ -202,11 +202,11 @@
   .rte-content :deep(blockquote) {
     margin: 0 0 10px;
     padding-left: 14px;
-    border-left: 3px solid rgba(var(--v-theme-primary), 0.4);
-    color: rgba(var(--v-theme-on-surface), 0.65);
+    border-left: 3px solid color-mix(in srgb, var(--primary) 40%, transparent);
+    color: color-mix(in srgb, var(--foreground) 65%, transparent);
   }
   .rte-content :deep(pre) {
-    background: rgba(var(--v-theme-on-surface), 0.06);
+    background: color-mix(in srgb, var(--foreground) 6%, transparent);
     border-radius: 8px;
     padding: 12px 14px;
     overflow-x: auto;
@@ -223,11 +223,11 @@
   }
   .rte-content :deep(td),
   .rte-content :deep(th) {
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.15);
+    border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
     padding: 6px 10px;
   }
   .rte-content :deep(th) {
-    background: rgba(var(--v-theme-on-surface), 0.04);
+    background: color-mix(in srgb, var(--foreground) 4%, transparent);
   }
   .rte-content :deep(div[data-type='callout']) {
     padding: 12px 16px;
@@ -236,15 +236,15 @@
   }
   .rte-content :deep(div[data-type='callout'][data-variant='tip']) {
     background: rgba(99, 102, 241, 0.08);
-    border-left: 3px solid rgb(var(--v-theme-primary));
+    border-left: 3px solid var(--primary);
   }
   .rte-content :deep(div[data-type='callout'][data-variant='important']) {
     background: rgba(245, 158, 11, 0.1);
     border-left: 3px solid #f59e0b;
   }
   .rte-content :deep(div[data-type='callout'][data-variant='note']) {
-    background: rgba(var(--v-theme-on-surface), 0.05);
-    border-left: 3px solid rgba(var(--v-theme-on-surface), 0.3);
+    background: color-mix(in srgb, var(--foreground) 5%, transparent);
+    border-left: 3px solid color-mix(in srgb, var(--foreground) 30%, transparent);
   }
   .rte-content :deep(div[data-type='callout'] p) {
     margin: 0 0 4px;
@@ -258,7 +258,7 @@
     margin: 0 0 12px;
     border-radius: 8px;
     overflow: hidden;
-    background: rgba(var(--v-theme-on-surface), 0.06);
+    background: color-mix(in srgb, var(--foreground) 6%, transparent);
   }
   .rte-content :deep(div[data-type='video-embed'] iframe) {
     position: absolute;

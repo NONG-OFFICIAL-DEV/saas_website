@@ -1,6 +1,6 @@
 <template>
   <section class="section-pad" id="contact">
-    <v-container>
+    <Container>
       <div class="cta-block text-center" data-aos="zoom-in">
         <h2 class="cta-title text-white mb-3">
           {{ t('home.cta.title') }}
@@ -10,27 +10,21 @@
         </p>
 
         <div class="cta-actions">
-          <v-btn
-            color="white"
-            variant="flat"
-            rounded="lg"
-            class="cta-btn-solid px-8 font-weight-bold text-primary"
-            append-icon="mdi-arrow-right"
-            to="/products"
-          >
+          <Button as="NuxtLink" to="/products" class="cta-btn-solid px-8 font-bold text-primary bg-white hover:bg-white/80">
             {{ t('button.view_products') }}
-          </v-btn>
-          <v-btn
-            variant="outlined"
-            rounded="lg"
-            class="cta-btn-outline px-8 font-weight-bold"
-            prepend-icon="mdi-send-outline"
+            <Icon name="mdi-arrow-right" size="18" />
+          </Button>
+          <Button
+            as="a"
+            variant="outline"
+            class="cta-btn-outline px-8 font-bold"
             href="https://t.me/Nong_Phloeut"
             target="_blank"
             rel="noopener"
           >
+            <Icon name="mdi-send-outline" size="18" />
             {{ t('button.chat_telegram') }}
-          </v-btn>
+          </Button>
         </div>
 
         <div class="cta-reassurance">
@@ -41,11 +35,13 @@
           <span>{{ t('home.cta.reassurance.cancel_anytime') }}</span>
         </div>
       </div>
-    </v-container>
+    </Container>
   </section>
 </template>
 
 <script setup lang="ts">
+  import { Button } from '~/components/ui/button'
+
   const { t } = useI18n()
 </script>
 
@@ -57,8 +53,8 @@
      identical in both. */
   background: linear-gradient(
     120deg,
-    rgb(var(--v-theme-primary)) 0%,
-    color-mix(in srgb, rgb(var(--v-theme-primary)), black 28%) 100%
+    var(--primary) 0%,
+    color-mix(in srgb, var(--primary), black 28%) 100%
   );
   border-radius: 24px;
   padding: 56px 32px;
@@ -87,7 +83,7 @@
 }
 
 .cta-btn-solid {
-  box-shadow: 0 8px 24px rgba(var(--v-theme-on-surface), 0.2) !important;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--foreground) 20%, transparent) !important;
 }
 .cta-btn-outline {
   color: #fff !important;
@@ -118,6 +114,6 @@
 @media (max-width: 640px) {
   .cta-block { padding: 44px 22px; border-radius: 20px; }
   .cta-actions { flex-direction: column; }
-  .cta-actions .v-btn { width: 100%; }
+  .cta-actions [data-slot='button'] { width: 100%; }
 }
 </style>

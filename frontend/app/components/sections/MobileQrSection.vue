@@ -1,18 +1,18 @@
 <template>
   <section class="section-pad section-tint-mint" id="mobile">
-    <v-container>
-      <v-row align="center" direction="row-reverse">
-        <v-col cols="12" md="6" data-aos="fade-right" data-aos-delay="100">
+    <Container>
+      <Row align="center" reverse>
+        <Col cols="12" md="6" data-aos="fade-right" data-aos-delay="100">
           <img class="qr_image" src="/images/qr_scan.webp" width="400" alt="" />
-        </v-col>
-        <v-col cols="12" md="6" data-aos="fade-left">
+        </Col>
+        <Col cols="12" md="6" data-aos="fade-left">
           <div class="section-tag">{{ t('scan_menu.tag') }}</div>
           <h2 class="section-title">{{ t('scan_menu.title') }}</h2>
           <p class="section-sub mb-7">{{ t('scan_menu.subtitle') }}</p>
           <FeatureChecks :items="checks" />
-        </v-col>
-      </v-row>
-    </v-container>
+        </Col>
+      </Row>
+    </Container>
   </section>
 </template>
 

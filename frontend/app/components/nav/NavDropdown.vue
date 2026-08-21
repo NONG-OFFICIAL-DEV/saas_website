@@ -27,7 +27,7 @@
     <Transition name="dropdown-fade">
       <div v-if="isOpen" class="nav-dropdown-panel" @click="close">
         <NuxtLink v-for="item in items" :key="item.to" :to="item.to" class="dropdown-item">
-          <v-icon v-if="item.icon" :icon="item.icon" size="18" class="dropdown-item-icon" />
+          <Icon v-if="item.icon" :name="item.icon" size="18" class="dropdown-item-icon" />
           <span class="dropdown-item-text">
             <span class="dropdown-item-label">{{ item.label }}</span>
             <span v-if="item.description" class="dropdown-item-desc">{{ item.description }}</span>
@@ -36,7 +36,7 @@
 
         <NuxtLink v-if="viewAllTo" :to="viewAllTo" class="dropdown-view-all">
           {{ viewAllLabel }}
-          <v-icon icon="mdi-arrow-right" size="14" />
+          <Icon name="mdi-arrow-right" size="14" />
         </NuxtLink>
       </div>
     </Transition>
@@ -94,7 +94,7 @@
     gap: 5px;
     font-size: 0.875rem;
     font-weight: 600;
-    color: rgba(var(--v-theme-on-surface), 0.6);
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
     background: none;
     border: none;
     cursor: pointer;
@@ -102,7 +102,7 @@
   }
   .nav-dropdown-trigger:hover,
   .nav-dropdown-trigger.active {
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
   }
 
   .chevron {
@@ -119,10 +119,10 @@
     left: 50%;
     transform: translateX(-50%);
     min-width: 280px;
-    background: rgb(var(--v-theme-surface));
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    background: var(--card);
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     border-radius: 18px;
-    box-shadow: 0 20px 44px rgba(var(--v-theme-on-surface), 0.14);
+    box-shadow: 0 20px 44px color-mix(in srgb, var(--foreground) 14%, transparent);
     padding: 8px;
     z-index: 2000;
   }
@@ -134,15 +134,15 @@
     padding: 10px 12px;
     border-radius: 12px;
     text-decoration: none;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     transition: background 0.15s;
   }
   .dropdown-item:hover {
-    background: rgba(var(--v-theme-primary), 0.06);
+    background: color-mix(in srgb, var(--primary) 6%, transparent);
   }
   .dropdown-item-icon {
     margin-top: 2px;
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     flex-shrink: 0;
   }
   .dropdown-item-text {
@@ -157,7 +157,7 @@
   }
   .dropdown-item-desc {
     font-size: 0.76rem;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     line-height: 1.4;
   }
 
@@ -168,10 +168,10 @@
     gap: 8px;
     margin-top: 6px;
     padding: 10px 12px;
-    border-top: 1px solid rgba(var(--v-theme-on-surface), 0.07);
+    border-top: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
     font-size: 0.82rem;
     font-weight: 700;
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     text-decoration: none;
   }
 

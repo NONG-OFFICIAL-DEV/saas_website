@@ -169,10 +169,8 @@
 </template>
 
 <script setup lang="ts">
-  import { useTheme } from 'vuetify'
-
   const { t } = useI18n()
-  const theme = useTheme()
+  const { isDark } = useColorMode()
   const productsStore = useProductsStore()
   const siteContentStore = useSiteContentStore()
   const { footer } = storeToRefs(siteContentStore)
@@ -192,8 +190,6 @@
     return true
   })
 
-  const isDark = computed(() => theme.global.name.value === 'dark')
-
   // ── Nav links ─────────────────────────────────────────────────────────
   const navLinks = [
     { to: '/', key: 'menu.home' },
@@ -209,8 +205,8 @@
   /* ── Footer wrapper ─────────────────────────────────────────────────── */
   .site-footer {
     position: relative;
-    background: rgba(var(--v-theme-surface), 0.95);
-    border-top: 1px solid rgba(var(--v-theme-on-surface), 0.07);
+    background: color-mix(in srgb, var(--card) 95%, transparent);
+    border-top: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
     overflow: hidden;
   }
 
@@ -249,7 +245,7 @@
 
   .brand-tagline {
     font-size: 0.83rem;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
     line-height: 1.6;
     margin: 0 0 22px;
     max-width: 240px;
@@ -274,8 +270,8 @@
     width: 28px;
     height: 28px;
     border-radius: 8px;
-    background: rgba(var(--v-theme-primary), 0.1);
-    color: rgb(var(--v-theme-primary));
+    background: color-mix(in srgb, var(--primary) 10%, transparent);
+    color: var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -285,13 +281,13 @@
   .contact-link,
   .contact-text {
     font-size: 0.825rem;
-    color: rgba(var(--v-theme-on-surface), 0.65);
+    color: color-mix(in srgb, var(--foreground) 65%, transparent);
     text-decoration: none;
     line-height: 1.55;
     transition: color 0.15s;
   }
   .contact-link:hover {
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
   }
 
   /* ── Column heading ─────────────────────────────────────────────────── */
@@ -299,7 +295,7 @@
     font-size: 0.72rem;
     font-weight: 800;
     text-transform: uppercase;
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     margin: 0 0 18px;
   }
 
@@ -318,26 +314,26 @@
     gap: 8px;
     font-size: 0.845rem;
     font-weight: 500;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     text-decoration: none;
     transition:
       color 0.15s,
       gap 0.15s;
   }
   .footer-nav-link:hover {
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     gap: 12px;
   }
   .link-dot {
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: rgba(var(--v-theme-primary), 0.45);
+    background: color-mix(in srgb, var(--primary) 45%, transparent);
     flex-shrink: 0;
     transition: background 0.15s;
   }
   .footer-nav-link:hover .link-dot {
-    background: rgb(var(--v-theme-primary));
+    background: var(--primary);
   }
 
   /* ── Platform col ───────────────────────────────────────────────────── */
@@ -349,10 +345,10 @@
     gap: 12px;
     padding: 14px 16px;
     border-radius: 16px;
-    border: 1px solid rgba(var(--v-theme-primary), 0.18);
-    background: rgba(var(--v-theme-primary), 0.06);
-    box-shadow: 0 8px 20px rgba(var(--v-theme-on-surface), 0.04);
-    color: rgb(var(--v-theme-primary));
+    border: 1px solid color-mix(in srgb, var(--primary) 18%, transparent);
+    background: color-mix(in srgb, var(--primary) 6%, transparent);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--foreground) 4%, transparent);
+    color: var(--primary);
     margin-bottom: 28px;
   }
   .web-badge svg {
@@ -362,13 +358,13 @@
     display: block;
     font-size: 0.82rem;
     font-weight: 800;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     line-height: 1.2;
   }
   .web-badge-sub {
     display: block;
     font-size: 0.72rem;
-    color: rgba(var(--v-theme-on-surface), 0.45);
+    color: color-mix(in srgb, var(--foreground) 45%, transparent);
     margin-top: 2px;
   }
 
@@ -389,8 +385,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(var(--v-theme-on-surface), 0.06);
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    background: color-mix(in srgb, var(--foreground) 6%, transparent);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     text-decoration: none;
     transition:
       background 0.18s,
@@ -398,14 +394,14 @@
       transform 0.15s;
   }
   .social-btn:hover {
-    background: rgba(var(--v-theme-primary), 0.12);
-    color: rgb(var(--v-theme-primary));
+    background: color-mix(in srgb, var(--primary) 12%, transparent);
+    color: var(--primary);
     transform: translateY(-2px);
   }
 
   /* ── Bottom bar ─────────────────────────────────────────────────────── */
   .footer-bottom {
-    border-top: 1px solid rgba(var(--v-theme-on-surface), 0.06);
+    border-top: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
   }
   .footer-bottom-inner {
     max-width: 1280px;
@@ -419,7 +415,7 @@
   }
   .copy-text {
     font-size: 0.775rem;
-    color: rgba(var(--v-theme-on-surface), 0.35);
+    color: color-mix(in srgb, var(--foreground) 35%, transparent);
   }
   .bottom-links {
     display: flex;
@@ -428,15 +424,15 @@
   }
   .bottom-link {
     font-size: 0.775rem;
-    color: rgba(var(--v-theme-on-surface), 0.35);
+    color: color-mix(in srgb, var(--foreground) 35%, transparent);
     text-decoration: none;
     transition: color 0.15s;
   }
   .bottom-link:hover {
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
   }
   .bottom-sep {
-    color: rgba(var(--v-theme-on-surface), 0.2);
+    color: color-mix(in srgb, var(--foreground) 20%, transparent);
     font-size: 0.775rem;
   }
 </style>

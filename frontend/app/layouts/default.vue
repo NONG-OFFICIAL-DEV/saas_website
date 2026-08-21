@@ -71,7 +71,7 @@
     padding: 88px 0;
   }
   .bg-soft {
-    background: rgba(var(--v-theme-surface-variant), 0.05);
+    background: color-mix(in srgb, var(--muted) 5%, transparent);
   }
 
   /*
@@ -96,11 +96,11 @@
    */
   .clay-surface {
     border-radius: 22px;
-    background: rgb(var(--v-theme-surface));
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.06);
+    background: var(--card);
+    border: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
     box-shadow:
-      0 14px 32px rgba(var(--v-theme-on-surface), 0.08),
-      0 2px 8px rgba(var(--v-theme-on-surface), 0.04);
+      0 14px 32px color-mix(in srgb, var(--foreground) 8%, transparent),
+      0 2px 8px color-mix(in srgb, var(--foreground) 4%, transparent);
     transition:
       transform 0.25s ease,
       box-shadow 0.25s ease;
@@ -108,29 +108,33 @@
   .clay-surface--interactive:hover {
     transform: translateY(-4px);
     box-shadow:
-      0 22px 46px rgba(var(--v-theme-on-surface), 0.12),
-      0 4px 14px rgba(var(--v-theme-on-surface), 0.06);
+      0 22px 46px color-mix(in srgb, var(--foreground) 12%, transparent),
+      0 4px 14px color-mix(in srgb, var(--foreground) 6%, transparent);
   }
 
   /*
    * ── Buttons ──────────────────────────────────────────────────────────
    * Scoped to .landing-layout only — the admin panel is a separate root
-   * (the admin layout's v-navigation-drawer), so this never touches it.
-   * Flat buttons get a soft brand-colored lift; outlined/tonal buttons
-   * (secondary actions) get a soft tinted background + brand-colored
-   * text/border, unless a component already forces its own color
-   * (e.g. CtaSection's white-on-gradient buttons keep their own rule).
+   * (the admin layout's own shell), so this never touches it.
+   * Default (filled/primary) buttons get a soft brand-colored lift;
+   * outline/secondary buttons (secondary actions) get a soft tinted
+   * background + brand-colored text/border, unless a component already
+   * forces its own color (e.g. CtaSection's white-on-gradient buttons
+   * keep their own rule). Matched via shadcn Button's `data-slot`/
+   * `data-variant` attributes rather than a class, since those survive
+   * regardless of whether Button renders as a <button> or (via `as`) a
+   * NuxtLink <a>.
    */
-  .landing-layout .v-btn.v-btn--variant-flat:not(.cta-btn-solid) {
-    box-shadow: 0 10px 26px rgba(var(--v-theme-primary), 0.28);
+  .landing-layout [data-slot='button'][data-variant='default']:not(.cta-btn-solid) {
+    box-shadow: 0 10px 26px color-mix(in srgb, var(--primary) 28%, transparent);
   }
-  .landing-layout .v-btn.v-btn--variant-outlined:not(.cta-btn-outline),
-  .landing-layout .v-btn.v-btn--variant-tonal {
-    background: rgba(var(--v-theme-primary), 0.06);
-    color: rgb(var(--v-theme-primary)) !important;
-    border-color: rgba(var(--v-theme-primary), 0.35) !important;
+  .landing-layout [data-slot='button'][data-variant='outline']:not(.cta-btn-outline),
+  .landing-layout [data-slot='button'][data-variant='secondary'] {
+    background: color-mix(in srgb, var(--primary) 6%, transparent);
+    color: var(--primary) !important;
+    border-color: color-mix(in srgb, var(--primary) 35%, transparent) !important;
   }
-  .landing-layout .v-btn:active {
+  .landing-layout [data-slot='button']:active {
     transform: scale(0.97);
   }
 
@@ -140,13 +144,13 @@
     gap: 8px;
     font-size: 0.7rem;
     font-weight: 800;
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     text-transform: uppercase;
     letter-spacing: 0.04em;
     padding: 6px 16px 6px 12px;
-    border: 1px solid rgba(var(--v-theme-primary), 0.3);
+    border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
     border-radius: 999px;
-    background: rgba(var(--v-theme-primary), 0.06);
+    background: color-mix(in srgb, var(--primary) 6%, transparent);
     margin-bottom: 14px;
   }
   .section-tag::before {
@@ -193,10 +197,6 @@
     }
     .section-title {
       letter-spacing: -0.5px;
-    }
-    .landing-layout .v-container {
-      padding-left: 16px !important;
-      padding-right: 16px !important;
     }
     .landing-main {
       padding-bottom: 76px;

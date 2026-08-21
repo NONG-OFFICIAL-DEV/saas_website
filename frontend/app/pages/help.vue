@@ -1,6 +1,6 @@
 <template>
   <section class="section-pad help-page">
-    <v-container>
+    <Container>
       <div class="header text-center" data-aos="fade-up">
         <span class="section-tag">{{ t('help_page.tag') }}</span>
         <h1 class="section-title">{{ t('help_page.title') }}</h1>
@@ -10,33 +10,31 @@
       <!-- ── Contact channels ── -->
       <div class="contact-grid" data-aos="fade-up">
         <a v-if="footer.email" :href="`mailto:${footer.email}`" class="contact-card">
-          <v-icon icon="mdi-email-outline" size="20" />
+          <Icon name="mdi-email-outline" size="20" />
           <span>{{ footer.email }}</span>
         </a>
         <a v-if="telegramHref" :href="telegramHref" target="_blank" rel="noopener" class="contact-card">
-          <v-icon icon="mdi-send-outline" size="20" />
+          <Icon name="mdi-send-outline" size="20" />
           <span>{{ t('help_page.chat_telegram') }}</span>
         </a>
         <a v-if="footer.phone" :href="`tel:${footer.phone.replace(/\s+/g, '')}`" class="contact-card">
-          <v-icon icon="mdi-phone-outline" size="20" />
+          <Icon name="mdi-phone-outline" size="20" />
           <span>{{ footer.phone }}</span>
         </a>
       </div>
 
       <!-- ── FAQs, grouped per product ── -->
-      <div v-if="loading" class="faq-loading">
-        <v-progress-circular indeterminate color="primary" />
-      </div>
+      <InlineLoader v-if="loading" class="faq-loading" min-height="80px" />
 
       <template v-else>
         <div v-for="group in faqGroups" :key="group.slug" class="faq-group" data-aos="fade-up">
           <h2 class="faq-group-title">{{ group.name }}</h2>
-          <v-expansion-panels variant="accordion" class="faq-panels">
-            <v-expansion-panel v-for="faq in group.faqs" :key="faq.id" rounded="lg">
-              <v-expansion-panel-title class="faq-question">{{ faq.question }}</v-expansion-panel-title>
-              <v-expansion-panel-text class="faq-answer">{{ faq.answer }}</v-expansion-panel-text>
-            </v-expansion-panel>
-          </v-expansion-panels>
+          <Accordion type="multiple" class="faq-panels">
+            <AccordionItem v-for="faq in group.faqs" :key="faq.id" :value="String(faq.id)">
+              <AccordionTrigger class="faq-question">{{ faq.question }}</AccordionTrigger>
+              <AccordionContent class="faq-answer">{{ faq.answer }}</AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </template>
 
@@ -44,18 +42,20 @@
       <div class="still-need text-center" data-aos="fade-up">
         <h3 class="still-need-title">{{ t('help_page.still_need_help') }}</h3>
         <p class="section-sub still-need-sub">{{ t('help_page.still_need_help_sub') }}</p>
-        <v-btn v-if="telegramHref" color="primary" rounded="lg" :href="telegramHref" target="_blank" rel="noopener">
+        <Button v-if="telegramHref" as="a" :href="telegramHref" target="_blank" rel="noopener">
           {{ t('help_page.chat_telegram') }}
-        </v-btn>
-        <v-btn v-else-if="footer.email" color="primary" rounded="lg" :href="`mailto:${footer.email}`">
+        </Button>
+        <Button v-else-if="footer.email" as="a" :href="`mailto:${footer.email}`">
           {{ footer.email }}
-        </v-btn>
+        </Button>
       </div>
-    </v-container>
+    </Container>
   </section>
 </template>
 
 <script setup lang="ts">
+  import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion'
+  import { Button } from '~/components/ui/button'
   import { getProductBySlug } from '~/services/products'
   import type { ProductFaq } from '~/types'
 
@@ -109,9 +109,9 @@
     gap: 8px;
     padding: 12px 20px;
     border-radius: 999px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.1);
-    background: rgb(var(--v-theme-surface));
-    color: rgb(var(--v-theme-on-surface));
+    border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
+    background: var(--card);
+    color: var(--foreground);
     font-size: 0.86rem;
     font-weight: 600;
     text-decoration: none;
@@ -119,7 +119,7 @@
   }
   .contact-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 26px rgba(var(--v-theme-on-surface), 0.08);
+    box-shadow: 0 10px 26px color-mix(in srgb, var(--foreground) 8%, transparent);
   }
 
   .faq-loading {
@@ -140,16 +140,21 @@
   .faq-panels {
     margin-bottom: 4px;
   }
-  .faq-panels :deep(.v-expansion-panel) {
+  .faq-panels :deep([data-slot='accordion-item']) {
     margin-bottom: 10px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08) !important;
+    padding: 0 16px;
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent) !important;
+    border-radius: 10px;
+  }
+  .faq-panels :deep([data-slot='accordion-item']:last-child) {
+    margin-bottom: 0;
   }
   .faq-question {
     font-weight: 700;
     font-size: 0.95rem;
   }
   .faq-answer {
-    color: rgba(var(--v-theme-on-surface), 0.65);
+    color: color-mix(in srgb, var(--foreground) 65%, transparent);
     line-height: 1.6;
   }
 
@@ -157,7 +162,7 @@
     max-width: 480px;
     margin: 60px auto 0;
     padding-top: 40px;
-    border-top: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    border-top: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
   }
   .still-need-title {
     font-size: 1.2rem;

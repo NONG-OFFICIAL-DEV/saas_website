@@ -3,89 +3,117 @@
     <div class="editor-header">
       <div>
         <NuxtLink to="/admin/testimonials" class="back-link">
-          <v-icon icon="mdi-arrow-left" size="16" /> Back to testimonials
+          <Icon name="mdi-arrow-left" size="16" /> Back to testimonials
         </NuxtLink>
         <h1 class="editor-title">{{ isNew ? 'New testimonial' : form.author_name || 'Edit testimonial' }}</h1>
       </div>
-      <v-btn
-        color="primary"
-        variant="flat"
-        rounded="lg"
-        :loading="saving"
-        @click="handleSave"
-      >
+      <Button :disabled="saving" @click="handleSave">
+        <Icon v-if="saving" name="mdi-loading" size="16" class="animate-spin" />
         Save
-      </v-btn>
+      </Button>
     </div>
 
-    <v-alert v-if="error" type="error" variant="tonal" rounded="lg" class="mb-4">
-      {{ error }}
-    </v-alert>
+    <Alert v-if="error" variant="destructive" class="mb-4">
+      <AlertDescription>{{ error }}</AlertDescription>
+    </Alert>
 
-    <div v-if="loading" class="editor-loading">
-      <v-progress-circular indeterminate color="primary" />
-    </div>
+    <InlineLoader v-if="loading" min-height="80px" />
 
     <template v-else>
       <section class="editor-section">
         <h2 class="section-heading">Details</h2>
-        <v-row dense>
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.author_name" label="Author name" required />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.author_title" label="Author title" hint="e.g. Owner, Golden Spoon Restaurant" persistent-hint />
-          </v-col>
+        <Row dense>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="author_name">Author name</Label>
+              <Input id="author_name" v-model="form.author_name" required />
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="author_title">Author title</Label>
+              <Input id="author_title" v-model="form.author_title" />
+              <p class="field-hint">e.g. Owner, Golden Spoon Restaurant</p>
+            </div>
+          </Col>
 
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.author_avatar_url" label="Avatar URL" />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-file-input
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="author_avatar_url">Avatar URL</Label>
+              <Input id="author_avatar_url" v-model="form.author_avatar_url" />
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <FileInput
               label="Upload avatar"
               accept="image/*"
-              prepend-icon=""
               :loading="uploadingAvatar"
               @change="handleAvatarUpload"
             />
-          </v-col>
+          </Col>
 
-          <v-col cols="12" sm="6">
-            <v-select
-              v-model="form.product_id"
-              label="About which product? (optional)"
-              :items="allProducts"
-              item-title="name"
-              item-value="id"
-              clearable
-            />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-select
-              v-model="form.rating"
-              label="Rating (optional)"
-              :items="[1, 2, 3, 4, 5]"
-              clearable
-            />
-          </v-col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label>About which product? (optional)</Label>
+              <Select v-model="productSelectValue">
+                <SelectTrigger class="w-full">
+                  <SelectValue placeholder="None" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none__">— None —</SelectItem>
+                  <SelectItem v-for="p in allProducts" :key="p.id" :value="p.id">{{ p.name }}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label>Rating (optional)</Label>
+              <Select v-model="ratingSelectValue">
+                <SelectTrigger class="w-full">
+                  <SelectValue placeholder="None" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none__">— None —</SelectItem>
+                  <SelectItem v-for="n in [1, 2, 3, 4, 5]" :key="n" :value="String(n)">{{ n }}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </Col>
 
-          <v-col cols="12">
-            <v-textarea v-model="form.quote" label="Quote" rows="4" auto-grow required />
-          </v-col>
+          <Col cols="12">
+            <div class="field">
+              <Label for="quote">Quote</Label>
+              <Textarea id="quote" v-model="form.quote" rows="4" required />
+            </div>
+          </Col>
 
-          <v-col cols="12" sm="6">
-            <v-text-field v-model.number="form.sort_order" type="number" label="Sort order" />
-          </v-col>
-          <v-col cols="12" sm="6" class="d-flex align-center">
-            <v-switch v-model="form.is_published" color="primary" label="Published (visible on the public site)" hide-details />
-          </v-col>
-        </v-row>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="sort_order">Sort order</Label>
+              <Input id="sort_order" v-model.number="form.sort_order" type="number" />
+            </div>
+          </Col>
+          <Col cols="12" sm="6" class="flex items-center">
+            <div class="flex items-center gap-2">
+              <Switch id="is_published" :model-value="form.is_published" @update:model-value="(v) => (form.is_published = v)" />
+              <Label for="is_published">Published (visible on the public site)</Label>
+            </div>
+          </Col>
+        </Row>
       </section>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
+  import { Alert, AlertDescription } from '~/components/ui/alert'
+  import { Button } from '~/components/ui/button'
+  import { Input } from '~/components/ui/input'
+  import { Label } from '~/components/ui/label'
+  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
+  import { Switch } from '~/components/ui/switch'
+  import { Textarea } from '~/components/ui/textarea'
   import { getTestimonialForEdit, createTestimonial, updateTestimonial } from '~/services/adminTestimonials'
   import { listAllProducts, uploadProductMedia } from '~/services/adminProducts'
   import type { Product } from '~/types'
@@ -108,6 +136,21 @@
   })
 
   const allProducts = ref<Product[]>([])
+
+  // Select has no native "clearable" concept — a sentinel value stands in
+  // for "no selection" and is translated back to null on write.
+  const productSelectValue = computed({
+    get: () => form.product_id ?? '__none__',
+    set: (v: string) => {
+      form.product_id = v === '__none__' ? null : v
+    }
+  })
+  const ratingSelectValue = computed({
+    get: () => (form.rating != null ? String(form.rating) : '__none__'),
+    set: (v: string) => {
+      form.rating = v === '__none__' ? null : Number(v)
+    }
+  })
   const loading = ref(false)
   const saving = ref(false)
   const error = ref<string | null>(null)
@@ -193,7 +236,7 @@
     align-items: center;
     gap: 4px;
     font-size: 0.8rem;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     text-decoration: none;
     margin-bottom: 6px;
   }
@@ -203,18 +246,23 @@
     margin: 0;
   }
 
-  .editor-loading {
+  .field {
     display: flex;
-    justify-content: center;
-    padding: 60px 0;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field-hint {
+    font-size: 0.75rem;
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
+    margin: 0;
   }
 
   .editor-section {
     padding: 24px;
     margin-bottom: 24px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     border-radius: 14px;
-    background: rgba(var(--v-theme-surface), 0.6);
+    background: color-mix(in srgb, var(--card) 60%, transparent);
   }
   .section-heading {
     font-size: 1rem;

@@ -23,14 +23,16 @@ export const useBlogStore = defineStore('blog', () => {
     }
   }
 
+  // Deliberately does NOT null out currentPost before fetching — see the
+  // equivalent note in stores/products.ts's fetchProductBySlug.
   async function fetchPostBySlug(slug: string) {
     loadingPost.value = true
     error.value = null
-    currentPost.value = null
     try {
       currentPost.value = await getBlogPostBySlug(slug)
     } catch (err: any) {
       error.value = err?.message ?? 'Failed to load post'
+      currentPost.value = null
     } finally {
       loadingPost.value = false
     }

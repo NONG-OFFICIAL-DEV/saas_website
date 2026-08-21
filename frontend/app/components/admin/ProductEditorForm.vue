@@ -3,141 +3,190 @@
     <div class="editor-header">
       <div>
         <NuxtLink to="/admin" class="back-link">
-          <v-icon icon="mdi-arrow-left" size="16" /> Back to products
+          <Icon name="mdi-arrow-left" size="16" /> Back to products
         </NuxtLink>
         <h1 class="editor-title">{{ isNew ? 'New product' : form.name || 'Edit product' }}</h1>
       </div>
-      <v-btn
-        color="primary"
-        variant="flat"
-        rounded="lg"
-        :loading="saving"
-        @click="handleSave"
-      >
+      <Button :disabled="saving" @click="handleSave">
+        <Icon v-if="saving" name="mdi-loading" size="16" class="animate-spin" />
         Save
-      </v-btn>
+      </Button>
     </div>
 
-    <v-alert v-if="error" type="error" variant="tonal" rounded="lg" class="mb-4">
-      {{ error }}
-    </v-alert>
+    <Alert v-if="error" variant="destructive" class="mb-4">
+      <AlertDescription>{{ error }}</AlertDescription>
+    </Alert>
 
-    <div v-if="loading" class="editor-loading">
-      <v-progress-circular indeterminate color="primary" />
-    </div>
+    <InlineLoader v-if="loading" min-height="120px" />
 
     <template v-else>
       <!-- ── Basic info ── -->
       <section class="editor-section">
         <h2 class="section-heading">Details</h2>
-        <v-row dense>
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.slug" label="Slug" hint="e.g. nexstack-pos" persistent-hint required />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.name" label="Name" required />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.tagline" label="Tagline" />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.summary" label="Summary (hub card blurb)" />
-          </v-col>
-          <v-col cols="12">
-            <v-textarea v-model="form.description" label="Description" rows="3" auto-grow />
-          </v-col>
-
-          <v-col cols="12" sm="6">
-            <v-select
-              v-model="form.status"
-              label="Status"
-              :items="['live', 'beta', 'coming_soon']"
-            />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <div class="color-field">
-              <input v-model="form.accent_color" type="color" class="color-swatch" />
-              <v-text-field v-model="form.accent_color" label="Accent color" />
+        <Row dense>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="slug">Slug</Label>
+              <Input id="slug" v-model="form.slug" required />
+              <p class="field-hint">e.g. nexstack-pos</p>
             </div>
-          </v-col>
+          </Col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="name">Name</Label>
+              <Input id="name" v-model="form.name" required />
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="tagline">Tagline</Label>
+              <Input id="tagline" v-model="form.tagline" />
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="summary">Summary (hub card blurb)</Label>
+              <Input id="summary" v-model="form.summary" />
+            </div>
+          </Col>
+          <Col cols="12">
+            <div class="field">
+              <Label for="description">Description</Label>
+              <Textarea id="description" v-model="form.description" rows="3" />
+            </div>
+          </Col>
 
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.logo_url" label="Logo URL" />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-file-input
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label>Status</Label>
+              <Select v-model="form.status">
+                <SelectTrigger class="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="live">live</SelectItem>
+                  <SelectItem value="beta">beta</SelectItem>
+                  <SelectItem value="coming_soon">coming_soon</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="accent_color">Accent color</Label>
+              <div class="color-field">
+                <input v-model="form.accent_color" type="color" class="color-swatch" />
+                <Input id="accent_color" v-model="form.accent_color" />
+              </div>
+            </div>
+          </Col>
+
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="logo_url">Logo URL</Label>
+              <Input id="logo_url" v-model="form.logo_url" />
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <FileInput
               label="Upload logo"
               accept="image/*"
-              prepend-icon=""
               :loading="uploading.logo"
               @change="(e: Event) => handleFieldUpload(e, 'logo_url')"
             />
-          </v-col>
+          </Col>
 
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.hero_image_url" label="Hero image URL" />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-file-input
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="hero_image_url">Hero image URL</Label>
+              <Input id="hero_image_url" v-model="form.hero_image_url" />
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <FileInput
               label="Upload hero image"
               accept="image/*"
-              prepend-icon=""
               :loading="uploading.hero"
               @change="(e: Event) => handleFieldUpload(e, 'hero_image_url')"
             />
-          </v-col>
+          </Col>
 
-          <v-col cols="12" sm="6">
-            <v-text-field
-              v-model="form.demo_video_url"
-              label="Demo video URL"
-              hint="YouTube or Vimeo link — shown on the /docs page"
-              persistent-hint
-            />
-          </v-col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="demo_video_url">Demo video URL</Label>
+              <Input id="demo_video_url" v-model="form.demo_video_url" />
+              <p class="field-hint">YouTube or Vimeo link — shown on the /docs page</p>
+            </div>
+          </Col>
 
-          <v-col cols="12" sm="4">
-            <v-select
-              v-model="form.cta_type"
-              label="CTA type"
-              :items="['register', 'external_link', 'waitlist']"
-            />
-          </v-col>
-          <v-col cols="12" sm="4">
-            <v-text-field v-model="form.cta_label" label="CTA label" />
-          </v-col>
-          <v-col cols="12" sm="4">
-            <v-text-field
-              v-model="form.cta_url"
-              label="CTA URL"
-              :disabled="form.cta_type !== 'external_link'"
-            />
-          </v-col>
+          <Col cols="12" sm="4">
+            <div class="field">
+              <Label>CTA type</Label>
+              <Select v-model="form.cta_type">
+                <SelectTrigger class="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="register">register</SelectItem>
+                  <SelectItem value="external_link">external_link</SelectItem>
+                  <SelectItem value="waitlist">waitlist</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </Col>
+          <Col cols="12" sm="4">
+            <div class="field">
+              <Label for="cta_label">CTA label</Label>
+              <Input id="cta_label" v-model="form.cta_label" />
+            </div>
+          </Col>
+          <Col cols="12" sm="4">
+            <div class="field">
+              <Label for="cta_url">CTA URL</Label>
+              <Input id="cta_url" v-model="form.cta_url" :disabled="form.cta_type !== 'external_link'" />
+            </div>
+          </Col>
 
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.lead_source" label="Lead source tag" hint="Sent with waitlist submissions" persistent-hint />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field v-model.number="form.sort_order" type="number" label="Sort order" />
-          </v-col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="lead_source">Lead source tag</Label>
+              <Input id="lead_source" v-model="form.lead_source" />
+              <p class="field-hint">Sent with waitlist submissions</p>
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="sort_order">Sort order</Label>
+              <Input id="sort_order" v-model.number="form.sort_order" type="number" />
+            </div>
+          </Col>
 
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.seo_title" label="SEO title" />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field v-model="form.seo_description" label="SEO description" />
-          </v-col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="seo_title">SEO title</Label>
+              <Input id="seo_title" v-model="form.seo_title" />
+            </div>
+          </Col>
+          <Col cols="12" sm="6">
+            <div class="field">
+              <Label for="seo_description">SEO description</Label>
+              <Input id="seo_description" v-model="form.seo_description" />
+            </div>
+          </Col>
 
-          <v-col cols="12">
-            <v-switch v-model="form.is_published" color="primary" label="Published (visible on the public site)" hide-details />
-          </v-col>
-        </v-row>
+          <Col cols="12">
+            <div class="switch-row">
+              <Switch id="is_published" :model-value="form.is_published" @update:model-value="(v: boolean) => (form.is_published = v)" />
+              <Label for="is_published">Published (visible on the public site)</Label>
+            </div>
+          </Col>
+        </Row>
       </section>
 
       <template v-if="isNew">
-        <v-alert type="info" variant="tonal" rounded="lg">
-          Save this product first to add features and screenshots.
-        </v-alert>
+        <Alert>
+          <AlertDescription>Save this product first to add features and screenshots.</AlertDescription>
+        </Alert>
       </template>
 
       <template v-else>
@@ -145,27 +194,52 @@
         <section class="editor-section">
           <div class="section-row">
             <h2 class="section-heading">Features</h2>
-            <v-btn size="small" variant="tonal" prepend-icon="mdi-plus" @click="addFeature">Add feature</v-btn>
+            <Button type="button" size="sm" variant="secondary" @click="addFeature">
+              <Icon name="mdi-plus" size="16" />
+              Add feature
+            </Button>
           </div>
 
           <div v-for="f in features" :key="f.id" class="nested-card">
-            <v-row dense>
-              <v-col cols="12" sm="3">
-                <v-text-field v-model="f.icon" label="Icon (mdi-...)" density="compact" @blur="saveFeature(f)" />
-              </v-col>
-              <v-col cols="12" sm="3">
-                <v-text-field v-model="f.title" label="Title" density="compact" @blur="saveFeature(f)" />
-              </v-col>
-              <v-col cols="12" sm="4">
-                <v-text-field v-model="f.description" label="Description" density="compact" @blur="saveFeature(f)" />
-              </v-col>
-              <v-col cols="12" sm="1">
-                <v-text-field v-model.number="f.sort_order" type="number" label="Order" density="compact" @blur="saveFeature(f)" />
-              </v-col>
-              <v-col cols="12" sm="1" class="d-flex align-center justify-end">
-                <v-btn icon="mdi-delete-outline" size="small" variant="text" color="error" @click="removeFeature(f)" />
-              </v-col>
-            </v-row>
+            <Row dense>
+              <Col cols="12" sm="3">
+                <div class="field">
+                  <Label>Icon (mdi-...)</Label>
+                  <Input
+                    :model-value="f.icon ?? ''"
+                    @update:model-value="(v: string | number) => (f.icon = String(v))"
+                    @blur="saveFeature(f)"
+                  />
+                </div>
+              </Col>
+              <Col cols="12" sm="3">
+                <div class="field">
+                  <Label>Title</Label>
+                  <Input v-model="f.title" @blur="saveFeature(f)" />
+                </div>
+              </Col>
+              <Col cols="12" sm="4">
+                <div class="field">
+                  <Label>Description</Label>
+                  <Input
+                    :model-value="f.description ?? ''"
+                    @update:model-value="(v: string | number) => (f.description = String(v))"
+                    @blur="saveFeature(f)"
+                  />
+                </div>
+              </Col>
+              <Col cols="12" sm="1">
+                <div class="field">
+                  <Label>Order</Label>
+                  <Input v-model.number="f.sort_order" type="number" @blur="saveFeature(f)" />
+                </div>
+              </Col>
+              <Col cols="12" sm="1" class="flex items-end justify-end">
+                <Button type="button" size="icon-sm" variant="ghost" class="text-destructive hover:text-destructive" @click="removeFeature(f)">
+                  <Icon name="mdi-delete-outline" size="16" />
+                </Button>
+              </Col>
+            </Row>
           </div>
           <p v-if="!features.length" class="nested-empty">No features yet.</p>
         </section>
@@ -174,13 +248,10 @@
         <section class="editor-section">
           <div class="section-row">
             <h2 class="section-heading">Screenshots</h2>
-            <v-file-input
+            <FileInput
               label="Upload screenshot"
               accept="image/*"
-              prepend-icon=""
-              density="compact"
-              hide-details
-              style="max-width: 260px"
+              class="max-w-[260px]"
               :loading="uploadingScreenshot"
               @change="handleScreenshotUpload"
             />
@@ -188,20 +259,39 @@
 
           <div v-for="s in screenshots" :key="s.id" class="nested-card nested-card--shot">
             <img v-if="s.url" :src="s.url" class="shot-preview" :alt="s.alt_text ?? ''" />
-            <v-row dense class="flex-grow-1">
-              <v-col cols="12" sm="5">
-                <v-text-field v-model="s.alt_text" label="Alt text" density="compact" @blur="saveScreenshot(s)" />
-              </v-col>
-              <v-col cols="12" sm="5">
-                <v-text-field v-model="s.caption" label="Caption" density="compact" @blur="saveScreenshot(s)" />
-              </v-col>
-              <v-col cols="12" sm="1">
-                <v-text-field v-model.number="s.sort_order" type="number" label="Order" density="compact" @blur="saveScreenshot(s)" />
-              </v-col>
-              <v-col cols="12" sm="1" class="d-flex align-center justify-end">
-                <v-btn icon="mdi-delete-outline" size="small" variant="text" color="error" @click="removeScreenshot(s)" />
-              </v-col>
-            </v-row>
+            <Row dense class="grow">
+              <Col cols="12" sm="5">
+                <div class="field">
+                  <Label>Alt text</Label>
+                  <Input
+                    :model-value="s.alt_text ?? ''"
+                    @update:model-value="(v: string | number) => (s.alt_text = String(v))"
+                    @blur="saveScreenshot(s)"
+                  />
+                </div>
+              </Col>
+              <Col cols="12" sm="5">
+                <div class="field">
+                  <Label>Caption</Label>
+                  <Input
+                    :model-value="s.caption ?? ''"
+                    @update:model-value="(v: string | number) => (s.caption = String(v))"
+                    @blur="saveScreenshot(s)"
+                  />
+                </div>
+              </Col>
+              <Col cols="12" sm="1">
+                <div class="field">
+                  <Label>Order</Label>
+                  <Input v-model.number="s.sort_order" type="number" @blur="saveScreenshot(s)" />
+                </div>
+              </Col>
+              <Col cols="12" sm="1" class="flex items-end justify-end">
+                <Button type="button" size="icon-sm" variant="ghost" class="text-destructive hover:text-destructive" @click="removeScreenshot(s)">
+                  <Icon name="mdi-delete-outline" size="16" />
+                </Button>
+              </Col>
+            </Row>
           </div>
           <p v-if="!screenshots.length" class="nested-empty">No screenshots yet.</p>
         </section>
@@ -210,24 +300,38 @@
         <section class="editor-section">
           <div class="section-row">
             <h2 class="section-heading">FAQs</h2>
-            <v-btn size="small" variant="tonal" prepend-icon="mdi-plus" @click="addFaq">Add FAQ</v-btn>
+            <Button type="button" size="sm" variant="secondary" @click="addFaq">
+              <Icon name="mdi-plus" size="16" />
+              Add FAQ
+            </Button>
           </div>
 
           <div v-for="f in faqs" :key="f.id" class="nested-card">
-            <v-row dense>
-              <v-col cols="12" sm="5">
-                <v-text-field v-model="f.question" label="Question" density="compact" @blur="saveFaq(f)" />
-              </v-col>
-              <v-col cols="12" sm="5">
-                <v-text-field v-model="f.answer" label="Answer" density="compact" @blur="saveFaq(f)" />
-              </v-col>
-              <v-col cols="12" sm="1">
-                <v-text-field v-model.number="f.sort_order" type="number" label="Order" density="compact" @blur="saveFaq(f)" />
-              </v-col>
-              <v-col cols="12" sm="1" class="d-flex align-center justify-end">
-                <v-btn icon="mdi-delete-outline" size="small" variant="text" color="error" @click="removeFaq(f)" />
-              </v-col>
-            </v-row>
+            <Row dense>
+              <Col cols="12" sm="5">
+                <div class="field">
+                  <Label>Question</Label>
+                  <Input v-model="f.question" @blur="saveFaq(f)" />
+                </div>
+              </Col>
+              <Col cols="12" sm="5">
+                <div class="field">
+                  <Label>Answer</Label>
+                  <Input v-model="f.answer" @blur="saveFaq(f)" />
+                </div>
+              </Col>
+              <Col cols="12" sm="1">
+                <div class="field">
+                  <Label>Order</Label>
+                  <Input v-model.number="f.sort_order" type="number" @blur="saveFaq(f)" />
+                </div>
+              </Col>
+              <Col cols="12" sm="1" class="flex items-end justify-end">
+                <Button type="button" size="icon-sm" variant="ghost" class="text-destructive hover:text-destructive" @click="removeFaq(f)">
+                  <Icon name="mdi-delete-outline" size="16" />
+                </Button>
+              </Col>
+            </Row>
           </div>
           <p v-if="!faqs.length" class="nested-empty">No FAQs yet.</p>
         </section>
@@ -237,6 +341,13 @@
 </template>
 
 <script setup lang="ts">
+  import { Alert, AlertDescription } from '~/components/ui/alert'
+  import { Button } from '~/components/ui/button'
+  import { Input } from '~/components/ui/input'
+  import { Label } from '~/components/ui/label'
+  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
+  import { Switch } from '~/components/ui/switch'
+  import { Textarea } from '~/components/ui/textarea'
   import {
     getProductForEdit,
     createProduct,
@@ -499,7 +610,7 @@
     align-items: center;
     gap: 4px;
     font-size: 0.8rem;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     text-decoration: none;
     margin-bottom: 6px;
   }
@@ -509,18 +620,12 @@
     margin: 0;
   }
 
-  .editor-loading {
-    display: flex;
-    justify-content: center;
-    padding: 60px 0;
-  }
-
   .editor-section {
     padding: 24px;
     margin-bottom: 24px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     border-radius: 14px;
-    background: rgba(var(--v-theme-surface), 0.6);
+    background: color-mix(in srgb, var(--card) 60%, transparent);
   }
   .section-heading {
     font-size: 1rem;
@@ -539,6 +644,22 @@
     margin-bottom: 0;
   }
 
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field-hint {
+    font-size: 0.72rem;
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
+    margin: 0;
+  }
+  .switch-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
   .color-field {
     display: flex;
     align-items: center;
@@ -548,7 +669,7 @@
     width: 40px;
     height: 40px;
     border-radius: 8px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.15);
+    border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
     padding: 2px;
     flex-shrink: 0;
     cursor: pointer;
@@ -556,7 +677,7 @@
 
   .nested-card {
     padding: 14px 16px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.07);
+    border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
     border-radius: 10px;
     margin-bottom: 10px;
   }
@@ -574,7 +695,7 @@
   }
   .nested-empty {
     font-size: 0.85rem;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
     margin: 0;
   }
 </style>

@@ -1,25 +1,25 @@
 <template>
-  <div v-if="store.loadingPost" class="detail-loading">
+  <div v-if="!store.currentPost && store.loadingPost" class="detail-loading">
     <InlineLoader min-height="240px" />
   </div>
 
   <div v-else-if="!store.currentPost" class="not-found">
-    <v-container class="text-center">
-      <v-icon icon="mdi-compass-off-outline" size="48" />
+    <Container class="text-center">
+      <Icon name="mdi-compass-off-outline" size="48" />
       <h2 class="section-title">{{ t('blog_detail.not_found_title') }}</h2>
       <p class="section-sub mx-auto">{{ t('blog_detail.not_found_desc') }}</p>
-      <v-btn color="primary" rounded="lg" to="/blog">
+      <Button as="NuxtLink" to="/blog">
         {{ t('blog_detail.back_to_blog') }}
-      </v-btn>
-    </v-container>
+      </Button>
+    </Container>
   </div>
 
   <template v-else>
     <section class="section-pad hero">
-      <v-container>
+      <Container>
         <div class="hero-inner">
           <NuxtLink to="/blog" class="back-link">
-            <v-icon icon="mdi-arrow-left" size="16" /> {{ t('blog_detail.back_to_blog') }}
+            <Icon name="mdi-arrow-left" size="16" /> {{ t('blog_detail.back_to_blog') }}
           </NuxtLink>
           <div class="post-meta">
             <span v-if="post.author_name">{{ post.author_name }}</span>
@@ -29,18 +29,19 @@
           <h1 class="hero-title">{{ post.title }}</h1>
           <img v-if="post.cover_image_url" :src="post.cover_image_url" :alt="post.title" class="cover-image" />
         </div>
-      </v-container>
+      </Container>
     </section>
 
     <section class="section-pad content-section">
-      <v-container>
+      <Container>
         <div class="post-content">{{ post.content }}</div>
-      </v-container>
+      </Container>
     </section>
   </template>
 </template>
 
 <script setup lang="ts">
+  import { Button } from '~/components/ui/button'
   // Explicit import — Vuetify also exports its own `useDate` (date-adapter
   // composable) which Nuxt's auto-import would otherwise resolve instead.
   import { useDate } from '~/composables/useDate'
@@ -83,7 +84,7 @@
     align-items: center;
     gap: 4px;
     font-size: 0.82rem;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     text-decoration: none;
     margin-bottom: 16px;
   }
@@ -91,7 +92,7 @@
     display: flex;
     gap: 8px;
     font-size: 0.82rem;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
     margin-bottom: 10px;
   }
   .hero-title {
@@ -103,7 +104,7 @@
   .cover-image {
     width: 100%;
     border-radius: 18px;
-    box-shadow: 0 18px 40px rgba(var(--v-theme-on-surface), 0.1);
+    box-shadow: 0 18px 40px color-mix(in srgb, var(--foreground) 10%, transparent);
   }
 
   .content-section {
@@ -114,7 +115,7 @@
     margin: 0 auto;
     font-size: 1.02rem;
     line-height: 1.8;
-    color: rgba(var(--v-theme-on-surface), 0.82);
+    color: color-mix(in srgb, var(--foreground) 82%, transparent);
     white-space: pre-wrap;
   }
 

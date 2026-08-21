@@ -1,19 +1,19 @@
 <template>
-  <div v-if="store.loadingProduct" class="detail-loading">
+  <div v-if="!store.currentProduct && store.loadingProduct" class="detail-loading">
     <InlineLoader min-height="240px" />
   </div>
 
   <div v-else-if="!store.currentProduct" class="not-found">
-    <v-container class="text-center">
-      <v-icon icon="mdi-compass-off-outline" size="48" />
+    <Container class="text-center">
+      <Icon name="mdi-compass-off-outline" size="48" />
       <h2 class="section-title">{{ t('product_detail.not_found_title') }}</h2>
       <p class="section-sub mx-auto">
         {{ t('product_detail.not_found_desc') }}
       </p>
-      <v-btn color="primary" rounded="lg" to="/products">
+      <Button as="NuxtLink" to="/products">
         {{ t('button.back_to_products') }}
-      </v-btn>
-    </v-container>
+      </Button>
+    </Container>
   </div>
 
   <template v-else>
@@ -22,50 +22,39 @@
       class="section-pad hero"
       :style="{ '--accent': product.accent_color || '#6366F1' }"
     >
-      <v-container>
-        <v-row align="center">
-          <v-col cols="12" md="7" data-aos="fade-right">
-            <v-chip size="small" variant="flat" class="status-chip mb-4">
+      <Container>
+        <Row align="center">
+          <Col cols="12" md="7" data-aos="fade-right">
+            <Badge class="status-chip mb-4">
               {{ t(`common.status.${product.status}`) }}
-            </v-chip>
+            </Badge>
             <h1 class="hero-title">{{ product.name }}</h1>
             <p class="hero-tagline">{{ product.tagline }}</p>
             <p class="section-sub hero-desc">{{ product.description }}</p>
 
             <div class="hero-actions">
-              <v-btn
-                color="primary"
-                rounded="lg"
-                variant="flat"
-                @click="scrollToCta"
-              >
+              <Button @click="scrollToCta">
                 {{ product.cta_label || t('button.learn_more') }}
-              </v-btn>
-              <v-btn
-                rounded="lg"
-
-                variant="outlined"
-                to="/products"
-              >
+              </Button>
+              <Button as="NuxtLink" variant="outline" to="/products">
                 {{ t('button.all_products') }}
-              </v-btn>
+              </Button>
             </div>
-          </v-col>
+          </Col>
 
-          <v-col cols="12" md="5" data-aos="fade-left">
-            <v-img
+          <Col cols="12" md="5" data-aos="fade-left">
+            <img
               v-if="product.hero_image_url"
               :src="product.hero_image_url"
               :alt="product.name"
-              rounded="lg"
-              class="hero-image"
+              class="hero-image rounded-lg"
             />
-            <div v-else class="hero-geo d-none d-md-block">
+            <div v-else class="hero-geo hidden md:block">
               <Geometric3D :accent="product.accent_color ?? undefined" />
             </div>
-          </v-col>
-        </v-row>
-      </v-container>
+          </Col>
+        </Row>
+      </Container>
     </section>
 
     <!-- ── Features ── -->
@@ -73,7 +62,7 @@
       v-if="product.product_features?.length"
       class="section-pad section-tint-mint"
     >
-      <v-container>
+      <Container>
         <div class="text-center mb-10" data-aos="fade-up">
           <span class="section-tag">
             {{ t('product_detail.features_tag') }}
@@ -93,18 +82,18 @@
               class="feature-icon"
               :style="{ '--accent': product.accent_color }"
             >
-              <v-icon :icon="f.icon || 'mdi-check-circle-outline'" size="22" />
+              <Icon :name="f.icon || 'mdi-check-circle-outline'" size="22" />
             </div>
             <h3 class="feature-title">{{ f.title }}</h3>
             <p class="feature-desc">{{ f.description }}</p>
           </div>
         </div>
-      </v-container>
+      </Container>
     </section>
 
     <!-- ── Screenshots ── -->
     <section v-if="product.product_screenshots?.length" class="section-pad">
-      <v-container>
+      <Container>
         <div class="text-center mb-10" data-aos="fade-up">
           <span class="section-tag">
             {{ t('product_detail.screenshots_tag') }}
@@ -120,15 +109,15 @@
             class="screenshot"
             data-aos="fade-up"
           >
-            <v-img
+            <img
               :src="s.url"
               :alt="s.alt_text || product.name"
-              rounded="lg"
+              class="rounded-lg w-full"
             />
             <figcaption v-if="s.caption">{{ s.caption }}</figcaption>
           </figure>
         </div>
-      </v-container>
+      </Container>
     </section>
 
     <!-- ── Deep-dive extras (bespoke per-product sections, e.g. POS mockups) ── -->
@@ -151,7 +140,7 @@
 
     <!-- ── Final CTA / waitlist form ── -->
     <section id="cta" class="section-pad">
-      <v-container class="text-center">
+      <Container class="text-center">
         <h2 class="section-title" data-aos="fade-up">
           {{ t('product_detail.ready_title', { name: product.name }) }}
         </h2>
@@ -161,83 +150,61 @@
           class="waitlist-form"
           data-aos="fade-up"
         >
-          <v-form v-if="!waitlistSubmitted" @submit.prevent="submitWaitlist">
-            <v-alert
-              v-if="waitlistError"
-              type="error"
-              variant="tonal"
-              rounded="lg"
-              density="compact"
-              class="mb-4"
-            >
-              {{ waitlistError }}
-            </v-alert>
-            <v-row dense>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                  v-model="waitlist.name"
-                  :label="t('product_detail.name_label')"
-                  required
-                />
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                  v-model="waitlist.email"
-                  :label="t('product_detail.email_label')"
-                  type="email"
-                  required
-                />
-              </v-col>
-            </v-row>
-            <v-btn
-              color="primary"
-              variant="flat"
-              rounded="lg"
-              block
-              type="submit"
-              :loading="waitlistLoading"
-            >
+          <form v-if="!waitlistSubmitted" @submit.prevent="submitWaitlist">
+            <Alert v-if="waitlistError" variant="destructive" class="mb-4 text-left">
+              <AlertDescription>{{ waitlistError }}</AlertDescription>
+            </Alert>
+            <Row dense class="mb-4">
+              <Col cols="12" sm="6" class="text-left flex flex-col gap-1.5">
+                <Label for="waitlist-name">{{ t('product_detail.name_label') }}</Label>
+                <Input id="waitlist-name" v-model="waitlist.name" required />
+              </Col>
+              <Col cols="12" sm="6" class="text-left flex flex-col gap-1.5">
+                <Label for="waitlist-email">{{ t('product_detail.email_label') }}</Label>
+                <Input id="waitlist-email" v-model="waitlist.email" type="email" required />
+              </Col>
+            </Row>
+            <Button type="submit" class="w-full" :disabled="waitlistLoading">
+              <Icon v-if="waitlistLoading" name="mdi-loading" class="animate-spin" size="18" />
               {{ product.cta_label || t('button.join_waitlist') }}
-            </v-btn>
-          </v-form>
-          <v-alert v-else type="success" variant="tonal" rounded="lg">
-            {{ t('product_detail.waitlist_success') }}
-          </v-alert>
+            </Button>
+          </form>
+          <Alert v-else class="border-success/30 bg-success/10 text-success">
+            <AlertDescription>{{ t('product_detail.waitlist_success') }}</AlertDescription>
+          </Alert>
         </div>
 
         <div
           v-else-if="product.cta_type === 'external_link'"
           data-aos="fade-up"
         >
-          <v-btn
-            color="primary"
-            variant="flat"
-            rounded="lg"
+          <Button
+            as="a"
             :href="product.cta_url ?? undefined"
             target="_blank"
             rel="noopener"
           >
             {{ product.cta_label || t('button.visit_site') }}
-          </v-btn>
+          </Button>
         </div>
 
         <div v-else data-aos="fade-up">
-          <v-btn
-            color="primary"
-            variant="flat"
-            rounded="lg"
-            v-bind="finalCtaLink"
-          >
+          <Button :as="'to' in finalCtaLink ? 'NuxtLink' : 'a'" v-bind="finalCtaLink">
             {{ product.cta_label || t('button.start_free_trial') }}
-          </v-btn>
+          </Button>
         </div>
-      </v-container>
+      </Container>
     </section>
   </template>
 </template>
 
 <script setup lang="ts">
 import type { Component } from 'vue'
+import { Alert, AlertDescription } from '~/components/ui/alert'
+import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
+import { Input } from '~/components/ui/input'
+import { Label } from '~/components/ui/label'
 import RestaurantPosSection from '~/components/sections/RestaurantPosSection.vue'
 import InventorySection from '~/components/sections/InventorySection.vue'
 import MobileQrSection from '~/components/sections/MobileQrSection.vue'
@@ -392,7 +359,7 @@ async function submitWaitlist() {
     max-height: 360px;
     border-radius: 20px !important;
     overflow: hidden;
-    box-shadow: 0 18px 40px rgba(var(--v-theme-on-surface), 0.1);
+    box-shadow: 0 18px 40px color-mix(in srgb, var(--foreground) 10%, transparent);
   }
   .hero-geo {
     width: 100%;
@@ -409,16 +376,16 @@ async function submitWaitlist() {
   .feature-card {
     padding: 26px 24px;
     border-radius: 20px;
-    background: rgb(var(--v-theme-surface));
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.06);
-    box-shadow: 0 12px 28px rgba(var(--v-theme-on-surface), 0.06);
+    background: var(--card);
+    border: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--foreground) 6%, transparent);
     transition:
       transform 0.25s ease,
       box-shadow 0.25s ease;
   }
   .feature-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 18px 36px rgba(var(--v-theme-on-surface), 0.1);
+    box-shadow: 0 18px 36px color-mix(in srgb, var(--foreground) 10%, transparent);
   }
   .feature-icon {
     width: 44px;
@@ -438,7 +405,7 @@ async function submitWaitlist() {
   }
   .feature-desc {
     font-size: 0.86rem;
-    color: rgba(var(--v-theme-on-surface), 0.6);
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
     line-height: 1.55;
     margin: 0;
   }
@@ -448,15 +415,15 @@ async function submitWaitlist() {
     gap: 20px;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
-  .screenshot :deep(.v-img) {
+  .screenshot img {
     border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 14px 32px rgba(var(--v-theme-on-surface), 0.08);
+    box-shadow: 0 14px 32px color-mix(in srgb, var(--foreground) 8%, transparent);
   }
   .screenshot figcaption {
     text-align: center;
     font-size: 0.82rem;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     margin-top: 8px;
   }
 

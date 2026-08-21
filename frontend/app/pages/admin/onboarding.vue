@@ -7,16 +7,14 @@
       </div>
     </div>
 
-    <v-alert v-if="error" type="error" variant="tonal" rounded="lg" class="mb-4">
-      {{ error }}
-    </v-alert>
+    <Alert v-if="error" variant="destructive" class="mb-4">
+      <AlertDescription>{{ error }}</AlertDescription>
+    </Alert>
 
-    <div v-if="loading" class="dash-loading">
-      <v-progress-circular indeterminate color="primary" />
-    </div>
+    <InlineLoader v-if="loading" min-height="80px" />
 
     <div v-else-if="!submissions.length" class="dash-empty">
-      <v-icon icon="mdi-account-arrow-right-outline" size="36" />
+      <Icon name="mdi-account-arrow-right-outline" size="36" />
       <p>No onboarding submissions yet.</p>
     </div>
 
@@ -40,15 +38,17 @@
           <span class="dash-email">{{ item.email }}</span>
         </span>
         <span>
-          <v-chip size="x-small" variant="flat" :color="item.status === 'success' ? 'success' : 'error'">
+          <Badge :class="item.status === 'success' ? 'bg-success text-success-foreground' : 'bg-destructive text-destructive-foreground'">
             {{ item.status === 'success' ? 'Success' : 'Failed' }}
-          </v-chip>
+          </Badge>
           <div v-if="item.status === 'failed' && item.error_message" class="dash-error">
             {{ item.error_message }}
           </div>
         </span>
         <span class="dash-actions">
-          <v-btn size="small" variant="text" icon="mdi-delete-outline" color="error" @click="confirmDelete(item)" />
+          <Button size="icon-sm" variant="ghost" class="text-destructive hover:text-destructive" @click="confirmDelete(item)">
+            <Icon name="mdi-delete-outline" size="16" />
+          </Button>
         </span>
       </div>
     </div>
@@ -58,8 +58,9 @@
 <script setup lang="ts">
   definePageMeta({ layout: 'admin' })
 
-  // Explicit import — Vuetify also exports its own `useDate` (date-adapter
-  // composable) which Nuxt's auto-import would otherwise resolve instead.
+  import { Alert, AlertDescription } from '~/components/ui/alert'
+  import { Badge } from '~/components/ui/badge'
+  import { Button } from '~/components/ui/button'
   import { useDate } from '~/composables/useDate'
   import { listOnboardingSubmissions, deleteOnboardingSubmission } from '~/services/adminOnboarding'
   import type { OnboardingSubmission } from '~/types'
@@ -120,22 +121,21 @@
   }
   .dash-sub {
     font-size: 0.86rem;
-    color: rgba(var(--v-theme-on-surface), 0.6);
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
     margin: 0;
   }
 
-  .dash-loading,
   .dash-empty {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
     padding: 60px 0;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
   }
 
   .dash-table {
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     border-radius: 14px;
     overflow: hidden;
   }
@@ -145,31 +145,31 @@
     align-items: center;
     gap: 12px;
     padding: 14px 18px;
-    border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.06);
+    border-bottom: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
     font-size: 0.86rem;
   }
   .dash-row:last-child {
     border-bottom: none;
   }
   .dash-row--head {
-    background: rgba(var(--v-theme-on-surface), 0.03);
+    background: color-mix(in srgb, var(--foreground) 3%, transparent);
     font-size: 0.72rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
   }
   .dash-name {
     font-weight: 700;
   }
   .dash-email {
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     font-size: 0.78rem;
   }
   .dash-error {
     margin-top: 4px;
     font-size: 0.72rem;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
     max-width: 200px;
   }
   .dash-actions,

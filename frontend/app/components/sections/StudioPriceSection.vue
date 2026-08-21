@@ -1,6 +1,6 @@
 <template>
   <section id="pricing" class="section-pad section-tint-peach">
-    <v-container>
+    <Container>
       <div class="text-center mb-10" data-aos="fade-up">
         <span class="section-tag">{{ t('studio_pricing.eyebrow') }}</span>
         <h2 class="section-title">{{ t('studio_pricing.title') }}</h2>
@@ -29,17 +29,13 @@
       <InlineLoader v-if="store.loading" min-height="380px" />
 
 
-      <v-alert
+      <Alert
         v-else-if="store.error"
-        type="info"
-        variant="tonal"
-        rounded="lg"
-        icon="mdi-clock-outline"
-        class="mx-auto"
-        max-width="480"
+        class="flex items-center gap-2 border-info/30 bg-info/10 text-info mx-auto max-w-[480px]"
       >
-        {{ t('studio_pricing.unavailable') }}
-      </v-alert>
+        <Icon name="mdi-clock-outline" size="18" />
+        <AlertDescription>{{ t('studio_pricing.unavailable') }}</AlertDescription>
+      </Alert>
 
       <!-- ── Plan cards ── -->
       <div v-else class="cards-grid" :data-count="store.plans.length" data-aos="fade-up">
@@ -49,9 +45,10 @@
           class="plan-card clay-surface"
           :class="{ 'plan-card--featured': plan.code === 'professional' }"
         >
-          <v-chip v-if="plan.code === 'professional'" class="popular-badge" color="primary" size="x-small" variant="flat" prepend-icon="mdi-star">
+          <Badge v-if="plan.code === 'professional'" class="popular-badge bg-primary text-primary-foreground border-transparent">
+            <Icon name="mdi-star" size="12" />
             {{ t('common.most_popular') }}
-          </v-chip>
+          </Badge>
 
           <h3 class="plan-name">{{ plan.name }}</h3>
           <p class="plan-desc">{{ plan.description }}</p>
@@ -63,9 +60,10 @@
                 <span class="price-amount price-amount--free">0</span>
               </div>
               <div class="price-meta">
-                <v-chip size="x-small" color="primary" variant="tonal" prepend-icon="mdi-gift-outline">
+                <Badge class="bg-primary/10 text-primary border-transparent">
+                  <Icon name="mdi-gift-outline" size="12" />
                   {{ t('studio_pricing.trial_days', { days: plan.trial_days || 14 }) }}
-                </v-chip>
+                </Badge>
               </div>
             </template>
             <template v-else>
@@ -81,35 +79,35 @@
             </template>
           </div>
 
-          <v-divider />
+          <div class="plan-divider" />
 
           <ul class="feature-list">
             <li v-for="f in planFeatures(plan)" :key="f" class="feature-item">
-              <v-avatar color="primary" variant="tonal" size="18" rounded="sm">
-                <v-icon icon="mdi-check" size="10" />
-              </v-avatar>
+              <span class="plan-check-badge">
+                <Icon name="mdi-check" size="10" />
+              </span>
               <span>{{ f }}</span>
             </li>
           </ul>
 
-          <v-btn
-            :color="plan.code === 'professional' ? 'primary' : undefined"
-            :variant="plan.code === 'professional' ? 'flat' : 'outlined'"
-            rounded="lg"
-            block
-            append-icon="mdi-arrow-right"
-            class="plan-cta"
+          <Button
+            :variant="plan.code === 'professional' ? 'default' : 'outline'"
+            class="plan-cta w-full"
             @click="emit('select-plan', plan.code)"
           >
             {{ isFree(plan) ? t('button.start_free_trial') : t('button.get_started') }}
-          </v-btn>
+            <Icon name="mdi-arrow-right" size="16" />
+          </Button>
         </div>
       </div>
-    </v-container>
+    </Container>
   </section>
 </template>
 
 <script setup lang="ts">
+  import { Alert, AlertDescription } from '~/components/ui/alert'
+  import { Badge } from '~/components/ui/badge'
+  import { Button } from '~/components/ui/button'
   import type { StudioPlan } from '~/types'
 
   const { t } = useI18n()
@@ -117,7 +115,11 @@
 
   const emit = defineEmits<{ 'select-plan': [code: string] }>()
 
-  onMounted(() => store.fetchPlans())
+  // Awaited (not onMounted) so live pricing is present in the server-rendered
+  // HTML instead of flashing an empty grid/spinner before a client-only fetch
+  // resolves. store.fetchPlans() already no-ops on repeat calls once plans
+  // are cached, so this only ever does real work on first load.
+  await useAsyncData('studio-plans', () => store.fetchPlans())
 
   const CYCLES = [
     { months: 1, labelKey: 'studio_pricing.monthly' },
@@ -189,7 +191,7 @@
   .cycle-track {
     display: inline-flex;
     align-items: center;
-    background: rgba(var(--v-theme-on-surface), 0.06);
+    background: color-mix(in srgb, var(--foreground) 6%, transparent);
     border-radius: 999px;
     padding: 4px;
     gap: 2px;
@@ -204,14 +206,14 @@
     border-radius: 999px;
     font-size: 0.78rem;
     font-weight: 600;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
   }
   .cycle-btn--active {
-    background: rgb(var(--v-theme-primary));
+    background: var(--primary);
     color: #fff;
-    box-shadow: 0 2px 12px rgba(var(--v-theme-primary), 0.4);
+    box-shadow: 0 2px 12px color-mix(in srgb, var(--primary) 40%, transparent);
   }
   .cycle-btn__badge {
     font-size: 0.65rem;
@@ -221,8 +223,8 @@
     background: rgba(255, 255, 255, 0.22);
   }
   .cycle-btn:not(.cycle-btn--active) .cycle-btn__badge {
-    background: rgba(var(--v-theme-success), 0.15);
-    color: rgb(var(--v-theme-success));
+    background: color-mix(in srgb, var(--success) 15%, transparent);
+    color: var(--success);
   }
 
   .cards-grid {
@@ -241,7 +243,7 @@
     gap: 16px;
   }
   .plan-card--featured {
-    border-color: rgba(var(--v-theme-primary), 0.35) !important;
+    border-color: color-mix(in srgb, var(--primary) 35%, transparent) !important;
   }
   .popular-badge {
     position: absolute;
@@ -257,7 +259,7 @@
   }
   .plan-desc {
     font-size: 0.82rem;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     line-height: 1.5;
     margin: 0;
     min-height: 40px;
@@ -277,7 +279,7 @@
   .price-currency {
     font-size: 1rem;
     font-weight: 700;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
     margin-top: 4px;
   }
   .price-amount {
@@ -286,11 +288,11 @@
     letter-spacing: -1.5px;
   }
   .price-amount--free {
-    color: rgb(var(--v-theme-success));
+    color: var(--success);
   }
   .price-per {
     font-size: 0.75rem;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
   }
 
   .feature-list {
@@ -308,11 +310,25 @@
     gap: 8px;
     font-size: 0.82rem;
   }
+  .plan-check-badge {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: color-mix(in srgb, var(--primary) 14%, transparent);
+    color: var(--primary);
+  }
+  .plan-divider {
+    height: 1px;
+    background: color-mix(in srgb, var(--foreground) 10%, transparent);
+  }
 
   .plan-cta {
-    /* v-btn's `block` prop sets flex: 1 0 auto internally (meant for a
-       horizontal row) — inside this vertical flex column that makes the
-       button itself stretch to fill leftover height. Pin it back down;
+    /* Inside this vertical flex column, an unconstrained button would
+       stretch to fill leftover height. Pin it back down;
        .feature-list's flex-grow: 1 is what should absorb that space. */
     flex: none !important;
   }

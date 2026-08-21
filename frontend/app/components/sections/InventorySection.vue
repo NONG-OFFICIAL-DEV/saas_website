@@ -1,27 +1,27 @@
 <template>
   <section class="section-pad section-tint-lavender" id="backoffice">
-    <v-container>
-      <v-row align="center">
+    <Container>
+      <Row align="center">
         <!-- ── Text column ── -->
-        <v-col cols="12" md="5" data-aos="fade-right">
+        <Col cols="12" md="5" data-aos="fade-right">
           <div class="section-tag">{{ t('home.inventory.tag') }}</div>
           <h2 class="section-title">{{ t('home.inventory.title') }}</h2>
           <p class="section-sub mb-7">{{ t('home.inventory.sub') }}</p>
           <FeatureChecks :items="checks" />
-        </v-col>
+        </Col>
 
         <!-- ── Visual column ── -->
-        <v-col cols="12" md="7" data-aos="fade-left" data-aos-delay="100">
+        <Col cols="12" md="7" data-aos="fade-left" data-aos-delay="100">
           <VisualWrapper color="teal">
             <div class="chart-mock">
               <!-- Header -->
               <div class="chart-header">
                 <span class="chart-title">
-                  <v-icon icon="mdi-chart-bar" size="16" class="mr-1" color="#14b8a6" />
+                  <Icon name="mdi-chart-bar" size="16" class="mr-1" color="#14b8a6" />
                   Stock Movements
                 </span>
                 <span class="chart-badge">
-                  <v-icon icon="mdi-calendar-month-outline" size="11" class="mr-1" />
+                  <Icon name="mdi-calendar-month-outline" size="11" class="mr-1" />
                   This Month
                 </span>
               </div>
@@ -37,11 +37,11 @@
               <!-- Stock list -->
               <div class="stock-list">
                 <div v-for="s in stockList" :key="s.name" class="stock-row">
-                  <div class="d-flex align-center gap-2">
-                    <v-icon :icon="s.icon" :color="s.color" size="15" />
+                  <div class="flex items-center gap-2">
+                    <Icon :name="s.icon" :color="s.color" size="15" />
                     <span class="stock-name">{{ s.name }}</span>
                   </div>
-                  <div class="d-flex align-center gap-2">
+                  <div class="flex items-center gap-2">
                     <div class="stock-bar-bg">
                       <div class="stock-bar-fill" :style="`width:${s.pct}%;background:${s.barColor}`" />
                     </div>
@@ -51,9 +51,9 @@
               </div>
             </div>
           </VisualWrapper>
-        </v-col>
-      </v-row>
-    </v-container>
+        </Col>
+      </Row>
+    </Container>
   </section>
 </template>
 

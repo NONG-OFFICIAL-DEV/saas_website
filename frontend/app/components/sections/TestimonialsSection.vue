@@ -1,6 +1,6 @@
 <template>
   <section v-if="store.testimonials.length" class="section-pad section-tint-sky" id="testimonials">
-    <v-container>
+    <Container>
       <div class="text-center mb-12" data-aos="fade-up">
         <span class="section-tag">{{ t('testimonials.eyebrow') }}</span>
         <h2 class="section-title">{{ t('testimonials.title') }}</h2>
@@ -15,16 +15,16 @@
           :data-aos-delay="(i % 3) * 80"
         >
           <div v-if="item.rating" class="stars">
-            <v-icon v-for="n in 5" :key="n" icon="mdi-star" size="16" :color="n <= item.rating ? 'warning' : undefined" />
+            <Icon v-for="n in 5" :key="n" name="mdi-star" size="16" :color="n <= item.rating ? 'warning' : undefined" />
           </div>
 
           <p class="quote">"{{ item.quote }}"</p>
 
           <div class="author-row">
-            <v-avatar size="40" color="primary">
-              <v-img v-if="item.author_avatar_url" :src="item.author_avatar_url" :alt="item.author_name" />
-              <span v-else class="author-initial">{{ item.author_name?.charAt(0) }}</span>
-            </v-avatar>
+            <Avatar size="lg" class="bg-primary">
+              <AvatarImage v-if="item.author_avatar_url" :src="item.author_avatar_url" :alt="item.author_name" />
+              <AvatarFallback class="author-initial">{{ item.author_name?.charAt(0) }}</AvatarFallback>
+            </Avatar>
             <div class="author-text">
               <div class="author-name">{{ item.author_name }}</div>
               <div v-if="item.author_title" class="author-title">{{ item.author_title }}</div>
@@ -32,11 +32,13 @@
           </div>
         </div>
       </div>
-    </v-container>
+    </Container>
   </section>
 </template>
 
 <script setup lang="ts">
+  import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
+
   // Data is fetched by the parent page (app/pages/index.vue) via an awaited
   // useAsyncData call, so it's present in the server-rendered HTML — this
   // component only ever reads the store reactively.
@@ -66,7 +68,7 @@
   .quote {
     font-size: 0.92rem;
     line-height: 1.65;
-    color: rgba(var(--v-theme-on-surface), 0.8);
+    color: color-mix(in srgb, var(--foreground) 80%, transparent);
     margin: 0;
     flex-grow: 1;
   }
@@ -89,7 +91,7 @@
   }
   .author-title {
     font-size: 0.76rem;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
   }
 
   @media (max-width: 900px) {

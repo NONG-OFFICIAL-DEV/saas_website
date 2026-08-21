@@ -1,37 +1,37 @@
 <template>
-  <div v-if="store.loadingSolution" class="detail-loading">
+  <div v-if="!store.currentSolution && store.loadingSolution" class="detail-loading">
     <InlineLoader min-height="240px" />
   </div>
 
   <div v-else-if="!store.currentSolution" class="not-found">
-    <v-container class="text-center">
-      <v-icon icon="mdi-compass-off-outline" size="48" />
+    <Container class="text-center">
+      <Icon name="mdi-compass-off-outline" size="48" />
       <h2 class="section-title">{{ t('solution_detail.not_found_title') }}</h2>
       <p class="section-sub mx-auto">{{ t('solution_detail.not_found_desc') }}</p>
-      <v-btn color="primary" rounded="lg" to="/solutions">
+      <Button as="NuxtLink" to="/solutions">
         {{ t('solution_detail.back_to_solutions') }}
-      </v-btn>
-    </v-container>
+      </Button>
+    </Container>
   </div>
 
   <template v-else>
     <section class="section-pad hero">
-      <v-container>
-        <v-row align="center">
-          <v-col cols="12" md="8" data-aos="fade-right">
+      <Container>
+        <Row align="center">
+          <Col cols="12" md="8" data-aos="fade-right">
             <div class="icon-wrap mb-4">
-              <v-icon :icon="solution.icon || 'mdi-apps'" size="30" />
+              <Icon :name="solution.icon || 'mdi-apps'" size="30" />
             </div>
             <h1 class="hero-title">{{ solution.name }}</h1>
             <p class="hero-tagline">{{ solution.tagline }}</p>
             <p class="section-sub hero-desc">{{ solution.description }}</p>
-          </v-col>
-        </v-row>
-      </v-container>
+          </Col>
+        </Row>
+      </Container>
     </section>
 
     <section v-if="solution.products?.length" class="section-pad section-tint-mint">
-      <v-container>
+      <Container>
         <div class="text-center mb-10" data-aos="fade-up">
           <span class="section-tag">{{ t('solution_detail.products_tag') }}</span>
           <h2 class="section-title">{{ t('solution_detail.products_title') }}</h2>
@@ -39,12 +39,14 @@
         <div class="products-grid" data-aos="fade-up">
           <ProductCard v-for="product in solution.products" :key="product.id" :product="product" />
         </div>
-      </v-container>
+      </Container>
     </section>
   </template>
 </template>
 
 <script setup lang="ts">
+  import { Button } from '~/components/ui/button'
+
   const { t } = useI18n()
   const route = useRoute()
   const store = useSolutionsStore()
@@ -76,8 +78,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(var(--v-theme-primary), 0.12);
-    color: rgb(var(--v-theme-primary));
+    background: color-mix(in srgb, var(--primary) 12%, transparent);
+    color: var(--primary);
   }
   .hero-title {
     font-size: clamp(1.8rem, 4.5vw, 3rem);
@@ -88,7 +90,7 @@
   .hero-tagline {
     font-size: 1.1rem;
     font-weight: 600;
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     margin: 0 0 14px;
   }
   .hero-desc {

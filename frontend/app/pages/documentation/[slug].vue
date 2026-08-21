@@ -1,19 +1,19 @@
 <template>
-  <div v-if="store.loadingArticle" class="detail-loading">
+  <div v-if="!article && store.loadingArticle" class="detail-loading">
     <InlineLoader min-height="240px" />
   </div>
 
   <div v-else-if="!article" class="not-found">
-    <v-container class="text-center">
-      <v-icon icon="mdi-file-search-outline" size="48" />
+    <Container class="text-center">
+      <Icon name="mdi-file-search-outline" size="48" />
       <h2 class="section-title">{{ t('documentation_article.not_found_title') }}</h2>
       <p class="section-sub mx-auto">{{ t('documentation_article.not_found_desc') }}</p>
-      <v-btn color="primary" rounded="lg" to="/documentation">{{ t('documentation_article.back_to_docs') }}</v-btn>
-    </v-container>
+      <Button as="NuxtLink" to="/documentation">{{ t('documentation_article.back_to_docs') }}</Button>
+    </Container>
   </div>
 
   <section v-else class="docs-article-page">
-    <v-container fluid class="docs-layout" :class="{ 'docs-layout--no-toc': !headings.length }">
+    <Container fluid class="docs-layout" :class="{ 'docs-layout--no-toc': !headings.length }">
       <!-- ── Left: category nav ── -->
       <aside v-if="mdAndUp" class="docs-sidebar docs-sidebar--left">
         <DocsCategoryNav :categories="store.categories" :current-slug="article.slug" />
@@ -28,12 +28,12 @@
         <nav class="breadcrumb" aria-label="Breadcrumb">
           <NuxtLink to="/documentation">{{ t('documentation_home.tag') }}</NuxtLink>
           <template v-if="article.category?.parent">
-            <v-icon icon="mdi-chevron-right" size="14" />
+            <Icon name="mdi-chevron-right" size="14" />
             <NuxtLink :to="firstArticleLink(article.category.parent)">{{ article.category.parent.name }}</NuxtLink>
           </template>
-          <v-icon icon="mdi-chevron-right" size="14" />
+          <Icon name="mdi-chevron-right" size="14" />
           <NuxtLink :to="firstArticleLink(article.category)">{{ article.category?.name }}</NuxtLink>
-          <v-icon icon="mdi-chevron-right" size="14" />
+          <Icon name="mdi-chevron-right" size="14" />
           <span class="breadcrumb-current">{{ article.title }}</span>
         </nav>
 
@@ -62,11 +62,11 @@
         <div v-if="article.prev || article.next" class="prev-next">
           <NuxtLink v-if="article.prev" :to="`/documentation/${article.prev.slug}`" class="pn-link pn-link--prev">
             <span class="pn-label">{{ t('documentation_article.previous') }}</span>
-            <span class="pn-title"><v-icon icon="mdi-arrow-left" size="15" /> {{ article.prev.title }}</span>
+            <span class="pn-title"><Icon name="mdi-arrow-left" size="15" /> {{ article.prev.title }}</span>
           </NuxtLink>
           <NuxtLink v-if="article.next" :to="`/documentation/${article.next.slug}`" class="pn-link pn-link--next">
             <span class="pn-label">{{ t('documentation_article.next') }}</span>
-            <span class="pn-title">{{ article.next.title }} <v-icon icon="mdi-arrow-right" size="15" /></span>
+            <span class="pn-title">{{ article.next.title }} <Icon name="mdi-arrow-right" size="15" /></span>
           </NuxtLink>
         </div>
 
@@ -86,12 +86,12 @@
         <div class="toc-title">{{ t('documentation_article.on_this_page') }}</div>
         <DocsTableOfContents :headings="headings" :active-id="activeHeadingId" @navigate="scrollToHeading" />
       </aside>
-    </v-container>
+    </Container>
   </section>
 </template>
 
 <script setup lang="ts">
-  import { useDisplay } from 'vuetify'
+  import { Button } from '~/components/ui/button'
   import type { DocumentationCategory } from '~/types'
 
   interface Heading {
@@ -102,8 +102,24 @@
 
   const route = useRoute()
   const { t } = useI18n()
-  const { mdAndUp } = useDisplay()
   const store = useDocumentationStore()
+
+  // Vuetify's useDisplay().mdAndUp replacement — same 960px breakpoint.
+  // Defaults to true (desktop layout) for the server-rendered HTML, since
+  // the real viewport width is unknowable during SSR; updates once
+  // mounted, matching Vuetify's own SSR-default-then-client-corrects
+  // behavior for this composable.
+  const mdAndUp = ref(true)
+  let mdQuery: MediaQueryList | null = null
+  function onMdChange(e: MediaQueryListEvent) {
+    mdAndUp.value = e.matches
+  }
+  onMounted(() => {
+    mdQuery = window.matchMedia('(min-width: 960px)')
+    mdAndUp.value = mdQuery.matches
+    mdQuery.addEventListener('change', onMdChange)
+  })
+  onBeforeUnmount(() => mdQuery?.removeEventListener('change', onMdChange))
 
   const slug = computed(() => String(route.params.slug))
   const article = computed(() => store.currentArticle)
@@ -207,7 +223,7 @@
 
 <style scoped>
   .docs-article-page {
-    padding-top: 100px;
+    padding: 100px 0 96px;
   }
 
   .docs-layout {
@@ -215,6 +231,7 @@
     grid-template-columns: 220px minmax(0, 1fr) 200px;
     gap: 40px;
     max-width: 1280px;
+    margin: 0 auto;
     align-items: start;
   }
   .docs-layout--no-toc {
@@ -239,7 +256,7 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: rgba(var(--v-theme-on-surface), 0.45);
+    color: color-mix(in srgb, var(--foreground) 45%, transparent);
     margin-bottom: 10px;
   }
 
@@ -247,7 +264,7 @@
     margin-bottom: 20px;
     padding: 12px 16px;
     border-radius: 12px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.1);
+    border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
   }
   .docs-mobile-collapse summary {
     font-weight: 700;
@@ -265,18 +282,18 @@
     flex-wrap: wrap;
     gap: 4px;
     font-size: 0.82rem;
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     margin-bottom: 20px;
   }
   .breadcrumb a {
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
     text-decoration: none;
   }
   .breadcrumb a:hover {
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
   }
   .breadcrumb-current {
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     font-weight: 600;
   }
 
@@ -291,7 +308,7 @@
   }
   .article-excerpt {
     font-size: 1.02rem;
-    color: rgba(var(--v-theme-on-surface), 0.6);
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
     line-height: 1.6;
     margin: 0;
   }
@@ -300,7 +317,7 @@
     max-width: 720px;
     font-size: 0.98rem;
     line-height: 1.75;
-    color: rgba(var(--v-theme-on-surface), 0.85);
+    color: color-mix(in srgb, var(--foreground) 85%, transparent);
   }
   .article-content :deep(h2) {
     font-size: 1.3rem;
@@ -328,11 +345,11 @@
   .article-content :deep(blockquote) {
     margin: 0 0 14px;
     padding-left: 16px;
-    border-left: 3px solid rgba(var(--v-theme-primary), 0.4);
-    color: rgba(var(--v-theme-on-surface), 0.65);
+    border-left: 3px solid color-mix(in srgb, var(--primary) 40%, transparent);
+    color: color-mix(in srgb, var(--foreground) 65%, transparent);
   }
   .article-content :deep(pre) {
-    background: rgba(var(--v-theme-on-surface), 0.06);
+    background: color-mix(in srgb, var(--foreground) 6%, transparent);
     border-radius: 10px;
     padding: 14px 16px;
     overflow-x: auto;
@@ -353,12 +370,12 @@
   }
   .article-content :deep(td),
   .article-content :deep(th) {
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.14);
+    border: 1px solid color-mix(in srgb, var(--foreground) 14%, transparent);
     padding: 8px 12px;
     font-size: 0.9rem;
   }
   .article-content :deep(th) {
-    background: rgba(var(--v-theme-on-surface), 0.04);
+    background: color-mix(in srgb, var(--foreground) 4%, transparent);
     text-align: left;
   }
   .article-content :deep(div[data-type='callout']) {
@@ -372,15 +389,15 @@
   }
   .article-content :deep(div[data-type='callout'][data-variant='tip']) {
     background: rgba(99, 102, 241, 0.08);
-    border-left: 3px solid rgb(var(--v-theme-primary));
+    border-left: 3px solid var(--primary);
   }
   .article-content :deep(div[data-type='callout'][data-variant='important']) {
     background: rgba(245, 158, 11, 0.1);
     border-left: 3px solid #f59e0b;
   }
   .article-content :deep(div[data-type='callout'][data-variant='note']) {
-    background: rgba(var(--v-theme-on-surface), 0.05);
-    border-left: 3px solid rgba(var(--v-theme-on-surface), 0.3);
+    background: color-mix(in srgb, var(--foreground) 5%, transparent);
+    border-left: 3px solid color-mix(in srgb, var(--foreground) 30%, transparent);
   }
 
   .article-content :deep(div[data-type='video-embed']) {
@@ -390,7 +407,7 @@
     margin: 0 0 20px;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 14px 32px rgba(var(--v-theme-on-surface), 0.08);
+    box-shadow: 0 14px 32px color-mix(in srgb, var(--foreground) 8%, transparent);
   }
   .article-content :deep(div[data-type='video-embed'] iframe) {
     position: absolute;
@@ -405,8 +422,8 @@
     margin-top: 40px;
     padding: 20px 24px;
     border-radius: 14px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
-    background: rgba(var(--v-theme-on-surface), 0.02);
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+    background: color-mix(in srgb, var(--foreground) 2%, transparent);
   }
   .feedback-question {
     font-weight: 700;
@@ -419,18 +436,18 @@
   .feedback-btn {
     padding: 8px 18px;
     border-radius: 999px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
-    background: rgb(var(--v-theme-surface));
+    border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+    background: var(--card);
     cursor: pointer;
     font-size: 0.86rem;
     font-weight: 600;
   }
   .feedback-btn:hover {
-    border-color: rgb(var(--v-theme-primary));
+    border-color: var(--primary);
   }
   .feedback-thanks {
     margin: 0;
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     font-weight: 600;
   }
 
@@ -448,9 +465,9 @@
     gap: 4px;
     padding: 14px 18px;
     border-radius: 12px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     text-decoration: none;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     flex: 1;
     min-width: 200px;
   }
@@ -459,14 +476,14 @@
     align-items: flex-end;
   }
   .pn-link:hover {
-    border-color: rgb(var(--v-theme-primary));
+    border-color: var(--primary);
   }
   .pn-label {
     font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: rgba(var(--v-theme-on-surface), 0.45);
+    color: color-mix(in srgb, var(--foreground) 45%, transparent);
   }
   .pn-title {
     font-weight: 700;
@@ -494,12 +511,12 @@
     display: block;
     padding: 16px 18px;
     border-radius: 12px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     text-decoration: none;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
   }
   .related-card:hover {
-    border-color: rgb(var(--v-theme-primary));
+    border-color: var(--primary);
   }
   .related-name {
     display: block;
@@ -508,7 +525,7 @@
   }
   .related-excerpt {
     font-size: 0.82rem;
-    color: rgba(var(--v-theme-on-surface), 0.6);
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
     margin: 0;
   }
 

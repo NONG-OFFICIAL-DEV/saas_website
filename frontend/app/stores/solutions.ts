@@ -23,14 +23,16 @@ export const useSolutionsStore = defineStore('solutions', () => {
     }
   }
 
+  // Deliberately does NOT null out currentSolution before fetching — see
+  // the equivalent note in stores/products.ts's fetchProductBySlug.
   async function fetchSolutionBySlug(slug: string) {
     loadingSolution.value = true
     error.value = null
-    currentSolution.value = null
     try {
       currentSolution.value = await getSolutionBySlug(slug)
     } catch (err: any) {
       error.value = err?.message ?? 'Failed to load solution'
+      currentSolution.value = null
     } finally {
       loadingSolution.value = false
     }

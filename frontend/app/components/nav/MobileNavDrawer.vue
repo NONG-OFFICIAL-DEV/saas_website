@@ -12,7 +12,9 @@
             alt="Nexstack"
             class="drawer-logo"
           />
-          <v-btn icon="mdi-close" size="small" variant="tonal" @click="close" />
+          <Button variant="secondary" size="icon-sm" @click="close">
+            <Icon name="mdi-close" size="18" />
+          </Button>
         </div>
 
         <nav class="drawer-nav">
@@ -62,7 +64,7 @@
                   class="drawer-subitem"
                   @click="close"
                 >
-                  <v-icon v-if="item.icon" :icon="item.icon" size="16" />
+                  <Icon v-if="item.icon" :name="item.icon" size="16" />
                   {{ item.label }}
                 </NuxtLink>
                 <NuxtLink v-if="section.viewAllTo" :to="section.viewAllTo" class="drawer-subitem drawer-view-all" @click="close">
@@ -105,10 +107,10 @@
 
         <div class="drawer-divider" />
         <div class="drawer-theme-row">
-          <span class="drawer-switch-label ma-0">
+          <span class="drawer-switch-label">
             {{ isDark ? t('common.theme_dark') || 'Dark Mode' : t('common.theme_light') || 'Light Mode' }}
           </span>
-          <v-switch hide-details inset density="compact" color="primary" @click="toggleTheme" />
+          <Switch :model-value="isDark" @update:model-value="toggleTheme" />
         </div>
 
         <NuxtLink to="/login" class="drawer-login" @click="close">
@@ -137,7 +139,8 @@
 </template>
 
 <script setup lang="ts">
-  import { useTheme } from 'vuetify'
+  import { Button } from '~/components/ui/button'
+  import { Switch } from '~/components/ui/switch'
   import type { NavSection } from '~/types'
 
   withDefaults(
@@ -150,15 +153,8 @@
   const emit = defineEmits(['update:modelValue'])
 
   const { t } = useI18n()
-  const theme = useTheme()
+  const { isDark, toggle: toggleTheme } = useColorMode()
   const { languages, selectLang, locale } = useLanguageSwitcher()
-
-  const isDark = computed(() => theme.global.name.value === 'dark')
-  function toggleTheme() {
-    const next = isDark.value ? 'light' : 'dark'
-    theme.global.name.value = next
-    localStorage.setItem('theme', next)
-  }
 
   const openSections = reactive<Record<string, boolean>>({})
   function toggleSection(key: string) {
@@ -185,7 +181,7 @@
     bottom: 0;
     width: 300px;
     max-width: 85vw;
-    background: rgb(var(--v-theme-surface));
+    background: var(--card);
     z-index: 1200;
     display: flex;
     flex-direction: column;
@@ -198,7 +194,7 @@
     justify-content: space-between;
     padding: 0 20px;
     height: 68px;
-    border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.05);
+    border-bottom: 1px solid color-mix(in srgb, var(--foreground) 5%, transparent);
   }
   .drawer-logo {
     height: 32px;
@@ -216,12 +212,12 @@
     padding: 14px 16px;
     border-radius: 12px;
     text-decoration: none;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     font-weight: 600;
   }
   .drawer-link:hover {
-    background: rgba(var(--v-theme-primary), 0.05);
-    color: rgb(var(--v-theme-primary));
+    background: color-mix(in srgb, var(--primary) 5%, transparent);
+    color: var(--primary);
   }
   .drawer-group-trigger {
     width: 100%;
@@ -250,16 +246,16 @@
     padding: 10px 12px;
     border-radius: 10px;
     text-decoration: none;
-    color: rgba(var(--v-theme-on-surface), 0.75);
+    color: color-mix(in srgb, var(--foreground) 75%, transparent);
     font-size: 0.85rem;
     font-weight: 600;
   }
   .drawer-subitem:hover {
-    background: rgba(var(--v-theme-primary), 0.05);
-    color: rgb(var(--v-theme-primary));
+    background: color-mix(in srgb, var(--primary) 5%, transparent);
+    color: var(--primary);
   }
   .drawer-view-all {
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     font-weight: 700;
   }
   .drawer-login {
@@ -269,14 +265,14 @@
     margin: 16px 20px 0;
     padding: 14px;
     border-radius: 14px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
-    color: rgb(var(--v-theme-on-surface));
+    border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+    color: var(--foreground);
     text-decoration: none;
     font-weight: 700;
   }
   .drawer-divider {
     height: 1px;
-    background: rgba(var(--v-theme-on-surface), 0.08);
+    background: color-mix(in srgb, var(--foreground) 8%, transparent);
     margin: 15px 20px;
   }
   .drawer-section-label {
@@ -284,7 +280,7 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: rgba(var(--v-theme-on-surface), 0.4);
+    color: color-mix(in srgb, var(--foreground) 40%, transparent);
     padding: 0 20px;
     margin-bottom: 12px;
   }
@@ -293,7 +289,7 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: rgba(var(--v-theme-on-surface), 0.4);
+    color: color-mix(in srgb, var(--foreground) 40%, transparent);
   }
   .drawer-lang-col {
     padding: 0 10px;
@@ -310,16 +306,16 @@
     gap: 12px;
     padding: 12px;
     border-radius: 12px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.1);
+    border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
     background: transparent;
     text-decoration: none;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     text-align: left;
   }
   .drawer-lang-btn.active {
-    border-color: rgb(var(--v-theme-primary));
-    background: rgba(var(--v-theme-primary), 0.05);
-    color: rgb(var(--v-theme-primary));
+    border-color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 5%, transparent);
+    color: var(--primary);
   }
   .drawer-lang-check {
     margin-left: auto;
@@ -334,7 +330,7 @@
     margin: 10px 20px 20px;
     padding: 16px;
     border-radius: 14px;
-    background: rgb(var(--v-theme-primary));
+    background: var(--primary);
     color: white;
     text-align: center;
     font-weight: 700;

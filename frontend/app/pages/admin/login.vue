@@ -3,96 +3,100 @@
     <div class="login-glow login-glow--a" />
     <div class="login-glow login-glow--b" />
 
-    <v-card class="login-card" rounded="xl" elevation="0">
+    <Card class="login-card">
       <div class="login-brand">
-        <v-avatar class="login-avatar" size="52" color="primary" variant="flat">
-          <v-icon icon="mdi-view-dashboard-outline" size="26" />
-        </v-avatar>
+        <Avatar class="login-avatar size-[52px] bg-primary">
+          <AvatarFallback class="bg-primary text-primary-foreground">
+            <Icon name="mdi-view-dashboard-outline" size="26" />
+          </AvatarFallback>
+        </Avatar>
         <div class="login-logo">Nexstack <span>Admin</span></div>
         <p class="login-sub">Sign in to manage products and site content.</p>
       </div>
 
-      <v-form ref="formRef" v-model="formValid" validate-on="submit lazy" @submit.prevent="handleSubmit">
+      <form @submit.prevent="handleSubmit">
         <transition name="fade">
-          <v-alert
-            v-if="authStore.error"
-            type="error"
-            variant="tonal"
-            density="compact"
-            rounded="lg"
-            class="mb-4"
-            icon="mdi-alert-circle-outline"
-          >
-            {{ authStore.error }}
-          </v-alert>
+          <Alert v-if="authStore.error" variant="destructive" class="mb-4">
+            <AlertDescription>{{ authStore.error }}</AlertDescription>
+          </Alert>
         </transition>
 
-        <v-text-field
-          v-model="email"
-          label="Email"
-          type="email"
-          autocomplete="username"
-          autofocus
-          prepend-inner-icon="mdi-email-outline"
-          :rules="emailRules"
-          :disabled="authStore.loading"
-          class="mb-2"
-          @update:model-value="authStore.error = null"
-        />
-        <v-text-field
-          v-model="password"
-          label="Password"
-          :type="showPassword ? 'text' : 'password'"
-          prepend-inner-icon="mdi-lock-outline"
-          :append-inner-icon="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
-          autocomplete="current-password"
-          :rules="passwordRules"
-          :disabled="authStore.loading"
-          class="mb-5"
-          @click:append-inner="showPassword = !showPassword"
-          @update:model-value="authStore.error = null"
-        />
+        <div class="field mb-3">
+          <Label for="email">Email</Label>
+          <Input
+            id="email"
+            v-model="email"
+            type="email"
+            autocomplete="username"
+            autofocus
+            :disabled="authStore.loading"
+            :class="emailError ? 'border-destructive' : ''"
+            @update:model-value="authStore.error = null"
+          />
+          <p v-if="emailError" class="field-error">{{ emailError }}</p>
+        </div>
 
-        <v-btn
-          color="primary"
-          variant="flat"
-          rounded="lg"
-          size="large"
-          block
-          type="submit"
-          append-icon="mdi-arrow-right"
-          :loading="authStore.loading"
-          :disabled="authStore.loading"
-        >
+        <div class="field mb-5">
+          <Label for="password">Password</Label>
+          <div class="password-row">
+            <Input
+              id="password"
+              v-model="password"
+              :type="showPassword ? 'text' : 'password'"
+              autocomplete="current-password"
+              :disabled="authStore.loading"
+              :class="passwordError ? 'border-destructive' : ''"
+              @update:model-value="authStore.error = null"
+            />
+            <button type="button" class="password-toggle" @click="showPassword = !showPassword">
+              <Icon :name="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'" size="18" />
+            </button>
+          </div>
+          <p v-if="passwordError" class="field-error">{{ passwordError }}</p>
+        </div>
+
+        <Button type="submit" size="lg" class="w-full" :disabled="authStore.loading">
+          <Icon v-if="authStore.loading" name="mdi-loading" size="16" class="animate-spin" />
           Sign in
-        </v-btn>
-      </v-form>
-    </v-card>
+          <Icon v-if="!authStore.loading" name="mdi-arrow-right" size="18" />
+        </Button>
+      </form>
+    </Card>
 
     <p class="login-footer">Nexstack CMS — admin access only</p>
   </div>
 </template>
 
 <script setup lang="ts">
+  import { Alert, AlertDescription } from '~/components/ui/alert'
+  import { Avatar, AvatarFallback } from '~/components/ui/avatar'
+  import { Button } from '~/components/ui/button'
+  import { Card } from '~/components/ui/card'
+  import { Input } from '~/components/ui/input'
+  import { Label } from '~/components/ui/label'
+
   definePageMeta({ layout: false })
 
   const authStore = useAdminAuthStore()
 
-  const formRef = ref<{ validate: () => Promise<{ valid: boolean }> } | null>(null)
-  const formValid = ref(false)
   const email = ref('')
   const password = ref('')
   const showPassword = ref(false)
+  const emailError = ref<string | null>(null)
+  const passwordError = ref<string | null>(null)
 
-  const emailRules = [
-    (v: string) => !!v || 'Email is required',
-    (v: string) => /.+@.+\..+/.test(v) || 'Enter a valid email address'
-  ]
-  const passwordRules = [(v: string) => !!v || 'Password is required']
+  function validate() {
+    emailError.value = !email.value
+      ? 'Email is required'
+      : !/.+@.+\..+/.test(email.value)
+        ? 'Enter a valid email address'
+        : null
+    passwordError.value = !password.value ? 'Password is required' : null
+    return !emailError.value && !passwordError.value
+  }
 
   async function handleSubmit() {
-    const { valid } = await formRef.value!.validate()
-    if (!valid) return
+    if (!validate()) return
 
     const ok = await authStore.signIn(email.value, password.value)
     if (ok) navigateTo('/admin')
@@ -109,7 +113,7 @@
     justify-content: center;
     gap: 20px;
     padding: 24px;
-    background: rgb(var(--v-theme-background));
+    background: var(--background);
     overflow: hidden;
   }
 
@@ -118,7 +122,7 @@
     width: 480px;
     height: 480px;
     border-radius: 50%;
-    background: rgb(var(--v-theme-primary));
+    background: var(--primary);
     opacity: 0.16;
     filter: blur(120px);
     pointer-events: none;
@@ -139,8 +143,8 @@
     width: 100%;
     max-width: 400px;
     padding: 40px 36px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
-    background: rgba(var(--v-theme-surface), 0.72);
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+    background: color-mix(in srgb, var(--card) 72%, transparent);
     backdrop-filter: blur(20px);
     box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.35);
   }
@@ -161,19 +165,49 @@
     letter-spacing: -0.01em;
   }
   .login-logo span {
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
   }
   .login-sub {
     font-size: 0.85rem;
-    color: rgba(var(--v-theme-on-surface), 0.6);
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
     margin: 6px 0 0;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field-error {
+    font-size: 0.75rem;
+    color: var(--destructive);
+    margin: 0;
+  }
+  .password-row {
+    position: relative;
+    display: flex;
+  }
+  .password-row :deep(input) {
+    padding-right: 36px;
+  }
+  .password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
   }
 
   .login-footer {
     position: relative;
     z-index: 1;
     font-size: 0.76rem;
-    color: rgba(var(--v-theme-on-surface), 0.4);
+    color: color-mix(in srgb, var(--foreground) 40%, transparent);
     margin: 0;
   }
 

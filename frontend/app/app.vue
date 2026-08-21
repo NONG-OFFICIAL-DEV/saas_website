@@ -1,13 +1,13 @@
 <template>
-  <v-app>
+  <div>
     <Notif ref="notifRef" dismissible :default-timeout="2000" />
     <Confirm ref="confirmRef" />
-    <NuxtLoadingIndicator color="primary" />
+    <NuxtLoadingIndicator color="var(--primary)" />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
     <Loading />
-  </v-app>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -19,14 +19,26 @@ const notifRef = ref<InstanceType<typeof Notif> | null>(null)
 const confirmRef = ref<InstanceType<typeof Confirm> | null>(null)
 
 const instance = getCurrentInstance()!
-const { locale } = useI18n()
+const { locale, setLocale } = useI18n()
+
+// Sets <html class="dark"> during SSR itself (cookie is readable on the
+// server, unlike localStorage) — see useColorMode.ts for why this replaces
+// Vuetify's useTheme().
+const { isDark } = useColorMode()
+useHead({
+  htmlAttrs: {
+    class: computed(() => (isDark.value ? 'dark' : ''))
+  }
+})
 
 // Keyboard switcher
 const handleKeyDown = (e: KeyboardEvent) => {
   if (e.shiftKey && e.ctrlKey && e.key === 'L') {
     e.preventDefault()
     const newLocale = locale.value === 'en' ? 'km' : 'en'
-    locale.value = newLocale as typeof locale.value
+    // setLocale() (not locale.value = ...) — required to trigger the
+    // lazy-loaded locale messages import; see useLanguageSwitcher.ts.
+    setLocale(newLocale)
     localStorage.setItem('lang', newLocale)
   }
 }
@@ -40,8 +52,8 @@ onMounted(() => {
 
   // Restore saved language preference
   const savedLang = localStorage.getItem('lang')
-  if (savedLang) {
-    locale.value = savedLang as typeof locale.value
+  if (savedLang === 'en' || savedLang === 'km') {
+    setLocale(savedLang)
   }
 
   // Bind keyboard event
@@ -54,13 +66,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style>
-/* In app.vue or a global CSS file */
 html, body {
   overflow-y: auto !important;
-}
-
-.v-application__wrap {
-  min-height: 100dvh !important;
-  display: block !important; /* Allow normal document flow */
 }
 </style>

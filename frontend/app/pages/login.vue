@@ -1,6 +1,6 @@
 <template>
   <section class="section-pad login-page">
-    <v-container>
+    <Container>
       <div class="header text-center" data-aos="fade-up">
         <span class="section-tag">{{ t('login_page.tag') }}</span>
         <h1 class="section-title">{{ t('login_page.title') }}</h1>
@@ -19,18 +19,18 @@
         >
           <div class="logo-wrap">
             <img v-if="product.logo_url" :src="product.logo_url" :alt="product.name" class="logo-img" />
-            <v-icon v-else icon="mdi-apps" size="28" />
+            <Icon v-else name="mdi-apps" size="28" />
           </div>
           <h3 class="product-name">{{ product.name }}</h3>
           <span class="choice-cta">
             {{ t('login_page.choose', { name: product.name }) }}
-            <v-icon icon="mdi-arrow-right" size="16" />
+            <Icon name="mdi-arrow-right" size="16" />
           </span>
         </a>
       </div>
 
       <p v-else class="empty-note text-center">{{ t('login_page.no_products') }}</p>
-    </v-container>
+    </Container>
   </section>
 </template>
 
@@ -79,16 +79,16 @@
     gap: 12px;
     padding: 32px 28px;
     border-radius: 22px;
-    background: rgb(var(--v-theme-surface));
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.07);
-    box-shadow: 0 14px 32px rgba(var(--v-theme-on-surface), 0.07);
+    background: var(--card);
+    border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+    box-shadow: 0 14px 32px color-mix(in srgb, var(--foreground) 7%, transparent);
     text-decoration: none;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
   .product-choice-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 44px rgba(var(--v-theme-on-surface), 0.1);
+    box-shadow: 0 20px 44px color-mix(in srgb, var(--foreground) 10%, transparent);
   }
 
   .logo-wrap {
@@ -123,6 +123,6 @@
   }
 
   .empty-note {
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
   }
 </style>

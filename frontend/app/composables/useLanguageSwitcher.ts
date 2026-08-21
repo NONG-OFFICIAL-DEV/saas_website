@@ -7,7 +7,7 @@ interface LanguageOption {
 }
 
 export function useLanguageSwitcher() {
-  const { t, locale } = useI18n()
+  const { t, locale, setLocale } = useI18n()
 
   const menuOpen = ref(false)
 
@@ -29,7 +29,10 @@ export function useLanguageSwitcher() {
   const currentLang = computed(() => languages.value.find((l) => l.code === locale.value) ?? languages.value[0]!)
 
   function selectLang(code: string) {
-    locale.value = code as typeof locale.value
+    // setLocale() (not locale.value = code) — with lazy-loaded locale
+    // messages, direct assignment skips the async import that fetches the
+    // target locale's JSON, leaving every t() call unresolved (raw keys).
+    setLocale(code as Parameters<typeof setLocale>[0])
     menuOpen.value = false
   }
 

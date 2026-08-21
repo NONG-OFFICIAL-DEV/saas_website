@@ -39,17 +39,17 @@
   .toc-link {
     padding: 5px 0 5px 12px;
     font-size: 0.82rem;
-    color: rgba(var(--v-theme-on-surface), 0.6);
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
     text-decoration: none;
     border-left: 2px solid transparent;
   }
   .toc-link:hover {
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
   }
   .toc-link.active {
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     font-weight: 700;
-    border-left-color: rgb(var(--v-theme-primary));
+    border-left-color: var(--primary);
   }
   .toc-level-3 {
     padding-left: 22px;

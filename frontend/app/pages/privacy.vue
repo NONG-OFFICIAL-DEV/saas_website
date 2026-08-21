@@ -2,13 +2,13 @@
   <div class="legal-page">
     <div class="legal-inner">
       <NuxtLink to="/" class="back-link">
-        <v-icon icon="mdi-arrow-left" size="16" />
+        <Icon name="mdi-arrow-left" size="16" />
         {{ t('button.back_to_home') }}
       </NuxtLink>
 
       <div class="legal-header">
         <div class="legal-icon privacy-icon">
-          <v-icon icon="mdi-shield-lock-outline" size="28" />
+          <Icon name="mdi-shield-lock-outline" size="28" />
         </div>
         <h1 class="legal-title">{{ t('common.privacy_policy') }}</h1>
         <p class="legal-date">
@@ -120,7 +120,7 @@
     align-items: center;
     gap: 6px;
     font-size: 0.84rem;
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     text-decoration: none;
     margin-bottom: 40px;
     font-weight: 600;
@@ -138,8 +138,8 @@
     width: 52px;
     height: 52px;
     border-radius: 14px;
-    background: rgba(var(--v-theme-primary), 0.08);
-    color: rgb(var(--v-theme-primary));
+    background: color-mix(in srgb, var(--primary) 8%, transparent);
+    color: var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -163,8 +163,8 @@
   }
 
   .legal-toc {
-    background: rgba(var(--v-theme-on-surface), 0.03);
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.07);
+    background: color-mix(in srgb, var(--foreground) 3%, transparent);
+    border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
     border-radius: 14px;
     padding: 18px 22px;
     margin-bottom: 44px;
@@ -186,7 +186,7 @@
   }
   .toc-list li a {
     font-size: 0.84rem;
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     text-decoration: none;
     font-weight: 600;
   }
@@ -202,12 +202,12 @@
     font-size: 1.05rem;
     font-weight: 800;
     margin-bottom: 12px;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
   }
   .legal-section p {
     font-size: 0.9rem;
     line-height: 1.85;
-    color: rgba(var(--v-theme-on-surface), 0.7);
+    color: color-mix(in srgb, var(--foreground) 70%, transparent);
     margin-bottom: 10px;
   }
   .legal-bullets {
@@ -220,23 +220,23 @@
   .legal-bullets li {
     font-size: 0.88rem;
     line-height: 1.7;
-    color: rgba(var(--v-theme-on-surface), 0.68);
+    color: color-mix(in srgb, var(--foreground) 68%, transparent);
   }
 
   .legal-footer {
     margin-top: 60px;
     padding-top: 24px;
-    border-top: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    border-top: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
     font-size: 0.84rem;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
   }
   .link-primary {
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     font-weight: 700;
     text-decoration: none;
   }

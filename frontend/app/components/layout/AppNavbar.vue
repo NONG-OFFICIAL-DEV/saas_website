@@ -89,39 +89,26 @@
           </Transition>
         </div>
 
-        <ThemeToggle class="d-none d-md-flex" />
+        <ThemeToggle class="hidden md:flex" />
 
         <!-- Auth actions -->
-        <v-btn
-          to="/login"
-          variant="text"
-          rounded="lg"
-          size="small"
-          class="d-none d-md-flex"
-        >
+        <Button as="NuxtLink" to="/login" variant="ghost" size="sm" class="hidden md:flex">
           {{ t('button.log_in') }}
-        </v-btn>
-        <v-btn
-          to="/get-started"
-          color="primary"
-          rounded="lg"
-          variant="flat"
-          size="small"
-          class="cta-nav-btn d-none d-md-flex px-5"
-        >
+        </Button>
+        <Button as="NuxtLink" to="/get-started" size="sm" class="cta-nav-btn hidden md:flex px-5">
           {{ t('button.get_started') }}
-        </v-btn>
+        </Button>
 
         <!-- Hamburger (mobile) -->
-        <v-btn
-          :icon="mobileOpen ? 'mdi-close' : 'mdi-menu'"
+        <Button
+          variant="ghost"
+          size="icon"
+          class="md:hidden"
           :aria-label="mobileOpen ? t('common.close_menu') : t('common.open_menu')"
-          variant="text"
-          size="small"
-          rounded="lg"
-          class="d-md-none"
           @click="mobileOpen = !mobileOpen"
-        />
+        >
+          <Icon :name="mobileOpen ? 'mdi-close' : 'mdi-menu'" size="20" />
+        </Button>
       </div>
     </div>
 
@@ -137,14 +124,12 @@
 </template>
 
 <script setup lang="ts">
-  import { useTheme } from 'vuetify'
+  import { Button } from '~/components/ui/button'
 
   const { t } = useI18n()
-  const theme = useTheme()
+  const { isDark } = useColorMode()
   const { menuOpen: langMenuOpen, languages, currentLang, selectLang, locale } = useLanguageSwitcher()
   const { sections } = useNavSections()
-
-  const isDark = computed(() => theme.global.name.value === 'dark')
 
   const mobileOpen = ref(false)
   const isScrolled = ref(false)
@@ -171,10 +156,10 @@
     right: 0;
     z-index: 1000;
     height: 68px;
-    background: rgba(var(--v-theme-surface), 0.82);
+    background: color-mix(in srgb, var(--card) 82%, transparent);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.06);
+    border-bottom: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
     transition: box-shadow 0.25s ease;
   }
   .glass-nav.scrolled {
@@ -223,14 +208,14 @@
   .nav-link {
     font-size: 0.875rem;
     font-weight: 600;
-    color: rgba(var(--v-theme-on-surface), 0.6);
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
     text-decoration: none;
     transition: color 0.15s;
     cursor: pointer;
   }
   .nav-link:hover,
   .nav-link.active {
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
   }
 
   /* ── Controls ── */
@@ -249,12 +234,12 @@
     align-items: center;
     gap: 6px;
     padding: 5px 12px 5px 6px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.1);
+    border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
     border-radius: 999px;
-    background: rgba(var(--v-theme-on-surface), 0.04);
+    background: color-mix(in srgb, var(--foreground) 4%, transparent);
     font-size: 0.75rem;
     font-weight: 700;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     cursor: pointer;
   }
   .flag-img {
@@ -276,10 +261,10 @@
     top: calc(100% + 10px);
     right: 0;
     min-width: 150px;
-    background: rgb(var(--v-theme-surface));
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+    background: var(--card);
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     border-radius: 16px;
-    box-shadow: 0 14px 34px rgba(var(--v-theme-on-surface), 0.14);
+    box-shadow: 0 14px 34px color-mix(in srgb, var(--foreground) 14%, transparent);
     padding: 6px;
     z-index: 2000;
   }
@@ -293,17 +278,17 @@
     border: none;
     background: transparent;
     cursor: pointer;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     font-size: 0.85rem;
     text-align: left;
   }
   .lang-option:hover {
-    background: rgba(var(--v-theme-primary), 0.08);
+    background: color-mix(in srgb, var(--primary) 8%, transparent);
   }
   .lang-option.active {
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     font-weight: 700;
-    background: rgba(var(--v-theme-primary), 0.05);
+    background: color-mix(in srgb, var(--primary) 5%, transparent);
   }
 
   /* Transitions */

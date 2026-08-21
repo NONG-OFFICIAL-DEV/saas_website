@@ -1,6 +1,6 @@
 <template>
   <section class="section-pad get-started">
-    <v-container>
+    <Container>
       <div class="header text-center" data-aos="fade-up">
         <span class="section-tag">{{ t('get_started_page.tag') }}</span>
         <h1 class="section-title">{{ t('get_started_page.title') }}</h1>
@@ -18,7 +18,7 @@
         >
           <div class="logo-wrap">
             <img v-if="product.logo_url" :src="product.logo_url" :alt="product.name" class="logo-img" />
-            <v-icon v-else icon="mdi-apps" size="28" />
+            <Icon v-else name="mdi-apps" size="28" />
           </div>
           <h3 class="product-name">{{ product.name }}</h3>
           <p class="product-tagline">{{ product.tagline || product.summary }}</p>
@@ -28,7 +28,7 @@
             class="choice-cta"
           >
             {{ t('get_started_page.choose', { name: product.name }) }}
-            <v-icon icon="mdi-arrow-right" size="16" />
+            <Icon name="mdi-arrow-right" size="16" />
           </component>
         </div>
       </div>
@@ -38,7 +38,7 @@
           {{ t('get_started_page.explore_more') }}
         </NuxtLink>
       </div>
-    </v-container>
+    </Container>
   </section>
 </template>
 
@@ -95,14 +95,14 @@
     gap: 12px;
     padding: 32px 28px;
     border-radius: 22px;
-    background: rgb(var(--v-theme-surface));
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.07);
-    box-shadow: 0 14px 32px rgba(var(--v-theme-on-surface), 0.07);
+    background: var(--card);
+    border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+    box-shadow: 0 14px 32px color-mix(in srgb, var(--foreground) 7%, transparent);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
   .product-choice-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 44px rgba(var(--v-theme-on-surface), 0.1);
+    box-shadow: 0 20px 44px color-mix(in srgb, var(--foreground) 10%, transparent);
   }
 
   .logo-wrap {
@@ -128,7 +128,7 @@
   }
   .product-tagline {
     font-size: 0.88rem;
-    color: rgba(var(--v-theme-on-surface), 0.62);
+    color: color-mix(in srgb, var(--foreground) 62%, transparent);
     line-height: 1.6;
     margin: 0;
     flex-grow: 1;
@@ -155,7 +155,7 @@
   .explore-link {
     font-size: 0.9rem;
     font-weight: 700;
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     text-decoration: none;
   }
   .explore-link:hover {

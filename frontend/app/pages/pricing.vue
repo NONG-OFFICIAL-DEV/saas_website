@@ -1,6 +1,6 @@
 <template>
   <section class="section-pad">
-    <v-container>
+    <Container>
       <div class="hub-header text-center" data-aos="fade-up">
         <span class="section-tag">{{ t('pricing_hub.tag') }}</span>
         <h1 class="section-title">{{ t('pricing_hub.title') }}</h1>
@@ -20,7 +20,7 @@
           <div class="teaser-top">
             <div class="logo-wrap">
               <img v-if="product.logo_url" :src="product.logo_url" :alt="product.name" class="logo-img" />
-              <v-icon v-else icon="mdi-apps" size="26" />
+              <Icon v-else name="mdi-apps" size="26" />
             </div>
             <span class="status-chip" :class="`status-chip--${product.status}`">
               {{ t(`common.status.${product.status}`) }}
@@ -30,11 +30,11 @@
           <p class="product-tagline">{{ product.tagline || product.summary }}</p>
           <div class="teaser-cta">
             <span>{{ t('pricing_hub.view_plans') }}</span>
-            <v-icon icon="mdi-arrow-right" size="16" />
+            <Icon name="mdi-arrow-right" size="16" />
           </div>
         </NuxtLink>
       </div>
-    </v-container>
+    </Container>
   </section>
 </template>
 
@@ -75,16 +75,16 @@
     gap: 12px;
     padding: 30px 28px;
     border-radius: 22px;
-    background: rgb(var(--v-theme-surface));
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.07);
-    box-shadow: 0 14px 32px rgba(var(--v-theme-on-surface), 0.07);
+    background: var(--card);
+    border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+    box-shadow: 0 14px 32px color-mix(in srgb, var(--foreground) 7%, transparent);
     text-decoration: none;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
   .pricing-teaser-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 20px 44px rgba(var(--v-theme-on-surface), 0.1);
+    box-shadow: 0 20px 44px color-mix(in srgb, var(--foreground) 10%, transparent);
   }
 
   .teaser-top {
@@ -117,16 +117,16 @@
     border-radius: 999px;
   }
   .status-chip--live {
-    background: rgba(var(--v-theme-success), 0.14);
-    color: rgb(var(--v-theme-success));
+    background: color-mix(in srgb, var(--success) 14%, transparent);
+    color: var(--success);
   }
   .status-chip--beta {
-    background: rgba(var(--v-theme-info), 0.14);
-    color: rgb(var(--v-theme-info));
+    background: color-mix(in srgb, var(--info) 14%, transparent);
+    color: var(--info);
   }
   .status-chip--coming_soon {
-    background: rgba(var(--v-theme-on-surface), 0.08);
-    color: rgba(var(--v-theme-on-surface), 0.55);
+    background: color-mix(in srgb, var(--foreground) 8%, transparent);
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
   }
 
   .product-name {
@@ -136,7 +136,7 @@
   }
   .product-tagline {
     font-size: 0.87rem;
-    color: rgba(var(--v-theme-on-surface), 0.62);
+    color: color-mix(in srgb, var(--foreground) 62%, transparent);
     line-height: 1.6;
     margin: 0;
   }

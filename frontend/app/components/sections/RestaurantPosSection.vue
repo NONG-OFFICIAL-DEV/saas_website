@@ -1,26 +1,26 @@
 <template>
   <section class="section-pad section-tint-sky" id="pos">
-    <v-container>
-      <v-row align="center">
+    <Container>
+      <Row align="center">
         <!-- ── Text column ── -->
-        <v-col cols="12" md="5" data-aos="fade-right">
+        <Col cols="12" md="5" data-aos="fade-right">
           <div class="section-tag">{{ t('pos.tag') }}</div>
           <h2 class="section-title">{{ t('pos.title') }}</h2>
           <p class="section-sub mb-7">{{ t('pos.sub') }}</p>
           <FeatureChecks :items="checks" />
-        </v-col>
+        </Col>
 
         <!-- ── Visual column ── -->
-        <v-col cols="12" md="7" data-aos="fade-left" data-aos-delay="100">
+        <Col cols="12" md="7" data-aos="fade-left" data-aos-delay="100">
           <VisualWrapper color="indigo">
             <div class="pos-mock">
               <div class="pos-header">
                 <span class="pos-title">
-                  <v-icon icon="mdi-table-furniture" size="16" class="mr-1" color="#6366f1" />
+                  <Icon name="mdi-table-furniture" size="16" class="mr-1" color="#6366f1" />
                   Table Overview
                 </span>
                 <span class="pos-badge">
-                  <v-icon icon="mdi-circle" size="8" class="mr-1" color="#22c55e" />
+                  <Icon name="mdi-circle" size="8" class="mr-1" color="#22c55e" />
                   Live
                 </span>
               </div>
@@ -49,9 +49,9 @@
               </div>
             </div>
           </VisualWrapper>
-        </v-col>
-      </v-row>
-    </v-container>
+        </Col>
+      </Row>
+    </Container>
   </section>
 </template>
 

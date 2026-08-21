@@ -1,6 +1,6 @@
 <template>
   <section class="section-pad section-tint-sky" id="products">
-    <v-container>
+    <Container>
       <div class="text-center mb-10" data-aos="fade-up">
         <span class="section-tag">{{ t('home.products_teaser.tag') }}</span>
         <h2 class="section-title">{{ t('home.products_teaser.title') }}</h2>
@@ -20,20 +20,18 @@
       </div>
 
       <div class="text-center mt-10" data-aos="fade-up">
-        <v-btn
-          variant="outlined"
-          rounded="lg"
-          to="/products"
-          append-icon="mdi-arrow-right"
-        >
+        <Button as="NuxtLink" variant="outline" to="/products">
           {{ t('button.view_all_products') }}
-        </v-btn>
+          <Icon name="mdi-arrow-right" size="18" />
+        </Button>
       </div>
-    </v-container>
+    </Container>
   </section>
 </template>
 
 <script setup lang="ts">
+  import { Button } from '~/components/ui/button'
+
   // Data is fetched by the parent page (app/pages/index.vue) via an awaited
   // useAsyncData call, so it's present in the server-rendered HTML — this
   // component only ever reads the store reactively.

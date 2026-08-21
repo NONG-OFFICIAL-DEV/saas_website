@@ -1,33 +1,28 @@
 <template>
-  <v-dialog v-model="dialog" :max-width="options.width" @keydown.esc="cancel">
-    <v-card width="470">
-      <v-card-title class="bg-red d-flex">
-        <strong>Confirm Deletion</strong>
-      </v-card-title>
-      <v-card-text
-        v-show="!!message"
-        class="capitalize-first-letter pt-6 pb-4"
-        v-html="message"
-      />
-      <v-card-actions class="pa-4">
-        <v-spacer />
-        <v-btn
-          elevation="0"
-          ref="btnNo"
-          @click.native="cancel"
-          variant="tonal"
-        >
+  <Dialog :open="dialog" @update:open="onOpenChange">
+    <DialogContent class="w-[470px] max-w-[calc(100%-2rem)] p-0 gap-0" :show-close-button="false">
+      <DialogHeader class="bg-destructive px-4 py-3 rounded-t-xl">
+        <DialogTitle class="text-destructive-foreground">
+          <strong>Confirm Deletion</strong>
+        </DialogTitle>
+      </DialogHeader>
+      <DialogDescription v-show="!!message" class="capitalize-first-letter px-4 pt-6 pb-4" v-html="message" />
+      <div class="flex justify-end gap-2 p-4">
+        <Button variant="secondary" @click="cancel">
           {{ $t('button.cancel') }}
-        </v-btn>
-        <v-btn elevation="0" class="bg-red" @click.native="agree">
+        </Button>
+        <Button class="bg-destructive text-destructive-foreground hover:bg-destructive/90" @click="agree">
           {{ $t('button.yes') }}
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+        </Button>
+      </div>
+    </DialogContent>
+  </Dialog>
 </template>
 
 <script lang="ts">
+  import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '~/components/ui/dialog'
+  import { Button } from '~/components/ui/button'
+
   interface ConfirmOptions {
     type?: string
     width?: number
@@ -37,9 +32,11 @@
 
   export default {
     name: 'ConfirmDialog',
+    components: { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Button },
     data() {
       return {
         dialog: false,
+        resolving: false,
         agreeCallback: null as (() => void | Promise<void>) | null,
         cancelCallback: null as (() => void | Promise<void>) | null,
         message: null as string | null,
@@ -53,15 +50,6 @@
       }
     },
     methods: {
-      bgColor() {
-        const colors: Record<string, string> = {
-          info: '#233F740F',
-          error: '#FF52520F',
-          warning: '#FFC1070F'
-        }
-
-        return colors[this.options.type || 'info']
-      },
       open({ title, message, options, agree = () => {}, cancel = () => {} }: {
         title?: string
         message?: string
@@ -77,12 +65,28 @@
         this.cancelCallback = cancel
       },
       async agree() {
+        this.resolving = true
         if (this.agreeCallback) await this.agreeCallback()
         this.dialog = false
+        this.resolving = false
       },
       async cancel() {
+        this.resolving = true
         if (this.cancelCallback) await this.cancelCallback()
         this.dialog = false
+        this.resolving = false
+      },
+      // Fires on Escape / outside-click too (Reka UI's Dialog), not just
+      // the explicit Cancel button — the original Vuetify dialog only
+      // wired Escape to cancel(), backdrop-click silently closed with no
+      // callback. Treating outside-click the same as Escape here is a
+      // minor, harmless behavior widening (cancelCallback defaults to a
+      // no-op everywhere it's used), not a functional regression.
+      onOpenChange(value: boolean) {
+        this.dialog = value
+        if (!value && !this.resolving) {
+          this.cancelCallback?.()
+        }
       }
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <section class="section-pad">
-    <v-container>
+    <Container>
       <div class="hub-header text-center" data-aos="fade-up">
         <span class="section-tag">{{ t('blog_hub.tag') }}</span>
         <h1 class="section-title">{{ t('blog_hub.title') }}</h1>
@@ -23,17 +23,17 @@
             <p class="post-excerpt">{{ post.excerpt }}</p>
             <div class="post-cta">
               {{ t('button.learn_more') }}
-              <v-icon icon="mdi-arrow-right" size="16" />
+              <Icon name="mdi-arrow-right" size="16" />
             </div>
           </div>
         </NuxtLink>
       </div>
 
       <div v-else class="empty-state">
-        <v-icon icon="mdi-newspaper-variant-outline" size="40" />
+        <Icon name="mdi-newspaper-variant-outline" size="40" />
         <p>{{ t('blog_hub.empty') }}</p>
       </div>
-    </v-container>
+    </Container>
   </section>
 </template>
 
@@ -74,17 +74,17 @@
     display: flex;
     flex-direction: column;
     border-radius: 20px;
-    background: rgb(var(--v-theme-surface));
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.07);
-    box-shadow: 0 12px 28px rgba(var(--v-theme-on-surface), 0.06);
+    background: var(--card);
+    border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--foreground) 6%, transparent);
     text-decoration: none;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--foreground);
     overflow: hidden;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
   .post-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 44px rgba(var(--v-theme-on-surface), 0.1);
+    box-shadow: 0 20px 44px color-mix(in srgb, var(--foreground) 10%, transparent);
   }
 
   .post-cover {
@@ -105,7 +105,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: rgba(var(--v-theme-on-surface), 0.45);
+    color: color-mix(in srgb, var(--foreground) 45%, transparent);
   }
   .post-title {
     font-size: 1.05rem;
@@ -114,7 +114,7 @@
   }
   .post-excerpt {
     font-size: 0.86rem;
-    color: rgba(var(--v-theme-on-surface), 0.62);
+    color: color-mix(in srgb, var(--foreground) 62%, transparent);
     line-height: 1.6;
     margin: 0;
     flex-grow: 1;
@@ -125,7 +125,7 @@
     gap: 6px;
     font-size: 0.82rem;
     font-weight: 700;
-    color: rgb(var(--v-theme-primary));
+    color: var(--primary);
     margin-top: 6px;
   }
 
@@ -135,6 +135,6 @@
     align-items: center;
     gap: 10px;
     padding: 64px 0;
-    color: rgba(var(--v-theme-on-surface), 0.5);
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
   }
 </style>

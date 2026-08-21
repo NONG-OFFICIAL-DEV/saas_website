@@ -1,6 +1,6 @@
 <template>
   <section class="section-pad section-tint-mint" id="benefits">
-    <v-container>
+    <Container>
       <div class="text-center mb-12" data-aos="fade-up">
         <span class="section-tag">{{ t('home.benefits.eyebrow') }}</span>
         <h2 class="section-title">{{ t('home.benefits.title') }}</h2>
@@ -15,13 +15,13 @@
           :data-aos-delay="(i % 4) * 80"
         >
           <div class="benefit-icon">
-            <v-icon :icon="b.icon" size="20" />
+            <Icon :name="b.icon" size="20" />
           </div>
           <h3 class="benefit-title">{{ t(`home.benefits.items.${b.key}.title`) }}</h3>
           <p class="benefit-desc">{{ t(`home.benefits.items.${b.key}.desc`) }}</p>
         </div>
       </div>
-    </v-container>
+    </Container>
   </section>
 </template>
 
@@ -55,8 +55,8 @@
   height: 44px;
   margin: 0 auto 14px;
   border-radius: 12px;
-  background: rgba(var(--v-theme-primary), 0.1);
-  color: rgb(var(--v-theme-primary));
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+  color: var(--primary);
   display: flex;
   align-items: center;
   justify-content: center;
