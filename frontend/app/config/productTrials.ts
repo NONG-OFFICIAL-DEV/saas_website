@@ -19,12 +19,12 @@ export type TrialLink = { href: string; external: true } | { to: string }
 
 export function getTrialLink(slug: string, planCode?: string): TrialLink {
   const config = useRuntimeConfig()
-  const adminAppUrl = config.public.adminAppUrl || 'https://admin.nexstacktech.com'
+  const smartStoreAppUrl = config.public.smartStoreAppUrl || 'https://admin.nexstacktech.com'
   const studioAppUrl = config.public.studioAppUrl || 'https://photo-studio.nexstacktech.com'
 
   if (slug === 'nexstack-pos') {
     return {
-      href: `${adminAppUrl}/register${planCode ? `?plan=${planCode}` : ''}`,
+      href: `${smartStoreAppUrl}/register${planCode ? `?plan=${planCode}` : ''}`,
       external: true
     }
   }
@@ -46,10 +46,10 @@ export function getTrialLink(slug: string, planCode?: string): TrialLink {
  */
 export function getLoginLink(slug: string): string | null {
   const config = useRuntimeConfig()
-  const adminAppUrl = config.public.adminAppUrl || 'https://admin.nexstacktech.com'
+  const smartStoreAppUrl = config.public.smartStoreAppUrl || 'https://admin.nexstacktech.com'
   const studioAppUrl = config.public.studioAppUrl || 'https://photo-studio.nexstacktech.com'
 
-  if (slug === 'nexstack-pos') return `${adminAppUrl}/login`
+  if (slug === 'nexstack-pos') return `${smartStoreAppUrl}/login`
   if (slug === 'studio-management') return `${studioAppUrl}/login`
   return null
 }

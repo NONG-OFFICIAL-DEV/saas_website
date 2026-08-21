@@ -20,7 +20,7 @@ const api = axios.create({
 // of its own.
 api.interceptors.request.use(requestConfig => {
   const runtimeConfig = useRuntimeConfig()
-  requestConfig.baseURL = runtimeConfig.public.apiBaseUrl
+  requestConfig.baseURL = runtimeConfig.public.smartStoreApiUrl
 
   const loaderType = requestConfig.meta?.loader ?? 'skip'
   const token = import.meta.client ? localStorage.getItem('token') : null

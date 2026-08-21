@@ -1,3 +1,3 @@
 import http from './api'
 
-export const getAllPlansApi = () => http.get('/v1/public/plans')
+export const getSmartStorePlansApi = () => http.get('/v1/public/plans')

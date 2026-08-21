@@ -6,7 +6,7 @@
 // (see config/productTrials.ts), not on this site.
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getAllPlansApi } from '~/api/plans'
+import { getSmartStorePlansApi } from '~/api/plans'
 import type { PosPlan } from '~/types'
 
 export const usePosPlansStore = defineStore('posPlans', () => {
@@ -19,7 +19,7 @@ export const usePosPlansStore = defineStore('posPlans', () => {
     loading.value = true
     error.value = null
     try {
-      const { data } = await getAllPlansApi()
+      const { data } = await getSmartStorePlansApi()
       plans.value = data.data ?? []
     } catch (err: any) {
       error.value = err?.response?.data?.message ?? 'Failed to load plans'

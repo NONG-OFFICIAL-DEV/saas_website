@@ -57,12 +57,12 @@ export default defineNuxtConfig({
   // environment via container env vars (NUXT_PUBLIC_*), no rebuild needed.
   runtimeConfig: {
     public: {
-      apiBaseUrl: '',
-      adminAppUrl: 'https://admin.nexstacktech.com',
+      smartStoreApiUrl: '',
+      smartStoreAppUrl: 'https://admin.nexstacktech.com',
       cmsApiUrl: 'http://127.0.0.1:8000/api/v1',
       studioApiUrl: '',
       studioAppUrl: 'https://photo-studio.nexstacktech.com'
-    }
+    },
   },
 
   app: {
