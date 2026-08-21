@@ -5,12 +5,36 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-# =========================
-# 1. Build & Push Docker Images
-# =========================
 jobs:
+# =========================
+# 1. Detect what changed
+# =========================
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Path filter
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+            frontend:
+              - 'frontend/**'
+
+# =========================
+# 2. Build & Push Docker Images
+# =========================
   build-push:
     runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.backend == 'true' || needs.changes.outputs.frontend == 'true'
     env:
       IMAGE_BACKEND: ${{ secrets.DOCKERHUB_USERNAME }}/saas-website-backend
       IMAGE_WEBSERVER: ${{ secrets.DOCKERHUB_USERNAME }}/saas-website-webserver
@@ -27,6 +51,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build & Push backend
+        if: needs.changes.outputs.backend == 'true'
         run: |
           docker build \
             -t $IMAGE_BACKEND:latest \
@@ -37,6 +62,7 @@ jobs:
           docker push $IMAGE_BACKEND:$IMAGE_TAG
 
       - name: Build & Push webserver (nginx)
+        if: needs.changes.outputs.backend == 'true'
         run: |
           docker build \
             -t $IMAGE_WEBSERVER:latest \
@@ -52,6 +78,7 @@ jobs:
       # values are needed here. The server's docker-compose.yml supplies
       # them via env_file: ./frontend/.env.
       - name: Build & Push frontend
+        if: needs.changes.outputs.frontend == 'true'
         run: |
           docker build \
             -t $IMAGE_FRONTEND:latest \
@@ -62,11 +89,16 @@ jobs:
           docker push $IMAGE_FRONTEND:$IMAGE_TAG
 
 # =========================
-# 2. Deploy to server
+# 3. Deploy to server
 # =========================
   deploy:
     runs-on: ubuntu-latest
     needs: build-push
+    # build-push itself is skipped entirely when neither backend/ nor
+    # frontend/ changed (e.g. a docs-only commit) — deploy has nothing to
+    # do in that case either, so skip it the same way rather than running
+    # a pointless restart of already-up-to-date containers.
+    if: needs.build-push.result == 'success'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:20-alpine AS build-stage
+FROM node:22-alpine AS build-stage
 WORKDIR /app
 
 COPY package*.json ./
@@ -11,7 +11,7 @@ RUN npm run build
 # Nitro's node-server preset bundles everything the server needs into
 # .output/server (including its own node_modules) — no separate npm
 # install needed in this stage, just Node itself.
-FROM node:20-alpine
+FROM node:22-alpine
 WORKDIR /app
 
 ENV NODE_ENV=production
