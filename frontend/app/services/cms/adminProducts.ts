@@ -1,4 +1,4 @@
-import cmsApi from '~/services/cmsApi'
+import cmsApi from '~/services/cms/api'
 import type { Product } from '~/types'
 
 // Calls whose caller already renders its own loading/saving spinner — skip

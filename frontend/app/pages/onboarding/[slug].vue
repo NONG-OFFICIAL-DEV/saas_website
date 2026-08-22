@@ -155,7 +155,7 @@
   import { Input } from '~/components/ui/input'
   import { Label } from '~/components/ui/label'
   import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
-  import { getOnboardingBusinessTypes, provisionOnboarding } from '~/services/onboarding'
+  import { getOnboardingBusinessTypes, provisionOnboarding } from '~/services/cms/onboarding'
 
   const { t } = useI18n()
   const route = useRoute()

@@ -61,7 +61,7 @@
   import { Alert, AlertDescription } from '~/components/ui/alert'
   import { Badge } from '~/components/ui/badge'
   import { Button } from '~/components/ui/button'
-  import { listAllProducts, deleteProduct } from '~/services/adminProducts'
+  import { listAllProducts, deleteProduct } from '~/services/cms/adminProducts'
   import type { Product } from '~/types'
 
   const notify = useNotif()

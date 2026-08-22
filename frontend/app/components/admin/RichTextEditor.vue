@@ -38,7 +38,7 @@
   import Placeholder from '@tiptap/extension-placeholder'
   import { Callout } from './CalloutExtension'
   import { VideoEmbed } from './VideoEmbedExtension'
-  import { uploadProductMedia } from '~/services/adminProducts'
+  import { uploadProductMedia } from '~/services/cms/adminProducts'
 
   const props = withDefaults(
     defineProps<{

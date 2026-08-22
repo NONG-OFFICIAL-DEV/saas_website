@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getTestimonials } from '~/services/testimonials'
+import { getTestimonials } from '~/services/cms/testimonials'
 import type { Testimonial } from '~/types'
 
 export const useTestimonialsStore = defineStore('testimonials', () => {

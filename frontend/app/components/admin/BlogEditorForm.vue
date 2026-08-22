@@ -113,8 +113,8 @@
   // Explicit import — Vuetify also exports its own `useDate` (date-adapter
   // composable) which Nuxt's auto-import would otherwise resolve instead.
   import { useDate } from '~/composables/useDate'
-  import { getBlogPostForEdit, createBlogPost, updateBlogPost } from '~/services/adminBlog'
-  import { uploadProductMedia } from '~/services/adminProducts'
+  import { getBlogPostForEdit, createBlogPost, updateBlogPost } from '~/services/cms/adminBlog'
+  import { uploadProductMedia } from '~/services/cms/adminProducts'
 
   const notify = useNotif()
   const route = useRoute()

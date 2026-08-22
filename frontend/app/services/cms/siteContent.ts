@@ -1,4 +1,4 @@
-import cmsApi from '~/services/cmsApi'
+import cmsApi from '~/services/cms/api'
 
 // The backend splits each block into non-translatable `data` (emails,
 // phones, URLs) and translatable `content` (headlines, bios, labels) — see

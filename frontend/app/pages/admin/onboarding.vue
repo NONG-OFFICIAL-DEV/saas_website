@@ -62,7 +62,7 @@
   import { Badge } from '~/components/ui/badge'
   import { Button } from '~/components/ui/button'
   import { useDate } from '~/composables/useDate'
-  import { listOnboardingSubmissions, deleteOnboardingSubmission } from '~/services/adminOnboarding'
+  import { listOnboardingSubmissions, deleteOnboardingSubmission } from '~/services/cms/adminOnboarding'
   import type { OnboardingSubmission } from '~/types'
 
   const notify = useNotif()

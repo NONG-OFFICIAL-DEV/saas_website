@@ -400,8 +400,8 @@
   import { Label } from '~/components/ui/label'
   import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
   import { Textarea } from '~/components/ui/textarea'
-  import { getHero, updateHero, getAbout, updateAbout, getFooter, updateFooter } from '~/services/siteContent'
-  import { uploadProductMedia } from '~/services/adminProducts'
+  import { getHero, updateHero, getAbout, updateAbout, getFooter, updateFooter } from '~/services/cms/siteContent'
+  import { uploadProductMedia } from '~/services/cms/adminProducts'
   import type { HeroContent, AboutContent, FooterContent } from '~/types'
 
   // This editor always keeps these array fields populated (seeded below,

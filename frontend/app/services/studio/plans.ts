@@ -1,4 +1,4 @@
-import studioApi from '~/services/studioApi'
+import studioApi from '~/services/studio/api'
 import type { StudioPlan } from '~/types'
 
 export async function getStudioPlans(): Promise<StudioPlan[]> {

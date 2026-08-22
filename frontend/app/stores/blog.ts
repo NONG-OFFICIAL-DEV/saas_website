@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getBlogPosts, getBlogPostBySlug } from '~/services/blog'
+import { getBlogPosts, getBlogPostBySlug } from '~/services/cms/blog'
 import type { BlogPost } from '~/types'
 
 export const useBlogStore = defineStore('blog', () => {

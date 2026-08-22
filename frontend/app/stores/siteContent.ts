@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getHero, getAbout, getFooter } from '~/services/siteContent'
+import { getHero, getAbout, getFooter } from '~/services/cms/siteContent'
 import type { HeroContent, AboutContent, FooterContent } from '~/types'
 
 // Mirrors the CMS backend's seeded content — used if the API is

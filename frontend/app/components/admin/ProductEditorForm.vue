@@ -354,7 +354,7 @@
     updateFaq,
     deleteFaq,
     uploadProductMedia
-  } from '~/services/adminProducts'
+  } from '~/services/cms/adminProducts'
   import type { ProductFeature, ProductScreenshot, ProductFaq } from '~/types'
 
   const notify = useNotif()

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import cmsApi from '~/services/cmsApi'
+import cmsApi from '~/services/cms/api'
 import { NO_OVERLAY } from '~/types/api'
 import type { AdminUser } from '~/types'
 

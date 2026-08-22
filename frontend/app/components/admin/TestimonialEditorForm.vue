@@ -114,8 +114,8 @@
   import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
   import { Switch } from '~/components/ui/switch'
   import { Textarea } from '~/components/ui/textarea'
-  import { getTestimonialForEdit, createTestimonial, updateTestimonial } from '~/services/adminTestimonials'
-  import { listAllProducts, uploadProductMedia } from '~/services/adminProducts'
+  import { getTestimonialForEdit, createTestimonial, updateTestimonial } from '~/services/cms/adminTestimonials'
+  import { listAllProducts, uploadProductMedia } from '~/services/cms/adminProducts'
   import type { Product } from '~/types'
 
   const notify = useNotif()

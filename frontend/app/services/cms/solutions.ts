@@ -1,4 +1,4 @@
-import cmsApi from '~/services/cmsApi'
+import cmsApi from '~/services/cms/api'
 import type { Solution } from '~/types'
 
 const NO_OVERLAY = { meta: { loader: 'skip' as const } }

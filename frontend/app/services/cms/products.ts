@@ -1,4 +1,4 @@
-import cmsApi from '~/services/cmsApi'
+import cmsApi from '~/services/cms/api'
 import type { Product } from '~/types'
 
 // Vue components (ProductDetail.vue) expect the old relation key names —

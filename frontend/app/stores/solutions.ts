@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getSolutions, getSolutionBySlug } from '~/services/solutions'
+import { getSolutions, getSolutionBySlug } from '~/services/cms/solutions'
 import type { Solution } from '~/types'
 
 export const useSolutionsStore = defineStore('solutions', () => {

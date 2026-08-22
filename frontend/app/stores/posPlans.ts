@@ -6,7 +6,7 @@
 // (see config/productTrials.ts), not on this site.
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getSmartStorePlansApi } from '~/api/plans'
+import { getSmartStorePlansApi } from '~/services/smartStore/plans'
 import type { PosPlan } from '~/types'
 
 export const usePosPlansStore = defineStore('posPlans', () => {

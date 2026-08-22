@@ -59,7 +59,7 @@
   import { Alert, AlertDescription } from '~/components/ui/alert'
   import { Badge } from '~/components/ui/badge'
   import { Button } from '~/components/ui/button'
-  import { listAllDocArticles, deleteDocArticle } from '~/services/adminDocumentation'
+  import { listAllDocArticles, deleteDocArticle } from '~/services/cms/adminDocumentation'
   import type { DocumentationArticle } from '~/types'
 
   const notify = useNotif()

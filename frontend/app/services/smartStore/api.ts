@@ -1,12 +1,6 @@
 import axios from 'axios'
 import { useLoadingStore } from '~/stores/loadingStore'
 
-// Smart Store (Nexstack POS) — the real product's own live backend, entirely
-// separate from this repo's CMS (services/cmsApi.ts) and Studio
-// (services/studioApi.ts). Auth, live subscription plans/billing (plans.ts)
-// only — the only source of truth for actual money/checkout.
-// baseURL resolved inside the interceptor for the same reason as
-// services/cmsApi.ts — see that file's comment.
 const api = axios.create({
   headers: {
     'Access-Control-Allow-Origin': '*',

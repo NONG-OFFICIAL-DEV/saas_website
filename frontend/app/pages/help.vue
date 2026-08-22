@@ -56,7 +56,7 @@
 <script setup lang="ts">
   import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion'
   import { Button } from '~/components/ui/button'
-  import { getProductBySlug } from '~/services/products'
+  import { getProductBySlug } from '~/services/cms/products'
   import type { ProductFaq } from '~/types'
 
   const { t } = useI18n()

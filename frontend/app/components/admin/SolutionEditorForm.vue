@@ -105,8 +105,8 @@
   import { Label } from '~/components/ui/label'
   import { Switch } from '~/components/ui/switch'
   import { Textarea } from '~/components/ui/textarea'
-  import { getSolutionForEdit, createSolution, updateSolution } from '~/services/adminSolutions'
-  import { listAllProducts } from '~/services/adminProducts'
+  import { getSolutionForEdit, createSolution, updateSolution } from '~/services/cms/adminSolutions'
+  import { listAllProducts } from '~/services/cms/adminProducts'
   import type { Product } from '~/types'
 
   const notify = useNotif()

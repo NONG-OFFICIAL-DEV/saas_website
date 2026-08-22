@@ -103,8 +103,8 @@
   import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
   import { Switch } from '~/components/ui/switch'
   import { Textarea } from '~/components/ui/textarea'
-  import { getDocCategoryForEdit, createDocCategory, updateDocCategory, listAllDocCategories } from '~/services/adminDocumentation'
-  import { listAllProducts } from '~/services/adminProducts'
+  import { getDocCategoryForEdit, createDocCategory, updateDocCategory, listAllDocCategories } from '~/services/cms/adminDocumentation'
+  import { listAllProducts } from '~/services/cms/adminProducts'
   import type { Product, DocumentationCategory } from '~/types'
 
   const notify = useNotif()

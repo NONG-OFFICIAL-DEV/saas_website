@@ -140,8 +140,8 @@
     createDocArticle,
     updateDocArticle,
     listAllDocCategories
-  } from '~/services/adminDocumentation'
-  import { listAllProducts } from '~/services/adminProducts'
+  } from '~/services/cms/adminDocumentation'
+  import { listAllProducts } from '~/services/cms/adminProducts'
   import type { Product, DocumentationCategory } from '~/types'
 
   const STATUS_OPTIONS = ['draft', 'published', 'archived']

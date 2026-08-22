@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getDocumentationCategories, getDocumentationArticle, searchDocumentation } from '~/services/documentation'
+import { getDocumentationCategories, getDocumentationArticle, searchDocumentation } from '~/services/cms/documentation'
 import type { DocumentationCategory, DocumentationArticle, DocumentationSearchResult } from '~/types'
 
 export const useDocumentationStore = defineStore('documentation', () => {

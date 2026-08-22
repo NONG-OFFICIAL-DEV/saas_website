@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getStudioPlans } from '~/services/studioPlans'
+import { getStudioPlans } from '~/services/studio/plans'
 import type { StudioPlan } from '~/types'
 
 export const useStudioPlansStore = defineStore('studioPlans', () => {
