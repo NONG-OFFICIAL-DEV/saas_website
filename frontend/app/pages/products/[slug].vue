@@ -24,7 +24,7 @@
     >
       <Container>
         <Row align="center">
-          <Col cols="12" md="7" data-aos="fade-right">
+          <Col cols="12" md="7" data-aos="fade-up">
             <Badge class="status-chip mb-4">
               {{ t(`common.status.${product.status}`) }}
             </Badge>
@@ -42,7 +42,7 @@
             </div>
           </Col>
 
-          <Col cols="12" md="5" data-aos="fade-left">
+          <Col cols="12" md="5" data-aos="fade-up" data-aos-delay="100">
             <img
               v-if="product.hero_image_url"
               :src="product.hero_image_url"

@@ -3,7 +3,7 @@
     <Container>
       <Row align="center">
         <!-- ── Text column ── -->
-        <Col cols="12" md="5" data-aos="fade-right">
+        <Col cols="12" md="5" data-aos="fade-up">
           <div class="section-tag">{{ t('pos.tag') }}</div>
           <h2 class="section-title">{{ t('pos.title') }}</h2>
           <p class="section-sub mb-7">{{ t('pos.sub') }}</p>
@@ -11,7 +11,7 @@
         </Col>
 
         <!-- ── Visual column ── -->
-        <Col cols="12" md="7" data-aos="fade-left" data-aos-delay="100">
+        <Col cols="12" md="7" data-aos="fade-up" data-aos-delay="100">
           <VisualWrapper color="indigo">
             <div class="pos-mock">
               <div class="pos-header">

@@ -18,7 +18,7 @@
     <section class="section-pad hero">
       <Container>
         <Row align="center">
-          <Col cols="12" md="8" data-aos="fade-right">
+          <Col cols="12" md="8" data-aos="fade-up">
             <div class="icon-wrap mb-4">
               <Icon :name="solution.icon || 'mdi-apps'" size="30" />
             </div>

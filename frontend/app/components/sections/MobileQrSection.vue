@@ -2,10 +2,10 @@
   <section class="section-pad section-tint-mint" id="mobile">
     <Container>
       <Row align="center" reverse>
-        <Col cols="12" md="6" data-aos="fade-right" data-aos-delay="100">
+        <Col cols="12" md="6" data-aos="fade-up" data-aos-delay="100">
           <img class="qr_image" src="/images/qr_scan.webp" width="400" alt="" />
         </Col>
-        <Col cols="12" md="6" data-aos="fade-left">
+        <Col cols="12" md="6" data-aos="fade-up">
           <div class="section-tag">{{ t('scan_menu.tag') }}</div>
           <h2 class="section-title">{{ t('scan_menu.title') }}</h2>
           <p class="section-sub mb-7">{{ t('scan_menu.subtitle') }}</p>
