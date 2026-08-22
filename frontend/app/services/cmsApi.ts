@@ -29,7 +29,7 @@ const cmsApi = axios.create({
 // server-side too, so the token lookup must be guarded.
 cmsApi.interceptors.request.use(requestConfig => {
   const runtimeConfig = useRuntimeConfig()
-  requestConfig.baseURL = runtimeConfig.public.cmsApiUrl || 'http://127.0.0.1:8000/api/v1'
+  requestConfig.baseURL = runtimeConfig.public.cmsApiUrl || 'http://127.0.0.1:8000/api/v1' || 'https://www.nexstacktech.com/api/v1'
 
   const token = import.meta.client ? localStorage.getItem('cms_admin_token') : null
   if (token) {

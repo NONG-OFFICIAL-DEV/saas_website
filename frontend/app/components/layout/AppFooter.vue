@@ -97,7 +97,7 @@
         <ul class="footer-links">
           <li v-for="link in navLinks" :key="link.to || link.href">
             <component
-              :is="link.to ? 'NuxtLink' : 'a'"
+              :is="link.to ? NuxtLink : 'a'"
               :to="link.to"
               :href="link.href"
               class="footer-nav-link"
@@ -169,6 +169,8 @@
 </template>
 
 <script setup lang="ts">
+  import { NuxtLink } from '#components'
+
   const { t } = useI18n()
   const { isDark } = useColorMode()
   const productsStore = useProductsStore()

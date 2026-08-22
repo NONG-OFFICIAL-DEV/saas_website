@@ -23,7 +23,7 @@
           <h3 class="product-name">{{ product.name }}</h3>
           <p class="product-tagline">{{ product.tagline || product.summary }}</p>
           <component
-            :is="linkFor(product).href ? 'a' : 'NuxtLink'"
+            :is="linkFor(product).href ? 'a' : NuxtLink"
             v-bind="linkFor(product)"
             class="choice-cta"
           >
@@ -43,6 +43,7 @@
 </template>
 
 <script setup lang="ts">
+  import { NuxtLink } from '#components'
   import type { Product } from '~/types'
 
   const { t } = useI18n()

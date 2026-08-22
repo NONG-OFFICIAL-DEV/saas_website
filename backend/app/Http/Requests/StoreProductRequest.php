@@ -16,13 +16,12 @@ class StoreProductRequest extends FormRequest
         return [
             'slug' => ['required', 'string', 'max:150', 'unique:products,slug', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'],
             'status' => ['sometimes', 'in:live,beta,coming_soon'],
-            'cta_type' => ['sometimes', 'in:register,external_link,waitlist'],
+            'cta_type' => ['sometimes', 'in:register,external_link'],
             'cta_url' => ['nullable', 'string', 'max:255'],
             'accent_color' => ['sometimes', 'string', 'max:20'],
             'logo_url' => ['nullable', 'string', 'max:500'],
             'hero_image_url' => ['nullable', 'string', 'max:500'],
             'demo_video_url' => ['nullable', 'string', 'max:500'],
-            'lead_source' => ['nullable', 'string', 'max:100'],
             'sort_order' => ['sometimes', 'integer'],
             'is_published' => ['sometimes', 'boolean'],
 

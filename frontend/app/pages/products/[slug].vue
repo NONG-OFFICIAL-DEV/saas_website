@@ -138,7 +138,7 @@
     <!-- ── FAQ ── -->
     <ProductFaqSection :faqs="product.faqs" />
 
-    <!-- ── Final CTA / waitlist form ── -->
+    <!-- ── Final CTA ── -->
     <section id="cta" class="section-pad">
       <Container class="text-center">
         <h2 class="section-title" data-aos="fade-up">
@@ -146,36 +146,7 @@
         </h2>
 
         <div
-          v-if="product.cta_type === 'waitlist'"
-          class="waitlist-form"
-          data-aos="fade-up"
-        >
-          <form v-if="!waitlistSubmitted" @submit.prevent="submitWaitlist">
-            <Alert v-if="waitlistError" variant="destructive" class="mb-4 text-left">
-              <AlertDescription>{{ waitlistError }}</AlertDescription>
-            </Alert>
-            <Row dense class="mb-4">
-              <Col cols="12" sm="6" class="text-left flex flex-col gap-1.5">
-                <Label for="waitlist-name">{{ t('product_detail.name_label') }}</Label>
-                <Input id="waitlist-name" v-model="waitlist.name" required />
-              </Col>
-              <Col cols="12" sm="6" class="text-left flex flex-col gap-1.5">
-                <Label for="waitlist-email">{{ t('product_detail.email_label') }}</Label>
-                <Input id="waitlist-email" v-model="waitlist.email" type="email" required />
-              </Col>
-            </Row>
-            <Button type="submit" class="w-full" :disabled="waitlistLoading">
-              <Icon v-if="waitlistLoading" name="mdi-loading" class="animate-spin" size="18" />
-              {{ product.cta_label || t('button.join_waitlist') }}
-            </Button>
-          </form>
-          <Alert v-else class="border-success/30 bg-success/10 text-success">
-            <AlertDescription>{{ t('product_detail.waitlist_success') }}</AlertDescription>
-          </Alert>
-        </div>
-
-        <div
-          v-else-if="product.cta_type === 'external_link'"
+          v-if="product.cta_type === 'external_link'"
           data-aos="fade-up"
         >
           <Button
@@ -203,13 +174,10 @@ import type { Component } from 'vue'
 import { Alert, AlertDescription } from '~/components/ui/alert'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
-import { Input } from '~/components/ui/input'
-import { Label } from '~/components/ui/label'
 import RestaurantPosSection from '~/components/sections/RestaurantPosSection.vue'
 import InventorySection from '~/components/sections/InventorySection.vue'
 import MobileQrSection from '~/components/sections/MobileQrSection.vue'
 import { getTrialLink } from '~/config/productTrials'
-import { submitLead } from '~/api/leads'
 
 // Products with a guided in-house onboarding wizard skip straight to it;
 // anything else falls back to that product's own external signup (see
@@ -254,11 +222,6 @@ const finalCtaLink = computed(() => {
   return 'href' in link ? { href: link.href, target: '_blank', rel: 'noopener' } : { to: link.to }
 })
 
-const waitlist = ref({ name: '', email: '' })
-const waitlistLoading = ref(false)
-const waitlistSubmitted = ref(false)
-const waitlistError = ref<string | null>(null)
-
 // Registered before the data fetch below — useSeoMeta only needs to be
 // declared once with reactive getters, it doesn't need product data to
 // already be loaded. (Composable calls after an awaited useAsyncData can
@@ -290,29 +253,9 @@ function scrollToCta() {
 }
 
 // Hands off to this site's own onboarding wizard, which calls Studio's
-// real registration API server-side (carrying the chosen plan through),
-// rather than scrolling to this site's waitlist form.
+// real registration API server-side, carrying the chosen plan through.
 function goToStudioRegister(planCode?: string) {
   navigateTo({ path: '/onboarding/studio-management', query: planCode ? { plan: planCode } : {} })
-}
-
-async function submitWaitlist() {
-  if (!waitlist.value.name || !waitlist.value.email) return
-  waitlistLoading.value = true
-  waitlistError.value = null
-  try {
-    await submitLead({
-      name: waitlist.value.name,
-      email: waitlist.value.email,
-      source: product.value.lead_source || product.value.slug
-    })
-    waitlistSubmitted.value = true
-  } catch (err: any) {
-    waitlistError.value =
-      err?.response?.data?.message ?? t('product_detail.waitlist_error')
-  } finally {
-    waitlistLoading.value = false
-  }
 }
 </script>
 
@@ -425,11 +368,6 @@ async function submitWaitlist() {
     font-size: 0.82rem;
     color: color-mix(in srgb, var(--foreground) 55%, transparent);
     margin-top: 8px;
-  }
-
-  .waitlist-form {
-    max-width: 560px;
-    margin: 24px auto 0;
   }
 
   .not-found,

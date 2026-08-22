@@ -19,7 +19,6 @@ class Product extends Model
         'logo_url',
         'hero_image_url',
         'demo_video_url',
-        'lead_source',
         'sort_order',
         'is_published',
     ];

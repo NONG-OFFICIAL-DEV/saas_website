@@ -129,7 +129,6 @@
                 <SelectContent>
                   <SelectItem value="register">register</SelectItem>
                   <SelectItem value="external_link">external_link</SelectItem>
-                  <SelectItem value="waitlist">waitlist</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -147,13 +146,6 @@
             </div>
           </Col>
 
-          <Col cols="12" sm="6">
-            <div class="field">
-              <Label for="lead_source">Lead source tag</Label>
-              <Input id="lead_source" v-model="form.lead_source" />
-              <p class="field-hint">Sent with waitlist submissions</p>
-            </div>
-          </Col>
           <Col cols="12" sm="6">
             <div class="field">
               <Label for="sort_order">Sort order</Label>
@@ -382,10 +374,9 @@
     demo_video_url: '',
     accent_color: '#6366F1',
     status: 'coming_soon',
-    cta_type: 'waitlist',
+    cta_type: 'register',
     cta_label: '',
     cta_url: '',
-    lead_source: '',
     seo_title: '',
     seo_description: '',
     sort_order: 0,
@@ -426,7 +417,6 @@
         cta_type: data.cta_type,
         cta_label: data.cta_label ?? '',
         cta_url: data.cta_url ?? '',
-        lead_source: data.lead_source ?? '',
         seo_title: data.seo_title ?? '',
         seo_description: data.seo_description ?? '',
         sort_order: data.sort_order ?? 0,

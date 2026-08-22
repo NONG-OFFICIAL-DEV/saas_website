@@ -21,6 +21,7 @@
             href="https://t.me/Nong_Phloeut"
             target="_blank"
             rel="noopener"
+            text-primary
           >
             <Icon name="mdi-send-outline" size="18" />
             {{ t('button.chat_telegram') }}
@@ -94,6 +95,13 @@
   background-color: rgba(255, 255, 255, 0.8) !important;
 }
 .cta-btn-outline {
+  /* Button's own base "outline" variant class sets bg-background, which
+     resolves to solid white in light mode (dark mode's dark:bg-input/30
+     happens to look fine by coincidence) — without an explicit override
+     here, this button silently became invisible white-text-on-white in
+     light mode. Force it transparent so only this rule's own tint/hover
+     state ever shows, in both themes. */
+  background: transparent !important;
   color: #fff !important;
   border-color: rgba(255, 255, 255, 0.45) !important;
 }

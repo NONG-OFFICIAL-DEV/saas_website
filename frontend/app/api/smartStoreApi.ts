@@ -1,7 +1,10 @@
 import axios from 'axios'
 import { useLoadingStore } from '~/stores/loadingStore'
 
-// Legacy REST API — Nexstack POS's auth, lead capture, live plans/billing.
+// Smart Store (Nexstack POS) — the real product's own live backend, entirely
+// separate from this repo's CMS (services/cmsApi.ts) and Studio
+// (services/studioApi.ts). Auth, live subscription plans/billing (plans.ts)
+// only — the only source of truth for actual money/checkout.
 // baseURL resolved inside the interceptor for the same reason as
 // services/cmsApi.ts — see that file's comment.
 const api = axios.create({
@@ -11,16 +14,9 @@ const api = axios.create({
   }
 })
 
-// Every current caller of this client is a customer-facing flow (plans,
-// registration steps, waitlist leads) and already renders its own local
-// loading state (button spinner, inline indicator) — a global blocking
-// overlay stacked on top of those is a worse experience, not a better one.
-// So the default here is 'skip'; pass { meta: { loader: 'bar' } } to opt a
-// specific call back in if a future call genuinely has no local loading UI
-// of its own.
 api.interceptors.request.use(requestConfig => {
   const runtimeConfig = useRuntimeConfig()
-  requestConfig.baseURL = runtimeConfig.public.smartStoreApiUrl
+  requestConfig.baseURL = runtimeConfig.public.smartStoreApiUrl || 'https://admin.nexstacktech.com/api/'
 
   const loaderType = requestConfig.meta?.loader ?? 'skip'
   const token = import.meta.client ? localStorage.getItem('token') : null

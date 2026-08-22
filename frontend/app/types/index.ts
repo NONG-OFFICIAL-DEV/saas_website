@@ -29,13 +29,12 @@ export interface Product {
   id: string
   slug: string
   status: 'live' | 'beta' | 'coming_soon'
-  cta_type: 'register' | 'external_link' | 'waitlist'
+  cta_type: 'register' | 'external_link'
   cta_url: string | null
   accent_color: string
   logo_url: string | null
   hero_image_url: string | null
   demo_video_url: string | null
-  lead_source: string | null
   sort_order: number
   is_published: boolean
   name: string

@@ -52,7 +52,7 @@ class ProductSeeder extends Seeder
         $studio = Product::create([
             'slug' => 'studio-management',
             'status' => 'coming_soon',
-            'cta_type' => 'waitlist',
+            'cta_type' => 'register',
             'accent_color' => '#F59E0B',
             'sort_order' => 2,
             'is_published' => true,
@@ -63,8 +63,8 @@ class ProductSeeder extends Seeder
             'name' => 'Studio Management System',
             'tagline' => 'Bookings, staff, and payments in one place.',
             'summary' => 'Scheduling, staff, and client management built for studios — fitness, beauty, photography, and more.',
-            'description' => 'Studio Management System helps studio owners run bookings, staff schedules, and client payments without juggling spreadsheets. Currently in development — join the waitlist to get early access.',
-            'cta_label' => 'Join Waitlist',
+            'description' => 'Studio Management System helps studio owners run bookings, staff schedules, and client payments without juggling spreadsheets.',
+            'cta_label' => 'Get Started',
         ]);
 
         foreach ([
@@ -79,7 +79,7 @@ class ProductSeeder extends Seeder
         foreach ([
             ['Who is Studio Management for?', 'Any studio that books appointments and sells packages — photography, fitness, beauty, and similar service businesses.'],
             ['Can clients book without calling or messaging?', 'Yes — clients pick an open slot from your live calendar and book themselves.'],
-            ['When can I join?', 'Studio Management is currently in development. Join the waitlist and we\'ll reach out as soon as early access opens up.'],
+            ['When can I join?', 'You can sign up today — hit Get Started and you\'ll be up and running in minutes.'],
         ] as $i => [$question, $answer]) {
             $faq = $studio->faqs()->create(['sort_order' => $i + 1]);
             $faq->translations()->create(['locale' => 'en', 'question' => $question, 'answer' => $answer]);

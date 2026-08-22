@@ -53,7 +53,6 @@
     "view_all_products": "View all products",
     "all_products": "All products",
     "back_to_products": "Back to Products",
-    "join_waitlist": "Join Waitlist",
     "visit_site": "Visit site",
     "continue": "Continue",
     "back": "Back",
@@ -272,11 +271,7 @@
     "pricing_yearly": "Yearly",
     "faq_tag": "FAQ",
     "faq_title": "Frequently asked questions",
-    "ready_title": "Ready to try {name}?",
-    "name_label": "Name",
-    "email_label": "Email",
-    "waitlist_success": "Thanks you're on the list. I'll email you when it's ready.",
-    "waitlist_error": "Something went wrong please try again."
+    "ready_title": "Ready to try {name}?"
   },
   "auth": {
     "register": {
