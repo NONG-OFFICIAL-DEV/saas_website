@@ -270,8 +270,7 @@
     "pricing_monthly": "Monthly",
     "pricing_yearly": "Yearly",
     "faq_tag": "FAQ",
-    "faq_title": "Frequently asked questions",
-    "ready_title": "Ready to try {name}?"
+    "faq_title": "Frequently asked questions"
   },
   "auth": {
     "register": {

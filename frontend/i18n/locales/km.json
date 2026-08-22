@@ -270,8 +270,7 @@
     "pricing_monthly": "ប្រចាំខែ",
     "pricing_yearly": "ប្រចាំឆ្នាំ",
     "faq_tag": "សំណួរញឹកញាប់",
-    "faq_title": "សំណួរដែលសួរញឹកញាប់",
-    "ready_title": "ត្រៀមខ្លួនសាកល្បង {name} ហើយឬនៅ?"
+    "faq_title": "សំណួរដែលសួរញឹកញាប់"
   },
   "auth": {
     "register": {

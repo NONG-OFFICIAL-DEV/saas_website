@@ -138,34 +138,6 @@
     <!-- ── FAQ ── -->
     <ProductFaqSection :faqs="product.faqs" />
 
-    <!-- ── Final CTA ── -->
-    <section id="cta" class="section-pad">
-      <Container class="text-center">
-        <h2 class="section-title" data-aos="fade-up">
-          {{ t('product_detail.ready_title', { name: product.name }) }}
-        </h2>
-
-        <div
-          v-if="product.cta_type === 'external_link'"
-          data-aos="fade-up"
-        >
-          <Button
-            as="a"
-            :href="product.cta_url ?? undefined"
-            target="_blank"
-            rel="noopener"
-          >
-            {{ product.cta_label || t('button.visit_site') }}
-          </Button>
-        </div>
-
-        <div v-else data-aos="fade-up">
-          <Button :as="'to' in finalCtaLink ? 'NuxtLink' : 'a'" v-bind="finalCtaLink">
-            {{ product.cta_label || t('button.start_free_trial') }}
-          </Button>
-        </div>
-      </Container>
-    </section>
   </template>
 </template>
 

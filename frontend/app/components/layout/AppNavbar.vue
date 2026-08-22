@@ -174,8 +174,8 @@ onUnmounted(() => window.removeEventListener("scroll", onScroll));
   z-index: 1000;
   height: 68px;
   background: color-mix(in srgb, var(--card) 82%, transparent);
-  backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
   border-bottom: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
   transition: box-shadow 0.25s ease;
 }
