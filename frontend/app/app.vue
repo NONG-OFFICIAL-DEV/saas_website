@@ -68,5 +68,16 @@ onBeforeUnmount(() => {
 <style>
 html, body {
   overflow-y: auto !important;
+  /* Clips horizontal bleed from decorative absolutely-positioned elements
+     (hero graphics, etc.) at the true top-level scroll container. This
+     used to live on .landing-main (a flex item inside .landing-layout),
+     but per the CSS Overflow spec, setting overflow-x to anything other
+     than 'visible' forces the computed overflow-y to 'auto' too — even
+     if overflow-y is explicitly written as 'visible' — which turned that
+     flex item into its own independent scroll container stacked on top
+     of this one, i.e. two scrollbars. body has no such flex-parent
+     interaction, so it's safe here.
+  */
+  overflow-x: hidden;
 }
 </style>

@@ -62,10 +62,6 @@
     box-sizing: border-box;
   }
 
-  .landing-main {
-    overflow-x: hidden;
-  }
-
   /* ── Shared utilities — available to all child section components ── */
   .section-pad {
     padding: 88px 0;
