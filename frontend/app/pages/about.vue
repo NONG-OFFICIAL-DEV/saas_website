@@ -16,7 +16,7 @@
               {{ about.hero_cta_primary_label }}
               <Icon name="mdi-arrow-right" size="18" />
             </Button>
-            <Button as="a" variant="outline" href="/#contact">
+            <Button as="a" variant="outline" href="/contact">
               <Icon name="mdi-email-outline" size="18" />
               {{ about.hero_cta_secondary_label }}
             </Button>
@@ -76,28 +76,12 @@
     </section>
 
     <!-- ── Who I Build For ──────────────────────────────────────────────── -->
-    <section class="section-pad section-tint-peach">
-      <Container class="text-center">
-        <div class="mb-8" data-aos="fade-up">
-          <h2 class="section-title">{{ about.audience_title }}</h2>
-          <p class="section-sub audience-sub mx-auto">{{ about.audience_description }}</p>
-        </div>
-
-        <div class="audience-grid" data-aos="fade-up">
-          <div
-            v-for="ex in about.audience_examples ?? []"
-            :key="ex.label"
-            class="audience-card clay-surface clay-surface--interactive"
-          >
-            <div class="audience-image">
-              <img v-if="ex.image_url" :src="ex.image_url" :alt="ex.label" class="audience-photo object-cover" />
-              <Icon v-else :name="ex.icon" size="40" />
-            </div>
-            <span class="audience-label">{{ ex.label }}</span>
-          </div>
-        </div>
-      </Container>
-    </section>
+    <AudienceSection
+      :tag="t('about_page.audience_tag')"
+      :title="about.audience_title ?? ''"
+      :description="about.audience_description ?? ''"
+      :examples="about.audience_examples ?? []"
+    />
 
     <!-- ── Personal Profile ─────────────────────────────────────────────── -->
     <section class="section-pad">
@@ -169,6 +153,7 @@
   import { Badge } from '~/components/ui/badge'
   import { Button } from '~/components/ui/button'
 
+  const { t } = useI18n()
   const store = useSiteContentStore()
   const { about } = storeToRefs(store)
   const productsStore = useProductsStore()
@@ -326,44 +311,6 @@
     color: color-mix(in srgb, var(--foreground) 60%, transparent);
     line-height: 1.55;
     margin: 0;
-  }
-
-  /* ── Who I Build For ───────────────────────────────────────────────────── */
-  .audience-sub {
-    max-width: 460px;
-    margin: 0 auto;
-  }
-  .audience-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 20px;
-    max-width: 800px;
-    margin: 8px auto 0;
-  }
-  .audience-card {
-    padding: 14px;
-    text-align: left;
-  }
-  .audience-image {
-    aspect-ratio: 4 / 3;
-    border-radius: 14px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(145deg, rgba(99, 102, 241, 0.16), rgba(139, 92, 246, 0.14));
-    color: var(--primary);
-    margin-bottom: 14px;
-  }
-  .audience-photo {
-    width: 100%;
-    height: 100%;
-  }
-  .audience-label {
-    display: block;
-    font-weight: 700;
-    font-size: 0.88rem;
-    padding: 0 4px 4px;
   }
 
   /* ── Personal Profile ──────────────────────────────────────────────────── */

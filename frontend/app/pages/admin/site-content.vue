@@ -216,23 +216,67 @@
               </div>
             </Col>
           </Row>
-          <div v-for="(ex, i) in about.audience_examples" :key="i" class="repeat-row repeat-row--audience">
-            <Input v-model="ex.label" placeholder="Label" />
-            <Input v-model="ex.icon" placeholder="Fallback icon (mdi-...)" />
-            <Input v-model="ex.image_url" placeholder="Image URL" />
-            <FileInput
-              accept="image/*"
-              :loading="uploadingAudienceImage === i"
-              @change="(e: Event) => handleAudienceImageUpload(e, i)"
-            />
-            <Button size="icon-sm" variant="ghost" @click="about.audience_examples.splice(i, 1)">
-              <Icon name="mdi-close" size="16" />
-            </Button>
+          <div v-for="(ex, i) in about.audience_examples" :key="i" class="nested-card nested-card--shot">
+            <img v-if="ex.image_url" :src="ex.image_url" class="shot-preview" :alt="ex.label" />
+            <Row dense class="grow">
+              <Col cols="12" sm="6" md="3">
+                <div class="field">
+                  <Label>Label</Label>
+                  <Input v-model="ex.label" />
+                </div>
+              </Col>
+              <Col cols="12" sm="6" md="3">
+                <div class="field">
+                  <Label>Fallback icon (mdi-...)</Label>
+                  <Input v-model="ex.icon" />
+                </div>
+              </Col>
+              <Col cols="12" md="6">
+                <div class="field">
+                  <Label>Description</Label>
+                  <Input v-model="ex.description" />
+                </div>
+              </Col>
+              <Col cols="12" sm="6">
+                <div class="field">
+                  <Label>Image URL</Label>
+                  <Input v-model="ex.image_url" placeholder="https://..." />
+                </div>
+              </Col>
+              <Col cols="12" sm="6">
+                <div class="field">
+                  <Label>Or upload an image</Label>
+                  <FileInput
+                    accept="image/*"
+                    :loading="uploadingAudienceImage === i"
+                    @change="(e: Event) => handleAudienceImageUpload(e, i)"
+                  />
+                </div>
+              </Col>
+              <Col cols="12" class="flex items-center justify-between">
+                <label class="featured-toggle">
+                  <Switch v-model="ex.featured" />
+                  Featured
+                </label>
+                <Button
+                  type="button"
+                  size="icon-sm"
+                  variant="ghost"
+                  class="text-destructive hover:text-destructive"
+                  @click="about.audience_examples.splice(i, 1)"
+                >
+                  <Icon name="mdi-delete-outline" size="16" />
+                </Button>
+              </Col>
+            </Row>
           </div>
+          <p v-if="!about.audience_examples.length" class="nested-empty">No examples yet.</p>
           <Button
             size="sm"
             variant="secondary"
-            @click="about.audience_examples.push({ icon: 'mdi-store-outline', label: '', image_url: '' })"
+            @click="
+              about.audience_examples.push({ icon: 'mdi-store-outline', label: '', description: '', image_url: '', featured: false })
+            "
           >
             <Icon name="mdi-plus" size="16" />
             Add example
@@ -398,10 +442,12 @@
   import { Button } from '~/components/ui/button'
   import { Input } from '~/components/ui/input'
   import { Label } from '~/components/ui/label'
+  import { Switch } from '~/components/ui/switch'
   import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
   import { Textarea } from '~/components/ui/textarea'
   import { getHero, updateHero, getAbout, updateAbout, getFooter, updateFooter } from '~/services/cms/siteContent'
   import { uploadProductMedia } from '~/services/cms/adminProducts'
+  import { FALLBACK_HERO, FALLBACK_ABOUT, FALLBACK_FOOTER } from '~/stores/siteContent'
   import type { HeroContent, AboutContent, FooterContent } from '~/types'
 
   // This editor always keeps these array fields populated (seeded below,
@@ -410,7 +456,7 @@
   type EditableHero = HeroContent & { stats: { num: string; label: string }[] }
   type EditableAbout = AboutContent & {
     approach_cards: { icon: string; title: string; description: string }[]
-    audience_examples: { icon: string; label: string; image_url: string }[]
+    audience_examples: { icon: string; label: string; description: string; image_url: string; featured: boolean }[]
     profile_skills: string[]
     socials: { name: string; href: string }[]
   }
@@ -424,20 +470,22 @@
   const uploadingAudienceImage = ref<number | null>(null)
   const error = ref<string | null>(null)
 
-  const hero = ref<EditableHero>({ stats: [] })
-  const about = ref<EditableAbout>({ approach_cards: [], audience_examples: [], profile_skills: [], socials: [] })
-  const footer = ref<EditableFooter>({ socials: [] })
+  const hero = ref<EditableHero>({ ...FALLBACK_HERO } as EditableHero)
+  const about = ref<EditableAbout>({ ...FALLBACK_ABOUT } as EditableAbout)
+  const footer = ref<EditableFooter>({ ...FALLBACK_FOOTER } as EditableFooter)
 
   onMounted(async () => {
     loading.value = true
     error.value = null
     try {
       const [heroData, aboutData, footerData] = await Promise.all([getHero(), getAbout(), getFooter()])
-      if (heroData) hero.value = heroData as EditableHero
-      // Merge over the default shape so a not-yet-migrated CMS row (missing
-      // newer array fields) doesn't blow up the repeaters below with undefined.
-      if (aboutData) about.value = { approach_cards: [], audience_examples: [], profile_skills: [], socials: [], ...aboutData } as EditableAbout
-      if (footerData) footer.value = footerData as EditableFooter
+      // Merge over the same fallback content the public site shows, rather
+      // than replacing outright — a CMS row that hasn't been re-saved since
+      // a content-shape change (or was never seeded past very old defaults)
+      // still has real starting values to edit instead of blank fields.
+      if (heroData) hero.value = { ...FALLBACK_HERO, ...heroData } as EditableHero
+      if (aboutData) about.value = { ...FALLBACK_ABOUT, ...aboutData } as EditableAbout
+      if (footerData) footer.value = { ...FALLBACK_FOOTER, ...footerData } as EditableFooter
     } catch (err: any) {
       error.value = err.message
     } finally {
@@ -571,8 +619,36 @@
   .repeat-row--skill {
     grid-template-columns: 1fr auto;
   }
-  .repeat-row--audience {
-    grid-template-columns: 1fr 1fr 1fr 1fr auto;
+  .featured-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  .nested-card {
+    padding: 14px 16px;
+    border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  .nested-card--shot {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .shot-preview {
+    width: 96px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .nested-empty {
+    font-size: 0.85rem;
+    color: color-mix(in srgb, var(--foreground) 50%, transparent);
+    margin: 0 0 10px;
   }
 
   .save-row {
@@ -582,8 +658,7 @@
   @media (max-width: 640px) {
     .repeat-row,
     .repeat-row--wide,
-    .repeat-row--skill,
-    .repeat-row--audience {
+    .repeat-row--skill {
       grid-template-columns: 1fr;
     }
   }

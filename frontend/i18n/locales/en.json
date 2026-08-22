@@ -8,6 +8,7 @@
     "open_menu": "Open menu",
     "close_menu": "Close menu",
     "most_popular": "Most popular",
+    "featured": "Featured",
     "per_month": "/ month",
     "billing_cycle": "Billing cycle",
     "terms_of_service": "Terms of Service",
@@ -429,6 +430,20 @@
     "faq_empty": "No questions answered yet for this product.",
     "still_need_help": "Still need help?",
     "still_need_help_sub": "Message me directly — I read and reply to everything myself."
+  },
+  "about_page": {
+    "audience_tag": "Who I Build For"
+  },
+  "contact_page": {
+    "tag": "Contact",
+    "title": "Let's talk",
+    "sub": "No forms, no ticket queues — just direct ways to reach me. Pick whichever's easiest.",
+    "email_label": "Email",
+    "phone_label": "Phone",
+    "telegram_label": "Telegram",
+    "telegram_value": "Chat directly",
+    "address_label": "Address",
+    "socials_title": "Or find me here"
   },
   "docs_page": {
     "tag": "Documentation",

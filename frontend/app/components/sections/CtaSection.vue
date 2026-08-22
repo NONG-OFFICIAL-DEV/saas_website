@@ -14,18 +14,6 @@
             {{ t('button.view_products') }}
             <Icon name="mdi-arrow-right" size="18" />
           </Button>
-          <Button
-            as="a"
-            variant="outline"
-            class="cta-btn-outline px-8 font-bold"
-            href="https://t.me/Nong_Phloeut"
-            target="_blank"
-            rel="noopener"
-            text-primary
-          >
-            <Icon name="mdi-send-outline" size="18" />
-            {{ t('button.chat_telegram') }}
-          </Button>
         </div>
 
         <div class="cta-reassurance">
@@ -34,6 +22,21 @@
           <span>{{ t('home.cta.reassurance.setup') }}</span>
           <span class="cta-dot" />
           <span>{{ t('home.cta.reassurance.cancel_anytime') }}</span>
+        </div>
+
+        <div class="contact-grid">
+          <a v-if="footer.email" :href="`mailto:${footer.email}`" class="contact-card">
+            <Icon name="mdi-email-outline" size="20" />
+            <span>{{ footer.email }}</span>
+          </a>
+          <a v-if="telegramHref" :href="telegramHref" target="_blank" rel="noopener" class="contact-card">
+            <Icon name="mdi-send-outline" size="20" />
+            <span>{{ t('button.chat_telegram') }}</span>
+          </a>
+          <a v-if="footer.phone" :href="`tel:${footer.phone.replace(/\s+/g, '')}`" class="contact-card">
+            <Icon name="mdi-phone-outline" size="20" />
+            <span>{{ footer.phone }}</span>
+          </a>
         </div>
       </div>
     </Container>
@@ -44,6 +47,14 @@
   import { Button } from '~/components/ui/button'
 
   const { t } = useI18n()
+  const siteContentStore = useSiteContentStore()
+  const footer = computed(() => siteContentStore.footer)
+  const telegramHref = computed(() => footer.value.socials?.find((s) => s.name === 'Telegram')?.href)
+
+  await useAsyncData('cta-section-footer', async () => {
+    await siteContentStore.fetchFooter()
+    return true
+  })
 </script>
 
 <style scoped>
@@ -94,22 +105,6 @@
      unpredictable Tailwind generation order instead of author intent. */
   background-color: rgba(255, 255, 255, 0.8) !important;
 }
-.cta-btn-outline {
-  /* Button's own base "outline" variant class sets bg-background, which
-     resolves to solid white in light mode (dark mode's dark:bg-input/30
-     happens to look fine by coincidence) — without an explicit override
-     here, this button silently became invisible white-text-on-white in
-     light mode. Force it transparent so only this rule's own tint/hover
-     state ever shows, in both themes. */
-  background: transparent !important;
-  color: #fff !important;
-  border-color: rgba(255, 255, 255, 0.45) !important;
-}
-.cta-btn-outline:hover {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-color: rgba(255, 255, 255, 0.75) !important;
-}
-
 .cta-reassurance {
   display: flex;
   align-items: center;
@@ -125,6 +120,32 @@
   height: 3px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.4);
+}
+
+.contact-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 28px;
+}
+.contact-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.contact-card:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-2px);
 }
 
 @media (max-width: 640px) {

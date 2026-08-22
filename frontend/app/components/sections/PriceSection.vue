@@ -48,8 +48,7 @@
         >
           <Icon name="mdi-clock-outline" size="18" />
           <AlertDescription>
-            Pricing is temporarily unavailable — please check back shortly or
-            {{ ' ' }}<a href="/#contact">contact me</a> for current plans.
+            Pricing is temporarily unavailable — please check back shortly.
           </AlertDescription>
         </Alert>
 

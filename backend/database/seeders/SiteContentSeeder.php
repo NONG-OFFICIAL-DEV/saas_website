@@ -71,11 +71,11 @@ class SiteContentSeeder extends Seeder
                 'audience_title' => 'Built for small businesses',
                 'audience_description' => "Technology shouldn't be the difficult part of running a business.",
                 'audience_examples' => [
-                    ['icon' => 'mdi-camera-outline', 'label' => 'Photography Studios', 'image_url' => 'https://jonathantaylorphotography.com/wp-content/uploads/2019/01/photography-studio-rental-bangkok.jpg'],
-                    ['icon' => 'mdi-coffee-outline', 'label' => 'Coffee Shops', 'image_url' => ''],
-                    ['icon' => 'mdi-silverware-fork-knife', 'label' => 'Restaurants', 'image_url' => ''],
-                    ['icon' => 'mdi-storefront-outline', 'label' => 'Retail Stores', 'image_url' => ''],
-                    ['icon' => 'mdi-store-outline', 'label' => 'Small Businesses', 'image_url' => ''],
+                    ['icon' => 'mdi-camera-outline', 'label' => 'Photography Studios', 'description' => 'Manage bookings, packages, and client galleries in one simple system.', 'image_url' => 'https://jonathantaylorphotography.com/wp-content/uploads/2019/01/photography-studio-rental-bangkok.jpg', 'featured' => false],
+                    ['icon' => 'mdi-coffee-outline', 'label' => 'Coffee Shops', 'description' => 'Quick order taking, till management, and simple daily sales tracking.', 'image_url' => '', 'featured' => false],
+                    ['icon' => 'mdi-silverware-fork-knife', 'label' => 'Restaurants', 'description' => 'Table orders, kitchen display, and multi-branch management in one POS.', 'image_url' => '', 'featured' => true],
+                    ['icon' => 'mdi-storefront-outline', 'label' => 'Retail Stores', 'description' => 'Track inventory, ring up sales, and know what\'s moving off the shelves.', 'image_url' => '', 'featured' => false],
+                    ['icon' => 'mdi-store-outline', 'label' => 'Small Businesses', 'description' => 'Any business that needs simple, reliable tools without the complexity.', 'image_url' => '', 'featured' => false],
                 ],
 
                 'products_tag' => 'What I Build',

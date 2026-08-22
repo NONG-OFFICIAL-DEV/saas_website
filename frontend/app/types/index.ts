@@ -222,7 +222,9 @@ export interface AboutApproachCard {
 export interface AboutAudienceExample {
   icon: string
   label: string
+  description: string
   image_url: string
+  featured: boolean
 }
 
 export interface AboutContent {

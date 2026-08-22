@@ -95,16 +95,11 @@
       <div class="footer-col">
         <h4 class="col-heading">{{ t('footer.links_heading') }}</h4>
         <ul class="footer-links">
-          <li v-for="link in navLinks" :key="link.to || link.href">
-            <component
-              :is="link.to ? NuxtLink : 'a'"
-              :to="link.to"
-              :href="link.href"
-              class="footer-nav-link"
-            >
+          <li v-for="link in navLinks" :key="link.to">
+            <NuxtLink :to="link.to" class="footer-nav-link">
               <span class="link-dot" />
               {{ t(link.key) }}
-            </component>
+            </NuxtLink>
           </li>
         </ul>
       </div>
@@ -169,8 +164,6 @@
 </template>
 
 <script setup lang="ts">
-  import { NuxtLink } from '#components'
-
   const { t } = useI18n()
   const { isDark } = useColorMode()
   const productsStore = useProductsStore()
@@ -199,7 +192,7 @@
     { to: '/solutions', key: 'menu.solutions' },
     { to: '/pricing', key: 'menu.pricing' },
     { to: '/about', key: 'menu.about' },
-    { href: '/#contact', key: 'menu.contact' }
+    { to: '/contact', key: 'menu.contact' }
   ]
 </script>
 
