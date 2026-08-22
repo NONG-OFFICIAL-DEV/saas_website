@@ -10,7 +10,7 @@
         </p>
 
         <div class="cta-actions">
-          <Button as="NuxtLink" to="/products" class="cta-btn-solid px-8 font-bold text-primary bg-white hover:bg-white/80">
+          <Button as="NuxtLink" to="/products" class="cta-btn-solid px-8 font-bold text-primary bg-white">
             {{ t('button.view_products') }}
             <Icon name="mdi-arrow-right" size="18" />
           </Button>
@@ -84,6 +84,14 @@
 
 .cta-btn-solid {
   box-shadow: 0 8px 24px color-mix(in srgb, var(--foreground) 20%, transparent) !important;
+}
+.cta-btn-solid:hover {
+  /* !important because Button's own base variant class includes
+     [a]:hover:bg-primary/80 — now that this renders as a real <a> tag
+     (see Button.vue's as="NuxtLink" fix), that rule and this one have
+     identical specificity, so without !important the winner depends on
+     unpredictable Tailwind generation order instead of author intent. */
+  background-color: rgba(255, 255, 255, 0.8) !important;
 }
 .cta-btn-outline {
   color: #fff !important;
