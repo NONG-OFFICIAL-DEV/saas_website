@@ -42,22 +42,30 @@
                 v-model="form.business_name"
                 :placeholder="t('onboarding.business_name_placeholder')"
                 :class="fieldError('name') ? 'border-destructive' : ''"
+                :aria-invalid="!!fieldError('name')"
+                :aria-describedby="fieldError('name') ? 'business_name-error' : undefined"
                 required
               />
-              <p v-if="fieldError('name')" class="field-error">{{ fieldError('name') }}</p>
+              <p v-if="fieldError('name')" id="business_name-error" class="field-error">{{ fieldError('name') }}</p>
             </div>
 
             <div v-if="productMeta.needsBusinessType" class="field">
               <Label>{{ t('onboarding.business_type') }}</Label>
               <Select v-model="form.business_type_id">
-                <SelectTrigger class="w-full" :disabled="loadingBusinessTypes" :class="fieldError('business_type_id') ? 'border-destructive' : ''">
+                <SelectTrigger
+                  class="w-full"
+                  :disabled="loadingBusinessTypes"
+                  :class="fieldError('business_type_id') ? 'border-destructive' : ''"
+                  :aria-invalid="!!fieldError('business_type_id')"
+                  :aria-describedby="fieldError('business_type_id') ? 'business_type_id-error' : undefined"
+                >
                   <SelectValue :placeholder="t('onboarding.business_type')" />
                 </SelectTrigger>
                 <SelectContent position="popper" :body-lock="false">
                   <SelectItem v-for="bt in businessTypes" :key="bt.id" :value="bt.id">{{ bt.name }}</SelectItem>
                 </SelectContent>
               </Select>
-              <p v-if="fieldError('business_type_id')" class="field-error">{{ fieldError('business_type_id') }}</p>
+              <p v-if="fieldError('business_type_id')" id="business_type_id-error" class="field-error">{{ fieldError('business_type_id') }}</p>
             </div>
 
             <div class="field">
@@ -96,9 +104,11 @@
                 type="email"
                 :placeholder="t('auth.register.email_placeholder')"
                 :class="(fieldError('email') || fieldError('owner_email')) ? 'border-destructive' : ''"
+                :aria-invalid="!!(fieldError('email') || fieldError('owner_email'))"
+                :aria-describedby="(fieldError('email') || fieldError('owner_email')) ? 'email-error' : undefined"
                 required
               />
-              <p v-if="fieldError('email') || fieldError('owner_email')" class="field-error">
+              <p v-if="fieldError('email') || fieldError('owner_email')" id="email-error" class="field-error">
                 {{ fieldError('email') || fieldError('owner_email') }}
               </p>
             </div>
@@ -111,9 +121,11 @@
                 type="password"
                 :placeholder="t('auth.register.password_placeholder')"
                 :class="(fieldError('password') || fieldError('owner_password')) ? 'border-destructive' : ''"
+                :aria-invalid="!!(fieldError('password') || fieldError('owner_password'))"
+                :aria-describedby="(fieldError('password') || fieldError('owner_password')) ? 'password-error' : undefined"
                 required
               />
-              <p v-if="fieldError('password') || fieldError('owner_password')" class="field-error">
+              <p v-if="fieldError('password') || fieldError('owner_password')" id="password-error" class="field-error">
                 {{ fieldError('password') || fieldError('owner_password') }}
               </p>
             </div>

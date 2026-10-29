@@ -31,9 +31,11 @@
             autofocus
             :disabled="authStore.loading"
             :class="emailError ? 'border-destructive' : ''"
+            :aria-invalid="!!emailError"
+            :aria-describedby="emailError ? 'email-error' : undefined"
             @update:model-value="authStore.error = null"
           />
-          <p v-if="emailError" class="field-error">{{ emailError }}</p>
+          <p v-if="emailError" id="email-error" class="field-error">{{ emailError }}</p>
         </div>
 
         <div class="field mb-5">
@@ -46,13 +48,15 @@
               autocomplete="current-password"
               :disabled="authStore.loading"
               :class="passwordError ? 'border-destructive' : ''"
+              :aria-invalid="!!passwordError"
+              :aria-describedby="passwordError ? 'password-error' : undefined"
               @update:model-value="authStore.error = null"
             />
             <button type="button" class="password-toggle" @click="showPassword = !showPassword">
               <Icon :name="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'" size="18" />
             </button>
           </div>
-          <p v-if="passwordError" class="field-error">{{ passwordError }}</p>
+          <p v-if="passwordError" id="password-error" class="field-error">{{ passwordError }}</p>
         </div>
 
         <Button type="submit" size="lg" class="w-full" :disabled="authStore.loading">

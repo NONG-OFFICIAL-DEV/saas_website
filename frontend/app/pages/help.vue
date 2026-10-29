@@ -29,12 +29,7 @@
       <template v-else>
         <RevealOnScroll v-for="(group, i) in faqGroups" :key="group.slug" as="div" class="faq-group" :delay="i * 80">
           <h2 class="faq-group-title">{{ group.name }}</h2>
-          <Accordion type="multiple" class="faq-panels">
-            <AccordionItem v-for="faq in group.faqs" :key="faq.id" :value="String(faq.id)">
-              <AccordionTrigger class="faq-question">{{ faq.question }}</AccordionTrigger>
-              <AccordionContent class="faq-answer">{{ faq.answer }}</AccordionContent>
-            </AccordionItem>
-          </Accordion>
+          <FaqAccordionList :faqs="group.faqs" />
         </RevealOnScroll>
       </template>
 
@@ -54,12 +49,9 @@
 </template>
 
 <script setup lang="ts">
-  import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion'
   import { Button } from '~/components/ui/button'
-  import { getProductBySlug } from '~/services/cms/products'
 
   const { t } = useI18n()
-  const productsStore = useProductsStore()
   const siteContentStore = useSiteContentStore()
 
   const footer = computed(() => siteContentStore.footer)
@@ -73,11 +65,8 @@
   // toggled inside it would stay stuck at its initial value and desync
   // from the server-rendered state, causing a hydration mismatch.
   const { data: faqGroupsData, pending: loading } = await useAsyncData('help-page', async () => {
-    await Promise.all([productsStore.fetchProducts(), siteContentStore.fetchFooter()])
-    const details = await Promise.all(productsStore.products.map((p) => getProductBySlug(p.slug)))
-    return details
-      .filter((d) => d?.faqs?.length)
-      .map((d) => ({ slug: d!.slug, name: d!.name, faqs: d!.faqs! }))
+    const [, groups] = await Promise.all([siteContentStore.fetchFooter(), fetchFaqGroups()])
+    return groups
   })
   const faqGroups = computed(() => faqGroupsData.value ?? [])
 </script>

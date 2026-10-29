@@ -157,6 +157,27 @@
         "setup": "Direct support",
         "cancel_anytime": "More products coming"
       }
+    },
+    "how_it_works": {
+      "tag": "How it works",
+      "title": "Up and running in three steps",
+      "sub": "No sales calls, no waiting on approval — you're using the real product within minutes.",
+      "step1_title": "Choose your product",
+      "step1_desc": "Pick the one built for your kind of business — Nexstack POS or Studio Management.",
+      "step2_title": "Tell us about your business",
+      "step2_desc": "A short form: business name, a few basics, and your login details. That's it.",
+      "step3_title": "Start right away",
+      "step3_desc": "Your account is created instantly — log in and start using it the same minute."
+    },
+    "showcase": {
+      "tag": "See it in action",
+      "title": "A closer look at what you get"
+    },
+    "faq_teaser": {
+      "tag": "FAQ",
+      "title": "Common questions",
+      "sub": "A few things people usually ask before getting started.",
+      "view_all": "View all questions"
     }
   },
   "pos": {
@@ -431,13 +452,25 @@
   "contact_page": {
     "tag": "Contact",
     "title": "Let's talk",
-    "sub": "No forms, no ticket queues — just direct ways to reach me. Pick whichever's easiest.",
+    "sub": "No ticket queues, no support bots — send a message directly, or pick whichever channel below is easiest.",
     "email_label": "Email",
     "phone_label": "Phone",
     "telegram_label": "Telegram",
     "telegram_value": "Chat directly",
     "address_label": "Address",
-    "socials_title": "Or find me here"
+    "socials_title": "Or find me here",
+    "form_title": "Send a message",
+    "form_sub": "Opens your email app with this pre-filled — nothing is sent from here directly.",
+    "form_name": "Your name",
+    "form_name_placeholder": "e.g. Sokha Chan",
+    "form_email": "Your email",
+    "form_email_placeholder": "you{'@'}example.com",
+    "form_message": "Message",
+    "form_message_placeholder": "What can I help with?",
+    "form_submit": "Open email to send",
+    "form_error_name": "Please enter your name",
+    "form_error_email": "Please enter a valid email",
+    "form_error_message": "Please enter a message"
   },
   "docs_page": {
     "tag": "Documentation",

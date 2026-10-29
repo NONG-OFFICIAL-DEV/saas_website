@@ -2,8 +2,11 @@
   <!-- Pure content — layout (navbar/footer) is handled by the default layout -->
   <HeroSection />
   <ProductsTeaserSection />
+  <ProductShowcaseSection />
   <BenefitsSection />
+  <HowItWorksSection />
   <TestimonialsSection />
+  <FaqTeaserSection />
   <CtaSection />
 </template>
 
