@@ -4,42 +4,40 @@
   </div>
 
   <div v-else-if="!store.currentSolution" class="not-found">
-    <Container class="text-center">
+    <div class="w-full px-4 max-w-[1280px] mx-auto text-center">
       <Icon name="mdi-compass-off-outline" size="48" />
       <h2 class="section-title">{{ t('solution_detail.not_found_title') }}</h2>
       <p class="section-sub mx-auto">{{ t('solution_detail.not_found_desc') }}</p>
       <Button as="NuxtLink" to="/solutions">
         {{ t('solution_detail.back_to_solutions') }}
       </Button>
-    </Container>
+    </div>
   </div>
 
   <template v-else>
     <section class="section-pad hero">
-      <Container>
-        <Row align="center">
-          <Col cols="12" md="8" data-aos="fade-up">
-            <div class="icon-wrap mb-4">
-              <Icon :name="solution.icon || 'mdi-apps'" size="30" />
-            </div>
-            <h1 class="hero-title">{{ solution.name }}</h1>
-            <p class="hero-tagline">{{ solution.tagline }}</p>
-            <p class="section-sub hero-desc">{{ solution.description }}</p>
-          </Col>
-        </Row>
-      </Container>
+      <div class="w-full px-4 max-w-[1280px] mx-auto">
+        <RevealOnScroll as="div" class="max-w-3xl">
+          <div class="icon-wrap mb-4">
+            <Icon :name="solution.icon || 'mdi-apps'" size="30" />
+          </div>
+          <h1 class="hero-title">{{ solution.name }}</h1>
+          <p class="hero-tagline">{{ solution.tagline }}</p>
+          <p class="section-sub hero-desc">{{ solution.description }}</p>
+        </RevealOnScroll>
+      </div>
     </section>
 
     <section v-if="solution.products?.length" class="section-pad section-tint-mint">
-      <Container>
-        <div class="text-center mb-10" data-aos="fade-up">
+      <div class="w-full px-4 max-w-[1280px] mx-auto">
+        <RevealOnScroll as="div" class="text-center mb-10">
           <span class="section-tag">{{ t('solution_detail.products_tag') }}</span>
           <h2 class="section-title">{{ t('solution_detail.products_title') }}</h2>
-        </div>
-        <div class="products-grid" data-aos="fade-up">
+        </RevealOnScroll>
+        <RevealOnScroll as="div" class="products-grid" :delay="80">
           <ProductCard v-for="product in solution.products" :key="product.id" :product="product" />
-        </div>
-      </Container>
+        </RevealOnScroll>
+      </div>
     </section>
   </template>
 </template>
@@ -74,7 +72,7 @@
   .icon-wrap {
     width: 56px;
     height: 56px;
-    border-radius: 16px;
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -82,9 +80,10 @@
     color: var(--primary);
   }
   .hero-title {
-    font-size: clamp(1.8rem, 4.5vw, 3rem);
-    font-weight: 900;
-    letter-spacing: -1px;
+    font-size: var(--text-h1);
+    font-weight: var(--text-h1--font-weight);
+    letter-spacing: var(--text-h1--letter-spacing);
+    line-height: var(--text-h1--line-height);
     margin: 0 0 8px;
   }
   .hero-tagline {

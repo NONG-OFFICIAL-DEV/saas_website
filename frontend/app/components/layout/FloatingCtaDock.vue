@@ -56,12 +56,18 @@
   font-size: 0.82rem;
   font-weight: 700;
   text-decoration: none;
-  box-shadow: 0 10px 28px color-mix(in srgb, var(--foreground) 18%, transparent);
-  transition: transform 0.15s ease;
+  box-shadow: var(--shadow-lg);
+  transition:
+    transform var(--duration-base) var(--ease-out-quart),
+    box-shadow var(--duration-base) var(--ease-out-quart);
   white-space: nowrap;
 }
 .dock-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-xl);
+}
+.dock-btn:active {
+  transform: translateY(-1px) scale(0.97);
 }
 
 .dock-btn--telegram {
@@ -117,7 +123,7 @@
 /* ── Transition ── */
 .dock-fade-enter-active,
 .dock-fade-leave-active {
-  transition: all 0.25s ease;
+  transition: all var(--duration-base) var(--ease-out-expo);
 }
 .dock-fade-enter-from,
 .dock-fade-leave-to {

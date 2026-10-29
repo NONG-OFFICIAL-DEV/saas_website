@@ -1,10 +1,10 @@
 <template>
   <section class="section-pad">
-    <Container>
-      <div v-if="section.title" class="text-center detail-header" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll v-if="section.title" as="div" class="text-center detail-header">
         <h2 class="section-title">{{ section.title }}</h2>
         <p v-if="section.subtitle" class="section-sub detail-sub">{{ section.subtitle }}</p>
-      </div>
+      </RevealOnScroll>
 
       <div class="detail-blocks">
         <div
@@ -13,14 +13,14 @@
           class="detail-block"
           :class="{ 'detail-block--reverse': i % 2 === 1 }"
         >
-          <div class="detail-media" data-aos="fade-up">
+          <RevealOnScroll as="div" class="detail-media">
             <img v-if="item.image_url" :src="item.image_url" :alt="item.title" class="h-full w-full object-cover" />
             <div v-else class="detail-media-placeholder">
               <Icon :name="item.icon || 'mdi-monitor-dashboard'" size="48" />
             </div>
-          </div>
+          </RevealOnScroll>
 
-          <div class="detail-text" data-aos="fade-up">
+          <RevealOnScroll as="div" class="detail-text" :delay="80">
             <Badge v-if="item.badge" class="detail-badge" :class="`detail-badge--${item.badge}`">
               {{ badgeLabel(item.badge) }}
             </Badge>
@@ -44,10 +44,10 @@
               {{ item.cta_label }}
               <Icon name="mdi-arrow-right" size="16" />
             </a>
-          </div>
+          </RevealOnScroll>
         </div>
       </div>
-    </Container>
+    </div>
   </section>
 </template>
 
@@ -100,14 +100,14 @@
 
   .detail-media {
     aspect-ratio: 4 / 3;
-    border-radius: 24px;
+    border-radius: var(--radius-2xl);
     overflow: hidden;
     background: linear-gradient(
       160deg,
       color-mix(in srgb, var(--primary) 14%, transparent),
       color-mix(in srgb, var(--primary) 4%, transparent)
     );
-    box-shadow: 0 24px 60px color-mix(in srgb, var(--foreground) 10%, transparent);
+    box-shadow: var(--shadow-lg);
   }
   .detail-media-placeholder {
     width: 100%;
@@ -143,9 +143,10 @@
     color: var(--warning);
   }
   .detail-title {
-    font-size: clamp(1.2rem, 2.6vw, 1.7rem);
-    font-weight: 900;
-    letter-spacing: -0.5px;
+    font-size: var(--text-h3);
+    font-weight: var(--text-h3--font-weight);
+    letter-spacing: var(--text-h3--letter-spacing);
+    line-height: var(--text-h3--line-height);
     margin: 0;
   }
   .detail-desc {

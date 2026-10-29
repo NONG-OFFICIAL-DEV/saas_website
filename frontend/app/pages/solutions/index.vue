@@ -1,17 +1,17 @@
 <template>
   <section class="section-pad">
-    <Container>
-      <div class="hub-header text-center" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll as="div" class="hub-header text-center">
         <span class="section-tag">{{ t('solutions_hub.tag') }}</span>
         <h1 class="section-title">{{ t('solutions_hub.title') }}</h1>
         <p class="section-sub hub-sub">{{ t('solutions_hub.sub') }}</p>
-      </div>
+      </RevealOnScroll>
 
       <InlineLoader v-if="store.loading" min-height="200px" />
 
-      <div v-else-if="store.solutions.length" class="hub-grid" data-aos="fade-up">
+      <RevealOnScroll v-else-if="store.solutions.length" as="div" class="hub-grid" :delay="80">
         <SolutionCard v-for="solution in store.solutions" :key="solution.id" :solution="solution" />
-      </div>
+      </RevealOnScroll>
 
       <Alert v-else-if="store.error" variant="destructive" class="mt-6">
         <AlertDescription>{{ store.error }}</AlertDescription>
@@ -21,7 +21,7 @@
         <Icon name="mdi-lightbulb-outline" size="40" />
         <p>{{ t('solutions_hub.empty') }}</p>
       </div>
-    </Container>
+    </div>
   </section>
 </template>
 

@@ -1,11 +1,11 @@
 <template>
   <div class="compare-block">
-    <div class="text-center compare-header" data-aos="fade-up">
+    <RevealOnScroll as="div" class="text-center compare-header">
       <h2 class="section-title">{{ title }}</h2>
       <p class="section-sub compare-sub">{{ subtitle }}</p>
-    </div>
+    </RevealOnScroll>
 
-    <div class="compare-scroll" data-aos="fade-up">
+    <RevealOnScroll as="div" class="compare-scroll" :delay="80">
       <table class="compare-table">
         <thead>
           <tr>
@@ -24,7 +24,7 @@
           </tr>
         </tbody>
       </table>
-    </div>
+    </RevealOnScroll>
   </div>
 </template>
 
@@ -56,7 +56,7 @@
     max-width: 900px;
     margin: 0 auto;
     border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
-    border-radius: 16px;
+    border-radius: var(--radius-xl);
   }
 
   .compare-table {

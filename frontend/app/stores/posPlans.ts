@@ -22,7 +22,7 @@ export const usePosPlansStore = defineStore('posPlans', () => {
       const { data } = await getSmartStorePlansApi()
       plans.value = data.data ?? []
     } catch (err: any) {
-      error.value = err?.response?.data?.message ?? 'Failed to load plans'
+      error.value = err.message ?? 'Failed to load plans'
     } finally {
       loading.value = false
     }

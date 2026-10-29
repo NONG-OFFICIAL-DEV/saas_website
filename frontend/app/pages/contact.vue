@@ -1,13 +1,13 @@
 <template>
   <section class="section-pad contact-page">
-    <Container>
-      <div class="header text-center" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll as="div" class="header text-center">
         <span class="section-tag">{{ t('contact_page.tag') }}</span>
         <h1 class="section-title">{{ t('contact_page.title') }}</h1>
         <p class="section-sub header-sub">{{ t('contact_page.sub') }}</p>
-      </div>
+      </RevealOnScroll>
 
-      <div class="channel-list" data-aos="fade-up">
+      <RevealOnScroll as="div" class="channel-list" :delay="80">
         <a v-if="footer.email" :href="`mailto:${footer.email}`" class="channel-item">
           <span class="channel-label">
             <Icon name="mdi-email-outline" size="16" />
@@ -39,9 +39,9 @@
           </span>
           <span class="channel-value">{{ footer.address }}</span>
         </div>
-      </div>
+      </RevealOnScroll>
 
-      <div v-if="footer.socials?.length" class="socials-row" data-aos="fade-up">
+      <RevealOnScroll v-if="footer.socials?.length" as="div" class="socials-row" :delay="160">
         <a
           v-for="social in footer.socials"
           :key="social.name"
@@ -53,8 +53,8 @@
         >
           <SocialIcon :name="social.name.toLowerCase()" />
         </a>
-      </div>
-    </Container>
+      </RevealOnScroll>
+    </div>
   </section>
 </template>
 
@@ -102,7 +102,7 @@
     text-decoration: none;
     color: var(--foreground);
     border-bottom: 1px solid color-mix(in srgb, var(--foreground) 9%, transparent);
-    transition: color 0.15s ease;
+    transition: color var(--duration-fast) var(--ease-out-quart);
   }
   .channel-item:first-child {
     padding-top: 0;
@@ -150,8 +150,8 @@
     display: flex;
     color: color-mix(in srgb, var(--foreground) 45%, transparent);
     transition:
-      color 0.15s ease,
-      transform 0.15s ease;
+      color var(--duration-base) var(--ease-out-quart),
+      transform var(--duration-base) var(--ease-out-quart);
   }
   .social-link :deep(svg) {
     width: 28px;

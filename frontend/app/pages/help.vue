@@ -1,14 +1,14 @@
 <template>
   <section class="section-pad help-page">
-    <Container>
-      <div class="header text-center" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll as="div" class="header text-center">
         <span class="section-tag">{{ t('help_page.tag') }}</span>
         <h1 class="section-title">{{ t('help_page.title') }}</h1>
         <p class="section-sub header-sub">{{ t('help_page.sub') }}</p>
-      </div>
+      </RevealOnScroll>
 
       <!-- ── Contact channels ── -->
-      <div class="contact-grid" data-aos="fade-up">
+      <RevealOnScroll as="div" class="contact-grid" :delay="80">
         <a v-if="footer.email" :href="`mailto:${footer.email}`" class="contact-card">
           <Icon name="mdi-email-outline" size="20" />
           <span>{{ footer.email }}</span>
@@ -21,13 +21,13 @@
           <Icon name="mdi-phone-outline" size="20" />
           <span>{{ footer.phone }}</span>
         </a>
-      </div>
+      </RevealOnScroll>
 
       <!-- ── FAQs, grouped per product ── -->
       <InlineLoader v-if="loading" class="faq-loading" min-height="80px" />
 
       <template v-else>
-        <div v-for="group in faqGroups" :key="group.slug" class="faq-group" data-aos="fade-up">
+        <RevealOnScroll v-for="(group, i) in faqGroups" :key="group.slug" as="div" class="faq-group" :delay="i * 80">
           <h2 class="faq-group-title">{{ group.name }}</h2>
           <Accordion type="multiple" class="faq-panels">
             <AccordionItem v-for="faq in group.faqs" :key="faq.id" :value="String(faq.id)">
@@ -35,11 +35,11 @@
               <AccordionContent class="faq-answer">{{ faq.answer }}</AccordionContent>
             </AccordionItem>
           </Accordion>
-        </div>
+        </RevealOnScroll>
       </template>
 
       <!-- ── Still need help ── -->
-      <div class="still-need text-center" data-aos="fade-up">
+      <RevealOnScroll as="div" class="still-need text-center">
         <h3 class="still-need-title">{{ t('help_page.still_need_help') }}</h3>
         <p class="section-sub still-need-sub">{{ t('help_page.still_need_help_sub') }}</p>
         <Button v-if="telegramHref" as="a" :href="telegramHref" target="_blank" rel="noopener">
@@ -48,8 +48,8 @@
         <Button v-else-if="footer.email" as="a" :href="`mailto:${footer.email}`">
           {{ footer.email }}
         </Button>
-      </div>
-    </Container>
+      </RevealOnScroll>
+    </div>
   </section>
 </template>
 
@@ -57,7 +57,6 @@
   import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion'
   import { Button } from '~/components/ui/button'
   import { getProductBySlug } from '~/services/cms/products'
-  import type { ProductFaq } from '~/types'
 
   const { t } = useI18n()
   const productsStore = useProductsStore()
@@ -66,20 +65,21 @@
   const footer = computed(() => siteContentStore.footer)
   const telegramHref = computed(() => footer.value.socials?.find((s) => s.name === 'Telegram')?.href)
 
-  const loading = ref(true)
-  const faqGroups = ref<{ slug: string; name: string; faqs: ProductFaq[] }[]>([])
-
   // Awaited (not onMounted) so the FAQ groups (this page's primary content)
   // are present in the server-rendered HTML, not just after hydration.
-  await useAsyncData('help-page', async () => {
+  // `pending`/`data` (not a hand-rolled `loading` ref flipped inside the
+  // callback) is what actually hydrates correctly — on client navigation
+  // with a cached payload, the callback never re-runs, so a plain ref
+  // toggled inside it would stay stuck at its initial value and desync
+  // from the server-rendered state, causing a hydration mismatch.
+  const { data: faqGroupsData, pending: loading } = await useAsyncData('help-page', async () => {
     await Promise.all([productsStore.fetchProducts(), siteContentStore.fetchFooter()])
     const details = await Promise.all(productsStore.products.map((p) => getProductBySlug(p.slug)))
-    faqGroups.value = details
+    return details
       .filter((d) => d?.faqs?.length)
       .map((d) => ({ slug: d!.slug, name: d!.name, faqs: d!.faqs! }))
-    loading.value = false
-    return true
   })
+  const faqGroups = computed(() => faqGroupsData.value ?? [])
 </script>
 
 <style scoped>
@@ -115,11 +115,11 @@
     font-size: 0.86rem;
     font-weight: 600;
     text-decoration: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform var(--duration-base) var(--ease-out-quart), box-shadow var(--duration-base) var(--ease-out-quart);
   }
   .contact-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 26px color-mix(in srgb, var(--foreground) 8%, transparent);
+    box-shadow: var(--shadow-md);
   }
 
   .faq-loading {

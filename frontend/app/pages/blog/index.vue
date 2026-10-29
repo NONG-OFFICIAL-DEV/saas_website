@@ -1,39 +1,41 @@
 <template>
   <section class="section-pad">
-    <Container>
-      <div class="hub-header text-center" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll as="div" class="hub-header text-center">
         <span class="section-tag">{{ t('blog_hub.tag') }}</span>
         <h1 class="section-title">{{ t('blog_hub.title') }}</h1>
         <p class="section-sub hub-sub">{{ t('blog_hub.sub') }}</p>
-      </div>
+      </RevealOnScroll>
 
       <InlineLoader v-if="store.loading" min-height="260px" />
 
-      <div v-else-if="store.posts.length" class="hub-grid" data-aos="fade-up">
-        <NuxtLinkLocale
-          v-for="post in store.posts"
-          :key="post.id"
-          :to="`/blog/${post.slug}`"
-          class="post-card"
-        >
-          <img v-if="post.cover_image_url" :src="post.cover_image_url" :alt="post.title" class="post-cover" />
-          <div class="post-body">
-            <div class="post-date">{{ formatDate(post.published_at ?? undefined) }}</div>
-            <h3 class="post-title">{{ post.title }}</h3>
-            <p class="post-excerpt">{{ post.excerpt }}</p>
-            <div class="post-cta">
-              {{ t('button.learn_more') }}
-              <Icon name="mdi-arrow-right" size="16" />
-            </div>
-          </div>
-        </NuxtLinkLocale>
+      <div v-else-if="store.posts.length" class="hub-grid">
+        <RevealOnScroll v-for="(post, i) in store.posts" :key="post.id" :delay="(i % 3) * 80">
+          <TiltCard :max-tilt="5" :glare="false">
+            <NuxtLinkLocale
+              :to="`/blog/${post.slug}`"
+              class="post-card"
+            >
+              <img v-if="post.cover_image_url" :src="post.cover_image_url" :alt="post.title" class="post-cover" />
+              <div class="post-body">
+                <div class="post-date">{{ formatDate(post.published_at ?? undefined) }}</div>
+                <h3 class="post-title">{{ post.title }}</h3>
+                <p class="post-excerpt">{{ post.excerpt }}</p>
+                <div class="post-cta">
+                  {{ t('button.learn_more') }}
+                  <Icon name="mdi-arrow-right" size="16" />
+                </div>
+              </div>
+            </NuxtLinkLocale>
+          </TiltCard>
+        </RevealOnScroll>
       </div>
 
       <div v-else class="empty-state">
         <Icon name="mdi-newspaper-variant-outline" size="40" />
         <p>{{ t('blog_hub.empty') }}</p>
       </div>
-    </Container>
+    </div>
   </section>
 </template>
 
@@ -73,18 +75,18 @@
   .post-card {
     display: flex;
     flex-direction: column;
-    border-radius: 20px;
+    height: 100%;
+    border-radius: var(--radius-xl);
     background: var(--card);
     border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
-    box-shadow: 0 12px 28px color-mix(in srgb, var(--foreground) 6%, transparent);
+    box-shadow: var(--shadow-sm);
     text-decoration: none;
     color: var(--foreground);
     overflow: hidden;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: box-shadow var(--duration-base) var(--ease-out-quart);
   }
   .post-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 44px color-mix(in srgb, var(--foreground) 10%, transparent);
+    box-shadow: var(--shadow-lg);
   }
 
   .post-cover {

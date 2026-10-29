@@ -177,10 +177,10 @@ onUnmounted(() => window.removeEventListener("scroll", onScroll));
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
   border-bottom: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
-  transition: box-shadow 0.25s ease;
+  transition: box-shadow var(--duration-base) var(--ease-out-quart);
 }
 .glass-nav.scrolled {
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-sm);
 }
 
 .nav-inner {
@@ -241,7 +241,7 @@ onUnmounted(() => window.removeEventListener("scroll", onScroll));
   font-weight: 600;
   color: color-mix(in srgb, var(--foreground) 60%, transparent);
   text-decoration: none;
-  transition: color 0.15s;
+  transition: color var(--duration-fast) var(--ease-out-quart);
   cursor: pointer;
 }
 .nav-link:hover,
@@ -294,8 +294,8 @@ onUnmounted(() => window.removeEventListener("scroll", onScroll));
   min-width: 150px;
   background: var(--card);
   border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
-  border-radius: 16px;
-  box-shadow: 0 14px 34px color-mix(in srgb, var(--foreground) 14%, transparent);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
   padding: 6px;
   z-index: 2000;
 }
@@ -325,7 +325,7 @@ onUnmounted(() => window.removeEventListener("scroll", onScroll));
 /* Transitions */
 .lang-drop-enter-active,
 .lang-drop-leave-active {
-  transition: all 0.2s ease;
+  transition: all var(--duration-fast) var(--ease-out-quart);
 }
 .lang-drop-enter-from,
 .lang-drop-leave-to {

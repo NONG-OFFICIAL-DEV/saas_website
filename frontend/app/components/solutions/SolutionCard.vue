@@ -33,18 +33,18 @@
     flex-direction: column;
     gap: 12px;
     padding: 28px 26px;
-    border-radius: 20px;
+    border-radius: var(--radius-2xl);
     background: var(--card);
     border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
-    box-shadow: 0 12px 28px color-mix(in srgb, var(--foreground) 6%, transparent);
+    box-shadow: var(--shadow-sm), var(--surface-sheen);
     text-decoration: none;
     color: var(--foreground);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform var(--duration-base) var(--ease-out-quart), box-shadow var(--duration-base) var(--ease-out-quart);
     overflow: hidden;
   }
   .solution-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 20px 40px color-mix(in srgb, var(--foreground) 10%, transparent);
+    box-shadow: var(--shadow-lg), var(--surface-sheen);
   }
 
   .card-glow {
@@ -65,12 +65,16 @@
     z-index: 1;
     width: 48px;
     height: 48px;
-    border-radius: 14px;
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
     background: color-mix(in srgb, var(--primary) 12%, transparent);
     color: var(--primary);
+    transition: transform var(--duration-base) var(--ease-spring);
+  }
+  .solution-card:hover .icon-wrap {
+    transform: scale(1.08) rotate(-2deg);
   }
 
   .solution-name {
@@ -100,7 +104,7 @@
     font-weight: 700;
     color: var(--primary);
     margin-top: 4px;
-    transition: gap 0.15s;
+    transition: gap var(--duration-fast) var(--ease-out-quart);
   }
   .solution-card:hover .card-cta {
     gap: 10px;

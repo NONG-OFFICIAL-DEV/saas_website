@@ -1,41 +1,45 @@
 <template>
   <section class="section-pad">
-    <Container class="text-center">
-      <div class="mb-10" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto text-center">
+      <RevealOnScroll as="div" class="mb-10">
         <span class="section-tag">{{ tag }}</span>
         <h2 class="section-title">{{ title }}</h2>
         <p class="section-sub audience-sub mx-auto">{{ description }}</p>
-      </div>
+      </RevealOnScroll>
 
       <div class="audience-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
-        <div
+        <RevealOnScroll
           v-for="(ex, i) in examples"
           :key="ex.label"
-          data-aos="fade-up"
-          :data-aos-delay="i * 80"
-          class="audience-card"
-          :class="{ 'audience-card--featured': ex.featured, 'audience-card--image': !!ex.image_url }"
+          :delay="i * 80"
         >
-          <div v-if="ex.image_url" class="audience-media">
-            <img :src="ex.image_url" :alt="ex.label" class="h-full w-full object-cover" />
-          </div>
-          <div v-else class="audience-icon">
-            <Icon :name="ex.icon" size="24" />
-          </div>
+          <TiltCard :max-tilt="5" :glare="false">
+            <div
+              class="audience-card"
+              :class="{ 'audience-card--featured': ex.featured, 'audience-card--image': !!ex.image_url }"
+            >
+              <div v-if="ex.image_url" class="audience-media">
+                <img :src="ex.image_url" :alt="ex.label" class="h-full w-full object-cover" />
+              </div>
+              <div v-else class="audience-icon">
+                <Icon :name="ex.icon" size="24" />
+              </div>
 
-          <div class="audience-heading">
-            <h3 class="audience-title">{{ ex.label }}</h3>
-            <Badge v-if="ex.featured" class="audience-badge">{{ t('common.featured') }}</Badge>
-          </div>
-          <p class="audience-desc">{{ ex.description }}</p>
-        </div>
+              <div class="audience-heading">
+                <h3 class="audience-title">{{ ex.label }}</h3>
+                <Badge v-if="ex.featured" class="audience-badge">{{ t('common.featured') }}</Badge>
+              </div>
+              <p class="audience-desc">{{ ex.description }}</p>
+            </div>
+          </TiltCard>
+        </RevealOnScroll>
       </div>
 
-      <NuxtLinkLocale to="/solutions" class="see-all-link" data-aos="fade-up">
+      <NuxtLinkLocale to="/solutions" class="see-all-link">
         {{ t('menu.view_all_solutions') }}
         <Icon name="mdi-arrow-right" size="16" />
       </NuxtLinkLocale>
-    </Container>
+    </div>
   </section>
 </template>
 
@@ -67,18 +71,18 @@
   .audience-card {
     display: flex;
     flex-direction: column;
+    height: 100%;
     padding: 28px 26px;
-    border-radius: 20px;
+    border-radius: var(--radius-xl);
     background: var(--card);
     border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+    box-shadow: var(--shadow-sm);
     transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease,
-      border-color 0.2s ease;
+      box-shadow var(--duration-base) var(--ease-out-quart),
+      border-color var(--duration-base) var(--ease-out-quart);
   }
   .audience-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 16px 34px color-mix(in srgb, var(--foreground) 8%, transparent);
+    box-shadow: var(--shadow-md);
     border-color: color-mix(in srgb, var(--primary) 30%, transparent);
   }
 

@@ -86,26 +86,35 @@
 
   /*
    * ── Claymorphism surface ────────────────────────────────────────────
-   * Soft rounded elevation for cards. Shadow color rides on on-surface
-   * (near-black in light mode, near-white in dark mode) so one rule
-   * works correctly in both themes without duplication.
+   * Soft rounded elevation for cards, built on the --shadow- and --radius-
+   * tokens in tailwind.css (shared with the shadcn Card primitive) plus
+   * --surface-sheen, a thin top rim-light that reads as a genuine
+   * highlight in dark mode and is a no-op on white light-mode cards.
    */
   .clay-surface {
-    border-radius: 22px;
+    border-radius: var(--radius-2xl);
     background: var(--card);
     border: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
-    box-shadow:
-      0 14px 32px color-mix(in srgb, var(--foreground) 8%, transparent),
-      0 2px 8px color-mix(in srgb, var(--foreground) 4%, transparent);
+    box-shadow: var(--shadow-md), var(--surface-sheen);
     transition:
-      transform 0.25s ease,
-      box-shadow 0.25s ease;
+      transform var(--duration-base) var(--ease-out-quart),
+      box-shadow var(--duration-base) var(--ease-out-quart);
   }
   .clay-surface--interactive:hover {
     transform: translateY(-4px);
-    box-shadow:
-      0 22px 46px color-mix(in srgb, var(--foreground) 12%, transparent),
-      0 4px 14px color-mix(in srgb, var(--foreground) 6%, transparent);
+    box-shadow: var(--shadow-lg), var(--surface-sheen);
+  }
+
+  /*
+   * ── Sunken surface ───────────────────────────────────────────────────
+   * The recessed counterpart to .clay-surface — inset shadow instead of a
+   * raised one, for tracks/wells (pricing-toggle backgrounds, stat strips)
+   * that should read as "pressed in" rather than "floating".
+   */
+  .surface-sunken {
+    background: var(--muted);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--inset-shadow-sm);
   }
 
   /*
@@ -122,7 +131,17 @@
    * NuxtLink <a>.
    */
   .landing-layout [data-slot='button'][data-variant='default']:not(.cta-btn-solid) {
-    box-shadow: 0 10px 26px color-mix(in srgb, var(--primary) 28%, transparent);
+    box-shadow:
+      0 10px 28px color-mix(in srgb, var(--primary) 30%, transparent),
+      var(--shadow-xs);
+    transition:
+      box-shadow var(--duration-base) var(--ease-out-quart),
+      transform var(--duration-base) var(--ease-out-quart);
+  }
+  .landing-layout [data-slot='button'][data-variant='default']:not(.cta-btn-solid):hover {
+    box-shadow:
+      0 16px 38px color-mix(in srgb, var(--primary) 36%, transparent),
+      var(--shadow-sm);
   }
   .landing-layout [data-slot='button'][data-variant='outline']:not(.cta-btn-outline),
   .landing-layout [data-slot='button'][data-variant='secondary'] {
@@ -131,18 +150,18 @@
     border-color: color-mix(in srgb, var(--primary) 35%, transparent) !important;
   }
   .landing-layout [data-slot='button']:active {
-    transform: scale(0.97);
+    transform: scale(0.97) translateY(0);
   }
 
   .section-tag {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.7rem;
+    font-size: var(--text-caption);
+    letter-spacing: var(--text-caption--letter-spacing);
     font-weight: 800;
     color: var(--primary);
     text-transform: uppercase;
-    letter-spacing: 0.04em;
     padding: 6px 16px 6px 12px;
     border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
     border-radius: 999px;
@@ -159,18 +178,18 @@
   }
 
   .section-title {
-    font-size: clamp(1.4rem, 4vw, 2.6rem);
-    font-weight: 900;
-    letter-spacing: -1px;
-    line-height: 1.12;
+    font-size: var(--text-h2);
+    font-weight: var(--text-h2--font-weight);
+    letter-spacing: var(--text-h2--letter-spacing);
+    line-height: var(--text-h2--line-height);
     margin-bottom: 14px;
   }
 
   .section-sub {
-    font-size: clamp(0.82rem, 2.2vw, 0.95rem);
-    opacity: 0.6;
-    line-height: 1.75;
-    max-width: 480px;
+    font-size: var(--text-lead);
+    line-height: var(--text-lead--line-height);
+    opacity: 0.65;
+    max-width: 520px;
   }
 
   /* Gap helpers */

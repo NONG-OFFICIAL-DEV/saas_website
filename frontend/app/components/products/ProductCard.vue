@@ -50,24 +50,22 @@
     flex-direction: column;
     gap: 14px;
     padding: 30px 28px;
-    border-radius: 22px;
+    border-radius: var(--radius-2xl);
     background: var(--card);
     border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
-    box-shadow:
-      0 14px 32px color-mix(in srgb, var(--foreground) 7%, transparent),
-      0 2px 8px color-mix(in srgb, var(--foreground) 4%, transparent);
+    box-shadow: var(--shadow-md), var(--surface-sheen);
     text-decoration: none;
     color: var(--foreground);
     transition:
-      transform 0.25s ease,
-      box-shadow 0.25s ease,
-      border-color 0.25s ease;
+      transform var(--duration-base) var(--ease-out-quart),
+      box-shadow var(--duration-base) var(--ease-out-quart),
+      border-color var(--duration-base) var(--ease-out-quart);
     overflow: hidden;
   }
   .product-card:hover {
     transform: translateY(-6px);
     box-shadow:
-      0 22px 48px color-mix(in srgb, var(--foreground) 12%, transparent),
+      var(--shadow-lg),
       0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
     border-color: color-mix(in srgb, var(--accent) 45%, transparent);
   }
@@ -83,7 +81,7 @@
     opacity: 0.14;
     filter: blur(40px);
     pointer-events: none;
-    transition: opacity 0.25s ease;
+    transition: opacity var(--duration-base) var(--ease-out-quart);
   }
   .product-card:hover .card-glow {
     opacity: 0.22;
@@ -112,7 +110,7 @@
     );
     color: var(--accent);
     flex-shrink: 0;
-    transition: transform 0.25s ease;
+    transition: transform var(--duration-base) var(--ease-out-quart);
   }
   .product-card:hover .logo-wrap {
     transform: scale(1.06) rotate(-2deg);
@@ -190,7 +188,7 @@
     font-weight: 700;
     color: var(--accent);
     margin-top: 4px;
-    transition: gap 0.15s;
+    transition: gap var(--duration-fast) var(--ease-out-quart);
   }
   .product-card:hover .card-cta {
     gap: 10px;

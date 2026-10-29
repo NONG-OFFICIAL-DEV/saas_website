@@ -1,7 +1,7 @@
 <template>
   <section class="section-pad docs-home">
-    <Container>
-      <div class="header text-center" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll as="div" class="header text-center">
         <span class="section-tag">{{ t('documentation_home.tag') }}</span>
         <h1 class="section-title">{{ t('documentation_home.title') }}</h1>
         <p class="section-sub header-sub">{{ t('documentation_home.sub') }}</p>
@@ -15,11 +15,11 @@
             :placeholder="t('documentation_home.search_placeholder')"
           />
         </div>
-      </div>
+      </RevealOnScroll>
 
       <!-- ── Search results ── -->
       <template v-if="query.trim().length >= 2">
-        <div class="search-results" data-aos="fade-up">
+        <div class="search-results">
           <p class="results-heading">{{ t('documentation_home.search_results_for', { query }) }}</p>
 
           <InlineLoader v-if="store.searching" class="results-loading" size="28" min-height="0" />
@@ -47,7 +47,7 @@
       <template v-else>
         <InlineLoader v-if="store.loading" min-height="180px" />
 
-        <div v-else class="cards-grid" data-aos="fade-up">
+        <RevealOnScroll v-else as="div" class="cards-grid" :delay="80">
           <div v-for="category in productCategories" :key="category.id" class="product-card">
             <div class="product-icon">
               <Icon :name="category.icon || 'mdi-apps'" size="26" />
@@ -68,9 +68,9 @@
               <Icon name="mdi-play-circle-outline" size="15" /> Watch demo
             </a>
           </div>
-        </div>
+        </RevealOnScroll>
 
-        <div v-if="gettingStarted" class="getting-started" data-aos="fade-up">
+        <RevealOnScroll v-if="gettingStarted" as="div" class="getting-started" :delay="160">
           <span class="section-tag">{{ t('documentation_home.getting_started_tag') }}</span>
           <h2 class="gs-title">{{ t('documentation_home.getting_started_title') }}</h2>
           <ol class="gs-steps">
@@ -81,9 +81,9 @@
               </NuxtLinkLocale>
             </li>
           </ol>
-        </div>
+        </RevealOnScroll>
 
-        <div v-if="generalCategories.length" class="all-categories" data-aos="fade-up">
+        <RevealOnScroll v-if="generalCategories.length" as="div" class="all-categories" :delay="240">
           <h2 class="gs-title">{{ t('documentation_home.browse_all') }}</h2>
           <div class="category-grid">
             <NuxtLinkLocale
@@ -96,9 +96,9 @@
               {{ category.name }}
             </NuxtLinkLocale>
           </div>
-        </div>
+        </RevealOnScroll>
       </template>
-    </Container>
+    </div>
   </section>
 </template>
 
@@ -160,13 +160,13 @@
     border-radius: 999px;
     border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
     background: var(--card);
-    box-shadow: 0 10px 26px color-mix(in srgb, var(--foreground) 6%, transparent);
+    box-shadow: var(--shadow-sm);
     color: color-mix(in srgb, var(--foreground) 50%, transparent);
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color var(--duration-base) var(--ease-out-quart), box-shadow var(--duration-base) var(--ease-out-quart);
   }
   .search-box:focus-within {
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.14);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 14%, transparent);
   }
   .search-input {
     flex: 1;
@@ -189,26 +189,26 @@
     flex-direction: column;
     gap: 10px;
     padding: 28px 26px;
-    border-radius: 20px;
+    border-radius: var(--radius-xl);
     background: var(--card);
     border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
-    box-shadow: 0 12px 28px color-mix(in srgb, var(--foreground) 6%, transparent);
+    box-shadow: var(--shadow-sm);
     text-decoration: none;
     color: var(--foreground);
-    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    transition: transform var(--duration-base) var(--ease-out-quart), box-shadow var(--duration-base) var(--ease-out-quart);
   }
   .product-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 18px 36px color-mix(in srgb, var(--foreground) 10%, transparent);
+    box-shadow: var(--shadow-md);
   }
   .product-icon {
     width: 46px;
     height: 46px;
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(99, 102, 241, 0.12);
+    background: color-mix(in srgb, var(--primary) 12%, transparent);
     color: var(--primary);
   }
   .product-name {
@@ -275,7 +275,7 @@
     background: var(--card);
     text-decoration: none;
     color: var(--foreground);
-    transition: border-color 0.2s;
+    transition: border-color var(--duration-base) var(--ease-out-quart);
   }
   .gs-step:hover {
     border-color: var(--primary);
@@ -342,7 +342,7 @@
     border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     text-decoration: none;
     color: var(--foreground);
-    transition: border-color 0.2s;
+    transition: border-color var(--duration-base) var(--ease-out-quart);
   }
   .result-card:hover {
     border-color: var(--primary);

@@ -8,28 +8,28 @@
       <Geometric3D />
     </div>
 
-    <Container>
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
       <div class="w-full md:w-9/12 lg:w-7/12 mx-auto text-center">
 
           <!-- Badge -->
-          <div class="hero-badge mb-7" data-aos="fade-down" data-aos-delay="0">
+          <RevealOnScroll as="div" class="hero-badge mb-7" direction="down" :distance="12">
             <span class="pulse-dot" />
             {{ hero.badge_text }}
-          </div>
+          </RevealOnScroll>
 
           <!-- Headline -->
-          <h1 class="hero-title mb-6" data-aos="fade-up" data-aos-delay="100">
+          <RevealOnScroll as="h1" class="hero-title mb-6" :delay="80">
             {{ hero.headline }}<br />
             <span class="hero-title-sub">{{ hero.subheadline }}</span>
-          </h1>
+          </RevealOnScroll>
 
           <!-- Sub-headline -->
-          <p class="hero-sub mb-10" data-aos="fade-up" data-aos-delay="200">
+          <RevealOnScroll as="p" class="hero-sub mb-10" :delay="160">
             {{ hero.description }}
-          </p>
+          </RevealOnScroll>
 
           <!-- CTA buttons -->
-          <div class="flex gap-3 justify-center flex-wrap" data-aos="fade-up" data-aos-delay="300">
+          <RevealOnScroll as="div" class="flex gap-3 justify-center flex-wrap" :delay="240">
             <Button as="NuxtLink" to="/products" class="hero-btn px-10">
               {{ hero.cta_primary_label }}
               <Icon name="mdi-arrow-right" size="18" />
@@ -44,25 +44,23 @@
             >
               {{ hero.cta_secondary_label }}
             </Button>
-          </div>
+          </RevealOnScroll>
 
           <!-- Trust line -->
-          <p class="hero-trust-line mt-5" data-aos="fade-up" data-aos-delay="350">
+          <RevealOnScroll as="p" class="hero-trust-line mt-5" :delay="300">
             {{ hero.trust_line }}
-          </p>
+          </RevealOnScroll>
 
           <!-- Stats row -->
-          <Row dense class="mt-16" data-aos="fade-up" data-aos-delay="400">
-            <Col v-for="s in (hero.stats as { num: string; label: string }[])" :key="s.label" cols="6" sm="3">
-              <div class="stat-pill">
-                <div class="stat-num">{{ s.num }}</div>
-                <div class="stat-label">{{ s.label }}</div>
-              </div>
-            </Col>
-          </Row>
+          <RevealOnScroll as="div" class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-16" :delay="360">
+            <div v-for="s in (hero.stats as { num: string; label: string }[])" :key="s.label" class="stat-pill">
+              <div class="stat-num">{{ s.num }}</div>
+              <div class="stat-label">{{ s.label }}</div>
+            </div>
+          </RevealOnScroll>
 
       </div>
-    </Container>
+    </div>
   </section>
 </template>
 
@@ -129,10 +127,10 @@
 }
 
 .hero-title {
-   font-size: clamp(2.2rem, 5.5vw, 4rem);
-  font-weight: 900;
-  line-height: 1.08;
-  letter-spacing: -2.5px;
+  font-size: var(--text-display);
+  font-weight: var(--text-display--font-weight);
+  line-height: var(--text-display--line-height);
+  letter-spacing: var(--text-display--letter-spacing);
   position: relative;
   z-index: 1;
 }
@@ -148,16 +146,18 @@
   background: none;
 }
 .hero-sub {
-  font-size: 1.15rem;
+  font-size: var(--text-lead);
+  line-height: var(--text-lead--line-height);
   max-width: 560px;
   margin: 0 auto;
   opacity: 0.65;
-  line-height: 1.7;
   position: relative;
   z-index: 1;
 }
 .hero-btn {
-  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.35) !important;
+  /* Colored shadow rides on --primary so it stays correct in dark mode
+     too, instead of a hardcoded light-mode blue. */
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--primary) 38%, transparent) !important;
 }
 .hero-trust-line {
   font-size: 0.78rem;
@@ -169,10 +169,15 @@
 .stat-pill {
   background: var(--card);
   border: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
-  border-radius: 18px;
+  border-radius: var(--radius-xl);
   padding: 16px 8px;
   text-align: center;
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--foreground) 5%, transparent);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-base) var(--ease-out-quart), box-shadow var(--duration-base) var(--ease-out-quart);
+}
+.stat-pill:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
 }
 .stat-num {
   font-size: 1.9rem;

@@ -28,66 +28,68 @@
       <AlertDescription>{{ t('pricing.unavailable') }}</AlertDescription>
     </Alert>
 
-    <div v-else class="cards-grid" :data-count="visiblePlans.length">
-      <div v-for="plan in visiblePlans" :key="plan.id" class="plan-card" :class="{ 'plan-card--featured': plan.popular }">
-        <Badge v-if="plan.popular" class="popular-badge bg-primary text-primary-foreground border-transparent">
-          <Icon name="mdi-star" size="12" />
-          {{ t('common.most_popular') }}
-        </Badge>
+    <RevealOnScroll v-else as="div" class="cards-grid" :data-count="visiblePlans.length">
+      <TiltCard v-for="plan in visiblePlans" :key="plan.id" :max-tilt="4" :glare="false">
+        <div class="plan-card clay-surface" :class="{ 'plan-card--featured': plan.popular }">
+          <Badge v-if="plan.popular" class="popular-badge bg-primary text-primary-foreground border-transparent">
+            <Icon name="mdi-star" size="12" />
+            {{ t('common.most_popular') }}
+          </Badge>
 
-        <h3 class="plan-name">{{ plan.name }}</h3>
-        <p class="plan-desc">{{ tagline(plan) }}</p>
+          <h3 class="plan-name">{{ plan.name }}</h3>
+          <p class="plan-desc">{{ tagline(plan) }}</p>
 
-        <div class="price-block">
-          <template v-if="!available(plan)">
-            <div class="price-unavailable">
-              <Icon name="mdi-information-outline" size="14" />
-              <span>{{ t('pricing.free_monthly_only') }}</span>
-            </div>
-          </template>
-          <template v-else-if="isFree(plan)">
-            <div class="price-row">
-              <span class="price-currency">$</span>
-              <span class="price-amount price-amount--free">0</span>
-            </div>
-            <div class="price-meta">
-              <span class="price-per">{{ t('common.per_month') }}</span>
-            </div>
-          </template>
-          <template v-else>
-            <div class="price-row">
-              <span class="price-currency">$</span>
-              <span class="price-amount">{{ monthlyPrice(plan) }}</span>
-            </div>
-            <div class="price-meta">
-              <span class="price-per">{{ t('common.per_month') }}</span>
-              <Badge v-if="savingsPct(plan) > 0" class="bg-success/10 text-success border-transparent">
-                {{ t('pricing.save_pct', { pct: savingsPct(plan) }) }}
-              </Badge>
-            </div>
-          </template>
+          <div class="price-block">
+            <template v-if="!available(plan)">
+              <div class="price-unavailable">
+                <Icon name="mdi-information-outline" size="14" />
+                <span>{{ t('pricing.free_monthly_only') }}</span>
+              </div>
+            </template>
+            <template v-else-if="isFree(plan)">
+              <div class="price-row">
+                <span class="price-currency">$</span>
+                <span class="price-amount price-amount--free">0</span>
+              </div>
+              <div class="price-meta">
+                <span class="price-per">{{ t('common.per_month') }}</span>
+              </div>
+            </template>
+            <template v-else>
+              <div class="price-row">
+                <span class="price-currency">$</span>
+                <span class="price-amount">{{ monthlyPrice(plan) }}</span>
+              </div>
+              <div class="price-meta">
+                <span class="price-per">{{ t('common.per_month') }}</span>
+                <Badge v-if="savingsPct(plan) > 0" class="bg-success/10 text-success border-transparent">
+                  {{ t('pricing.save_pct', { pct: savingsPct(plan) }) }}
+                </Badge>
+              </div>
+            </template>
+          </div>
+
+          <div class="plan-divider" />
+
+          <ul class="feature-list">
+            <li v-for="f in features(plan)" :key="f" class="feature-item">
+              <Icon name="mdi-check" size="14" class="feature-check" />
+              <span>{{ f }}</span>
+            </li>
+          </ul>
+
+          <Button
+            :variant="plan.popular ? 'default' : 'outline'"
+            class="plan-cta w-full"
+            :disabled="!available(plan)"
+            @click="goToRegister"
+          >
+            {{ plan.code === 'enterprise' ? t('button.contact_sales') : plan.code === 'free' ? t('button.start_free') : t('button.get_started') }}
+            <Icon name="mdi-arrow-right" size="16" />
+          </Button>
         </div>
-
-        <div class="plan-divider" />
-
-        <ul class="feature-list">
-          <li v-for="f in features(plan)" :key="f" class="feature-item">
-            <Icon name="mdi-check" size="14" class="feature-check" />
-            <span>{{ f }}</span>
-          </li>
-        </ul>
-
-        <Button
-          :variant="plan.popular ? 'default' : 'outline'"
-          class="plan-cta w-full"
-          :disabled="!available(plan)"
-          @click="goToRegister"
-        >
-          {{ plan.code === 'enterprise' ? t('button.contact_sales') : plan.code === 'free' ? t('button.start_free') : t('button.get_started') }}
-          <Icon name="mdi-arrow-right" size="16" />
-        </Button>
-      </div>
-    </div>
+      </TiltCard>
+    </RevealOnScroll>
   </div>
 </template>
 
@@ -187,7 +189,7 @@
     color: color-mix(in srgb, var(--foreground) 50%, transparent);
     cursor: pointer;
     white-space: nowrap;
-    transition: background 0.2s, color 0.2s;
+    transition: background var(--duration-base) var(--ease-out-quart), color var(--duration-base) var(--ease-out-quart);
   }
   .cycle-btn--active {
     background: var(--primary);
@@ -234,18 +236,16 @@
 
   .plan-card {
     position: relative;
-    border-radius: 18px;
     padding: 24px 22px;
-    background: var(--card);
-    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     display: flex;
     flex-direction: column;
     gap: 14px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+    transition: border-color var(--duration-base) var(--ease-out-quart), box-shadow var(--duration-base) var(--ease-out-quart);
   }
   .plan-card--featured {
-    border: 2px solid var(--primary);
-    box-shadow: 0 12px 32px color-mix(in srgb, var(--primary) 12%, transparent);
+    border-color: color-mix(in srgb, var(--primary) 45%, transparent) !important;
+    box-shadow: var(--shadow-md), 0 0 0 1px color-mix(in srgb, var(--primary) 25%, transparent);
   }
   .popular-badge {
     position: absolute;

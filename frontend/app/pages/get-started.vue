@@ -1,58 +1,56 @@
 <template>
   <section class="section-pad get-started">
-    <Container>
-      <div class="header text-center" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll as="div" class="header text-center">
         <span class="section-tag">{{ t('get_started_page.tag') }}</span>
         <h1 class="section-title">{{ t('get_started_page.title') }}</h1>
         <p class="section-sub header-sub">{{ t('get_started_page.sub') }}</p>
-      </div>
+      </RevealOnScroll>
 
       <InlineLoader v-if="store.loading" min-height="220px" />
 
-      <div v-else class="cards-grid" data-aos="fade-up">
-        <div
-          v-for="product in store.products"
-          :key="product.id"
-          class="product-choice-card"
-          :style="{ '--accent': product.accent_color || '#6366F1' }"
-        >
-          <div class="logo-wrap">
-            <img v-if="product.logo_url" :src="product.logo_url" :alt="product.name" class="logo-img" />
-            <Icon v-else name="mdi-apps" size="28" />
-          </div>
-          <h3 class="product-name">{{ product.name }}</h3>
-          <p class="product-tagline">{{ product.tagline || product.summary }}</p>
-          <component
-            :is="linkFor(product).href ? 'a' : NuxtLinkLocale"
-            v-bind="linkFor(product)"
-            class="choice-cta"
-          >
-            {{ t('get_started_page.choose', { name: product.name }) }}
-            <Icon name="mdi-arrow-right" size="16" />
-          </component>
-        </div>
+      <div v-else class="cards-grid">
+        <RevealOnScroll v-for="(product, i) in store.products" :key="product.id" :delay="(i % 3) * 80">
+          <TiltCard :max-tilt="6" :glare="false">
+            <div
+              class="product-choice-card"
+              :style="{ '--accent': product.accent_color || '#6366F1' }"
+            >
+              <div class="logo-wrap">
+                <img v-if="product.logo_url" :src="product.logo_url" :alt="product.name" class="logo-img" />
+                <Icon v-else name="mdi-apps" size="28" />
+              </div>
+              <h3 class="product-name">{{ product.name }}</h3>
+              <p class="product-tagline">{{ product.tagline || product.summary }}</p>
+              <component
+                :is="linkFor(product).href ? 'a' : NuxtLinkLocale"
+                v-bind="linkFor(product)"
+                class="choice-cta"
+              >
+                {{ t('get_started_page.choose', { name: product.name }) }}
+                <Icon name="mdi-arrow-right" size="16" />
+              </component>
+            </div>
+          </TiltCard>
+        </RevealOnScroll>
       </div>
 
-      <div class="explore-more text-center" data-aos="fade-up">
+      <RevealOnScroll as="div" class="explore-more text-center">
         <NuxtLinkLocale to="/products" class="explore-link">
           {{ t('get_started_page.explore_more') }}
         </NuxtLinkLocale>
-      </div>
-    </Container>
+      </RevealOnScroll>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
   import { NuxtLinkLocale } from '#components'
+  import { ONBOARDABLE_SLUGS } from '~/config/onboardableProducts'
   import type { Product } from '~/types'
 
   const { t } = useI18n()
   const store = useProductsStore()
-
-  // Products with a guided in-house onboarding wizard skip straight to it;
-  // anything else falls back to that product's own marketing page (no
-  // guided setup exists for it yet).
-  const ONBOARDABLE_SLUGS = ['nexstack-pos', 'studio-management']
 
   // Awaited (not onMounted) — this is the whole page's content, so it must
   // be present in the server-rendered HTML, not just after hydration.
@@ -94,22 +92,22 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    height: 100%;
     padding: 32px 28px;
-    border-radius: 22px;
+    border-radius: var(--radius-2xl);
     background: var(--card);
     border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
-    box-shadow: 0 14px 32px color-mix(in srgb, var(--foreground) 7%, transparent);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--duration-base) var(--ease-out-quart);
   }
   .product-choice-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 44px color-mix(in srgb, var(--foreground) 10%, transparent);
+    box-shadow: var(--shadow-lg);
   }
 
   .logo-wrap {
     width: 56px;
     height: 56px;
-    border-radius: 16px;
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -142,12 +140,16 @@
     gap: 8px;
     margin-top: 8px;
     padding: 12px;
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     background: var(--accent);
     color: white;
     text-decoration: none;
     font-weight: 700;
     font-size: 0.9rem;
+    transition: transform var(--duration-fast) var(--ease-out-quart);
+  }
+  .choice-cta:hover {
+    transform: translateY(-1px);
   }
 
   .explore-more {

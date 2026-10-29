@@ -70,9 +70,9 @@
   </header>
 
   <main class="admin-main" :class="{ 'admin-main--mobile': mobile }">
-    <Container fluid class="p-4">
+    <div class="w-full px-4 p-4">
       <slot />
-    </Container>
+    </div>
   </main>
 </template>
 
@@ -170,6 +170,7 @@
     flex-direction: column;
     background: var(--card);
     border-right: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+    box-shadow: var(--shadow-sm);
     z-index: 200;
   }
   .admin-sidebar--sheet {
@@ -197,12 +198,12 @@
     align-items: center;
     gap: 12px;
     padding: 10px 12px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-size: 0.86rem;
     font-weight: 600;
     color: color-mix(in srgb, var(--foreground) 70%, transparent);
     text-decoration: none;
-    transition: background 0.15s, color 0.15s;
+    transition: background var(--duration-fast) var(--ease-out-quart), color var(--duration-fast) var(--ease-out-quart);
   }
   .drawer-item:hover {
     background: color-mix(in srgb, var(--foreground) 5%, transparent);

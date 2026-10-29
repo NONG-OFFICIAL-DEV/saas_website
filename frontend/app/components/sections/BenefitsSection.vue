@@ -1,27 +1,29 @@
 <template>
   <section class="section-pad section-tint-mint" id="benefits">
-    <Container>
-      <div class="text-center mb-12" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll as="div" class="text-center mb-12">
         <span class="section-tag">{{ t('home.benefits.eyebrow') }}</span>
         <h2 class="section-title">{{ t('home.benefits.title') }}</h2>
-      </div>
+      </RevealOnScroll>
 
       <div class="benefits-grid">
-        <div
+        <RevealOnScroll
           v-for="(b, i) in items"
           :key="b.key"
-          class="benefit-item clay-surface clay-surface--interactive"
-          data-aos="fade-up"
-          :data-aos-delay="(i % 4) * 80"
+          :delay="(i % 4) * 80"
         >
-          <div class="benefit-icon">
-            <Icon :name="b.icon" size="20" />
-          </div>
-          <h3 class="benefit-title">{{ t(`home.benefits.items.${b.key}.title`) }}</h3>
-          <p class="benefit-desc">{{ t(`home.benefits.items.${b.key}.desc`) }}</p>
-        </div>
+          <TiltCard :max-tilt="6" :glare="false">
+            <div class="benefit-item clay-surface clay-surface--interactive">
+              <div class="benefit-icon">
+                <Icon :name="b.icon" size="20" />
+              </div>
+              <h3 class="benefit-title">{{ t(`home.benefits.items.${b.key}.title`) }}</h3>
+              <p class="benefit-desc">{{ t(`home.benefits.items.${b.key}.desc`) }}</p>
+            </div>
+          </TiltCard>
+        </RevealOnScroll>
       </div>
-    </Container>
+    </div>
   </section>
 </template>
 
@@ -54,12 +56,16 @@
   width: 44px;
   height: 44px;
   margin: 0 auto 14px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   background: color-mix(in srgb, var(--primary) 10%, transparent);
   color: var(--primary);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform var(--duration-base) var(--ease-spring);
+}
+.benefit-item:hover .benefit-icon {
+  transform: scale(1.1);
 }
 .benefit-title {
   font-size: 0.88rem;
@@ -68,7 +74,7 @@
   margin-bottom: 5px;
 }
 .benefit-desc {
-  font-size: 0.78rem;
+  font-size: var(--text-caption);
   opacity: 0.55;
   line-height: 1.6;
   margin: 0;

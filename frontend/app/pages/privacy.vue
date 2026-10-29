@@ -7,7 +7,7 @@
       </NuxtLinkLocale>
 
       <div class="legal-header">
-        <div class="legal-icon privacy-icon">
+        <div class="legal-icon">
           <Icon name="mdi-shield-lock-outline" size="28" />
         </div>
         <h1 class="legal-title">{{ t('common.privacy_policy') }}</h1>
@@ -125,7 +125,7 @@
     margin-bottom: 40px;
     font-weight: 600;
     opacity: 0.8;
-    transition: opacity 0.15s;
+    transition: opacity var(--duration-fast) var(--ease-out-quart);
   }
   .back-link:hover {
     opacity: 1;
@@ -137,7 +137,7 @@
   .legal-icon {
     width: 52px;
     height: 52px;
-    border-radius: 14px;
+    border-radius: var(--radius-md);
     background: color-mix(in srgb, var(--primary) 8%, transparent);
     color: var(--primary);
     display: flex;
@@ -145,16 +145,12 @@
     justify-content: center;
     margin-bottom: 18px;
   }
-  .privacy-icon {
-    background: rgba(99, 102, 241, 0.08);
-    color: #6366f1;
-  }
   .legal-title {
-    font-size: clamp(1.6rem, 4vw, 2.2rem);
-    font-weight: 900;
-    letter-spacing: -1px;
+    font-size: var(--text-h1);
+    font-weight: var(--text-h1--font-weight);
+    letter-spacing: var(--text-h1--letter-spacing);
+    line-height: var(--text-h1--line-height);
     margin-bottom: 8px;
-    line-height: 1.1;
   }
   .legal-date {
     font-size: 0.82rem;
@@ -165,7 +161,7 @@
   .legal-toc {
     background: color-mix(in srgb, var(--foreground) 3%, transparent);
     border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
-    border-radius: 14px;
+    border-radius: var(--radius-md);
     padding: 18px 22px;
     margin-bottom: 44px;
   }

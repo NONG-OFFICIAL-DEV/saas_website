@@ -4,19 +4,19 @@
   </div>
 
   <div v-else-if="!store.currentPost" class="not-found">
-    <Container class="text-center">
+    <div class="w-full px-4 max-w-[1280px] mx-auto text-center">
       <Icon name="mdi-compass-off-outline" size="48" />
       <h2 class="section-title">{{ t('blog_detail.not_found_title') }}</h2>
       <p class="section-sub mx-auto">{{ t('blog_detail.not_found_desc') }}</p>
       <Button as="NuxtLink" to="/blog">
         {{ t('blog_detail.back_to_blog') }}
       </Button>
-    </Container>
+    </div>
   </div>
 
   <template v-else>
     <section class="section-pad hero">
-      <Container>
+      <div class="w-full px-4 max-w-[1280px] mx-auto">
         <div class="hero-inner">
           <NuxtLinkLocale to="/blog" class="back-link">
             <Icon name="mdi-arrow-left" size="16" /> {{ t('blog_detail.back_to_blog') }}
@@ -29,13 +29,13 @@
           <h1 class="hero-title">{{ post.title }}</h1>
           <img v-if="post.cover_image_url" :src="post.cover_image_url" :alt="post.title" class="cover-image" />
         </div>
-      </Container>
+      </div>
     </section>
 
     <section class="section-pad content-section">
-      <Container>
+      <div class="w-full px-4 max-w-[1280px] mx-auto">
         <div class="post-content">{{ post.content }}</div>
-      </Container>
+      </div>
     </section>
   </template>
 </template>
@@ -96,15 +96,16 @@
     margin-bottom: 10px;
   }
   .hero-title {
-    font-size: clamp(1.7rem, 4vw, 2.6rem);
-    font-weight: 900;
-    letter-spacing: -1px;
+    font-size: var(--text-h1);
+    font-weight: var(--text-h1--font-weight);
+    letter-spacing: var(--text-h1--letter-spacing);
+    line-height: var(--text-h1--line-height);
     margin: 0 0 24px;
   }
   .cover-image {
     width: 100%;
-    border-radius: 18px;
-    box-shadow: 0 18px 40px color-mix(in srgb, var(--foreground) 10%, transparent);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
   }
 
   .content-section {

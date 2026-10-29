@@ -1,13 +1,13 @@
 <template>
   <section class="section-pad section-tint-mint">
-    <Container>
-      <div v-if="section.title" class="text-center showcase-header" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll v-if="section.title" as="div" class="text-center showcase-header">
         <h2 class="section-title">{{ section.title }}</h2>
         <p v-if="section.subtitle" class="section-sub showcase-sub">{{ section.subtitle }}</p>
-      </div>
+      </RevealOnScroll>
 
       <!-- ── Feature selector ── -->
-      <div class="selector-wrap" data-aos="fade-up">
+      <RevealOnScroll as="div" class="selector-wrap" :delay="80">
         <div class="selector-track" role="tablist">
           <button
             v-for="item in section.items"
@@ -22,7 +22,7 @@
             {{ item.title }}
           </button>
         </div>
-      </div>
+      </RevealOnScroll>
 
       <!-- ── Active feature panel ── -->
       <Transition name="showcase-fade" mode="out-in">
@@ -61,7 +61,7 @@
           </div>
         </div>
       </Transition>
-    </Container>
+    </div>
   </section>
 </template>
 
@@ -118,12 +118,12 @@
     color: color-mix(in srgb, var(--foreground) 55%, transparent);
     cursor: pointer;
     white-space: nowrap;
-    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    transition: background var(--duration-base) var(--ease-out-quart), color var(--duration-base) var(--ease-out-quart), box-shadow var(--duration-base) var(--ease-out-quart);
   }
   .selector-btn--active {
     background: var(--card);
     color: var(--primary);
-    box-shadow: 0 4px 14px color-mix(in srgb, var(--foreground) 10%, transparent);
+    box-shadow: var(--shadow-sm);
   }
 
   .showcase-panel {
@@ -165,9 +165,10 @@
     color: var(--warning);
   }
   .showcase-title {
-    font-size: clamp(1.3rem, 3vw, 1.9rem);
-    font-weight: 900;
-    letter-spacing: -0.6px;
+    font-size: var(--text-h2);
+    font-weight: var(--text-h2--font-weight);
+    letter-spacing: var(--text-h2--letter-spacing);
+    line-height: var(--text-h2--line-height);
     margin: 0;
   }
   .showcase-desc {
@@ -220,14 +221,14 @@
 
   .showcase-media {
     aspect-ratio: 4 / 3;
-    border-radius: 24px;
+    border-radius: var(--radius-2xl);
     overflow: hidden;
     background: linear-gradient(
       160deg,
       color-mix(in srgb, var(--primary) 14%, transparent),
       color-mix(in srgb, var(--primary) 4%, transparent)
     );
-    box-shadow: 0 24px 60px color-mix(in srgb, var(--foreground) 10%, transparent);
+    box-shadow: var(--shadow-lg);
   }
   .showcase-media-placeholder {
     width: 100%;
@@ -240,7 +241,7 @@
 
   .showcase-fade-enter-active,
   .showcase-fade-leave-active {
-    transition: opacity 0.25s ease, transform 0.25s ease;
+    transition: opacity var(--duration-base) var(--ease-out-expo), transform var(--duration-base) var(--ease-out-expo);
   }
   .showcase-fade-enter-from {
     opacity: 0;

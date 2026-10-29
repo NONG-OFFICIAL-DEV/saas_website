@@ -5,8 +5,8 @@
       <div class="hero-decor hidden md:block" aria-hidden="true">
         <Geometric3D />
       </div>
-      <Container>
-        <div class="hero-content" data-aos="fade-up">
+      <div class="w-full px-4 max-w-[1280px] mx-auto">
+        <RevealOnScroll as="div" class="hero-content">
           <span class="section-tag">{{ about.hero_tag }}</span>
           <h1 class="section-title">{{ about.hero_heading }}</h1>
           <p class="section-sub hero-description mx-auto">{{ about.hero_description }}</p>
@@ -21,58 +21,58 @@
               {{ about.hero_cta_secondary_label }}
             </Button>
           </div>
-        </div>
-      </Container>
+        </RevealOnScroll>
+      </div>
     </section>
 
     <!-- ── My Story ─────────────────────────────────────────────────────── -->
     <section class="section-pad section-tint-neutral">
-      <Container>
-        <div class="story-block" data-aos="fade-up">
+      <div class="w-full px-4 max-w-[1280px] mx-auto">
+        <RevealOnScroll as="div" class="story-block">
           <h2 class="section-title">{{ about.story_title }}</h2>
           <p v-for="(para, i) in storyParagraphs" :key="i" class="section-sub story-para">
             {{ para }}
           </p>
-        </div>
-      </Container>
+        </RevealOnScroll>
+      </div>
     </section>
 
     <!-- ── What I Build ─────────────────────────────────────────────────── -->
     <section class="section-pad section-tint-sky">
-      <Container>
-        <div class="text-center mb-10" data-aos="fade-up">
+      <div class="w-full px-4 max-w-[1280px] mx-auto">
+        <RevealOnScroll as="div" class="text-center mb-10">
           <span class="section-tag">{{ about.products_tag }}</span>
           <h2 class="section-title">{{ about.products_title }}</h2>
           <p class="section-sub products-sub mx-auto">{{ about.products_description }}</p>
-        </div>
+        </RevealOnScroll>
 
         <InlineLoader v-if="productsStore.loading" min-height="200px" />
-        <div v-else class="products-grid" data-aos="fade-up">
+        <RevealOnScroll v-else as="div" class="products-grid" :delay="80">
           <ProductCard v-for="product in productsStore.products" :key="product.id" :product="product" />
-        </div>
-      </Container>
+        </RevealOnScroll>
+      </div>
     </section>
 
     <!-- ── My Approach ──────────────────────────────────────────────────── -->
     <section class="section-pad">
-      <Container>
-        <div class="text-center mb-10" data-aos="fade-up">
+      <div class="w-full px-4 max-w-[1280px] mx-auto">
+        <RevealOnScroll as="div" class="text-center mb-10">
           <span class="section-tag">{{ about.approach_tag }}</span>
           <h2 class="section-title">{{ about.approach_title }}</h2>
-        </div>
+        </RevealOnScroll>
 
         <div class="values-grid">
           <template v-for="(v, i) in about.approach_cards ?? []" :key="v.title">
-            <div class="value-card" data-aos="fade-up" :data-aos-delay="i * 100">
+            <RevealOnScroll as="div" class="value-card" :delay="i * 100">
               <span class="value-num">{{ String(i + 1).padStart(2, '0') }}</span>
               <Icon :name="v.icon" size="24" color="var(--primary)" />
               <h3>{{ v.title }}</h3>
               <p>{{ v.description }}</p>
-            </div>
+            </RevealOnScroll>
             <div v-if="i < (about.approach_cards?.length ?? 0) - 1" class="value-connector" aria-hidden="true" />
           </template>
         </div>
-      </Container>
+      </div>
     </section>
 
     <!-- ── Who I Build For ──────────────────────────────────────────────── -->
@@ -85,16 +85,18 @@
 
     <!-- ── Personal Profile ─────────────────────────────────────────────── -->
     <section class="section-pad">
-      <Container>
-        <Row align="center">
-          <Col cols="12" md="4" class="text-center" data-aos="fade-right">
-            <Avatar class="size-[180px] bg-primary profile-avatar">
-              <AvatarImage v-if="about.profile_photo_url" :src="about.profile_photo_url" :alt="about.profile_name" />
-              <AvatarFallback><Icon name="mdi-account" size="90" color="white" /></AvatarFallback>
-            </Avatar>
-          </Col>
+      <div class="w-full px-4 max-w-[1280px] mx-auto">
+        <div class="grid grid-cols-12 gap-6 items-center">
+          <RevealOnScroll as="div" class="col-span-12 md:col-span-4 text-center" direction="none">
+            <TiltCard :max-tilt="6" class="inline-block">
+              <Avatar class="size-[180px] bg-primary profile-avatar">
+                <AvatarImage v-if="about.profile_photo_url" :src="about.profile_photo_url" :alt="about.profile_name" />
+                <AvatarFallback><Icon name="mdi-account" size="90" color="white" /></AvatarFallback>
+              </Avatar>
+            </TiltCard>
+          </RevealOnScroll>
 
-          <Col cols="12" md="8" class="text-center md:text-left" data-aos="fade-left">
+          <RevealOnScroll as="div" class="col-span-12 md:col-span-8 text-center md:text-left" direction="none" :delay="100">
             <p v-if="about.profile_greeting" class="profile-greeting">{{ about.profile_greeting }}</p>
             <h2 v-if="about.profile_name" class="section-title profile-name">{{ about.profile_name }}</h2>
             <p v-if="about.profile_bio" class="section-sub about-lead">{{ about.profile_bio }}</p>
@@ -122,19 +124,19 @@
                 <SocialIcon :name="social.name.toLowerCase()" />
               </a>
             </div>
-          </Col>
-        </Row>
-      </Container>
+          </RevealOnScroll>
+        </div>
+      </div>
     </section>
 
     <!-- ── CTA ──────────────────────────────────────────────────────────── -->
     <section class="section-pad section-tint-lavender">
-      <Container class="text-center">
-        <h2 class="section-title" data-aos="fade-up">{{ about.cta_title }}</h2>
-        <p class="section-sub about-lead mx-auto" data-aos="fade-up">
+      <RevealOnScroll as="div" class="w-full px-4 max-w-[1280px] mx-auto text-center">
+        <h2 class="section-title">{{ about.cta_title }}</h2>
+        <p class="section-sub about-lead mx-auto">
           {{ about.cta_description }}
         </p>
-        <div class="cta-links" data-aos="fade-up">
+        <div class="cta-links">
           <Button as="a" href="/#contact">
             {{ about.cta_primary_label }}
             <Icon name="mdi-arrow-right" size="18" />
@@ -143,7 +145,7 @@
             {{ about.cta_secondary_label }}
           </Button>
         </div>
-      </Container>
+      </RevealOnScroll>
     </section>
   </div>
 </template>
@@ -269,19 +271,19 @@
     position: relative;
     flex: 1 1 220px;
     padding: 28px 26px;
-    border-radius: 20px;
+    border-radius: var(--radius-xl);
     background: var(--card);
     border: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
-    box-shadow: 0 12px 28px color-mix(in srgb, var(--foreground) 6%, transparent);
+    box-shadow: var(--shadow-sm);
     text-align: center;
     overflow: hidden;
     transition:
-      transform 0.25s ease,
-      box-shadow 0.25s ease;
+      transform var(--duration-base) var(--ease-out-quart),
+      box-shadow var(--duration-base) var(--ease-out-quart);
   }
   .value-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 18px 36px color-mix(in srgb, var(--foreground) 10%, transparent);
+    box-shadow: var(--shadow-md);
   }
   .value-num {
     position: absolute;
@@ -314,7 +316,7 @@
 
   /* ── Personal Profile ──────────────────────────────────────────────────── */
   .profile-avatar {
-    box-shadow: 0 16px 40px color-mix(in srgb, var(--primary) 25%, transparent);
+    box-shadow: var(--shadow-lg), 0 0 0 1px color-mix(in srgb, var(--primary) 20%, transparent);
   }
   .about-lead {
     max-width: 560px;
@@ -352,9 +354,9 @@
     color: color-mix(in srgb, var(--foreground) 55%, transparent);
     text-decoration: none;
     transition:
-      background 0.18s,
-      color 0.18s,
-      transform 0.15s;
+      background var(--duration-base) var(--ease-out-quart),
+      color var(--duration-base) var(--ease-out-quart),
+      transform var(--duration-base) var(--ease-out-quart);
   }
   .social-btn:hover {
     background: color-mix(in srgb, var(--primary) 12%, transparent);

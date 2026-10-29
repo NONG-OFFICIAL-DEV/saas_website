@@ -1,39 +1,41 @@
 <template>
   <section class="section-pad">
-    <Container>
-      <div v-if="section.title" class="text-center grid-header" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll v-if="section.title" as="div" class="text-center grid-header">
         <h2 class="section-title">{{ section.title }}</h2>
         <p v-if="section.subtitle" class="section-sub grid-sub">{{ section.subtitle }}</p>
-      </div>
+      </RevealOnScroll>
 
       <div class="feature-grid">
-        <div
+        <RevealOnScroll
           v-for="(item, i) in section.items"
           :key="item.id"
-          class="feature-card"
-          data-aos="fade-up"
-          :data-aos-delay="(i % 4) * 80"
+          :delay="(i % 4) * 80"
         >
-          <div v-if="item.image_url" class="feature-media">
-            <img :src="item.image_url" :alt="item.title" class="h-full w-full object-cover" />
-          </div>
-          <div class="feature-top">
-            <div class="feature-icon">
-              <Icon :name="item.icon || 'mdi-check-circle-outline'" size="22" />
+          <TiltCard :max-tilt="5" :glare="false">
+            <div class="feature-card">
+              <div v-if="item.image_url" class="feature-media">
+                <img :src="item.image_url" :alt="item.title" class="h-full w-full object-cover" />
+              </div>
+              <div class="feature-top">
+                <div class="feature-icon">
+                  <Icon :name="item.icon || 'mdi-check-circle-outline'" size="22" />
+                </div>
+                <Badge v-if="item.badge" class="feature-badge" :class="`feature-badge--${item.badge}`">
+                  {{ badgeLabel(item.badge) }}
+                </Badge>
+              </div>
+              <h3 class="feature-title">{{ item.title }}</h3>
+              <p class="feature-desc">{{ item.description }}</p>
+              <a v-if="item.cta_url && item.cta_label" :href="item.cta_url" class="feature-cta" target="_blank" rel="noopener">
+                {{ item.cta_label }}
+                <Icon name="mdi-arrow-right" size="14" />
+              </a>
             </div>
-            <Badge v-if="item.badge" class="feature-badge" :class="`feature-badge--${item.badge}`">
-              {{ badgeLabel(item.badge) }}
-            </Badge>
-          </div>
-          <h3 class="feature-title">{{ item.title }}</h3>
-          <p class="feature-desc">{{ item.description }}</p>
-          <a v-if="item.cta_url && item.cta_label" :href="item.cta_url" class="feature-cta" target="_blank" rel="noopener">
-            {{ item.cta_label }}
-            <Icon name="mdi-arrow-right" size="14" />
-          </a>
-        </div>
+          </TiltCard>
+        </RevealOnScroll>
       </div>
-    </Container>
+    </div>
   </section>
 </template>
 
@@ -70,18 +72,18 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    height: 100%;
     padding: 26px 24px;
-    border-radius: 20px;
+    border-radius: var(--radius-xl);
     background: var(--card);
     border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+    box-shadow: var(--shadow-sm);
     transition:
-      transform 0.25s ease,
-      box-shadow 0.25s ease,
-      border-color 0.25s ease;
+      box-shadow var(--duration-base) var(--ease-out-quart),
+      border-color var(--duration-base) var(--ease-out-quart);
   }
   .feature-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 18px 40px color-mix(in srgb, var(--foreground) 8%, transparent);
+    box-shadow: var(--shadow-md);
     border-color: color-mix(in srgb, var(--primary) 25%, transparent);
   }
 

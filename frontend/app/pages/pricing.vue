@@ -1,18 +1,18 @@
 <template>
   <section class="section-pad pricing-page">
-    <Container>
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
       <!-- ── Header ── -->
-      <div class="hub-header text-center" data-aos="fade-up">
+      <RevealOnScroll as="div" class="hub-header text-center">
         <span class="section-tag">{{ t('pricing_hub.tag') }}</span>
         <h1 class="section-title">{{ t('pricing_hub.title') }}</h1>
         <p class="section-sub hub-sub">{{ t('pricing_hub.sub') }}</p>
-      </div>
+      </RevealOnScroll>
 
       <InlineLoader v-if="productsStore.loading" min-height="200px" />
 
       <template v-else-if="tabs.length">
         <!-- ── Product selector ── -->
-        <div class="product-selector-wrap" data-aos="fade-up">
+        <RevealOnScroll as="div" class="product-selector-wrap">
           <Tabs v-model="activeSlug">
             <TabsList class="product-selector">
               <TabsTrigger
@@ -30,13 +30,13 @@
               </TabsTrigger>
             </TabsList>
           </Tabs>
-        </div>
+        </RevealOnScroll>
 
         <!-- ═══════════════════ Nexstack POS ═══════════════════ -->
         <template v-if="activeSlug === 'nexstack-pos'">
           <!-- Same cycle-toggle + plan cards component used on the
                Nexstack POS product detail page's pricing section. -->
-          <PosPricingCards data-aos="fade-up" />
+          <PosPricingCards />
 
           <!-- ── Feature comparison ── -->
           <ComparisonTable
@@ -51,21 +51,12 @@
 
         <!-- ═══════════════════ Studio Management ═══════════════════ -->
         <template v-else-if="activeSlug === 'studio-management'">
-          <div v-if="studioHasPaidPlans" class="cycle-wrap" data-aos="fade-up">
-            <div class="cycle-track" role="group" :aria-label="t('common.billing_cycle')">
-              <button
-                v-for="c in STUDIO_CYCLES"
-                :key="c.months"
-                class="cycle-btn"
-                :class="{ 'cycle-btn--active': selectedMonths === c.months }"
-                :aria-pressed="selectedMonths === c.months"
-                @click="selectedMonths = c.months"
-              >
-                <span>{{ t(c.labelKey) }}</span>
-                <span v-if="c.months > 1" class="cycle-btn__badge">-{{ studioSavingsPct(c.months) }}%</span>
-              </button>
-            </div>
-          </div>
+          <StudioCycleToggle
+            v-if="studioPricing.hasPaidPlans"
+            v-model:selected-months="studioPricing.selectedMonths"
+            :cycles="studioPricing.CYCLES"
+            :savings-pct="studioPricing.savingsPct"
+          />
 
           <InlineLoader v-if="studioStore.loading" min-height="320px" />
           <Alert
@@ -77,66 +68,20 @@
           </Alert>
 
           <template v-else>
-            <div class="cards-grid" :data-count="studioStore.plans.length" data-aos="fade-up">
-              <div
+            <RevealOnScroll as="div" class="cards-grid" :data-count="studioStore.plans.length">
+              <StudioPlanCard
                 v-for="plan in studioStore.plans"
                 :key="plan.id"
-                class="plan-card"
-                :class="{ 'plan-card--featured': plan.code === 'professional' }"
-              >
-                <Badge
-                  v-if="plan.code === 'professional'"
-                  class="popular-badge bg-primary text-primary-foreground border-transparent"
-                >
-                  <Icon name="mdi-star" size="12" />
-                  {{ t('common.most_popular') }}
-                </Badge>
-
-                <h3 class="plan-name">{{ plan.name }}</h3>
-                <p class="plan-desc">{{ plan.description }}</p>
-
-                <div class="price-block">
-                  <template v-if="studioIsFree(plan)">
-                    <div class="price-row">
-                      <span class="price-currency">$</span>
-                      <span class="price-amount price-amount--free">0</span>
-                    </div>
-                    <div class="price-meta">
-                      <Badge class="bg-primary/10 text-primary border-transparent">
-                        {{ t('studio_pricing.trial_days', { days: plan.trial_days || 14 }) }}
-                      </Badge>
-                    </div>
-                  </template>
-                  <template v-else>
-                    <div class="price-row">
-                      <span class="price-currency">$</span>
-                      <span class="price-amount">{{ studioMonthlyPrice(plan) }}</span>
-                    </div>
-                    <div class="price-meta">
-                      <span class="price-per">{{ t('common.per_month') }}</span>
-                    </div>
-                  </template>
-                </div>
-
-                <div class="plan-divider" />
-
-                <ul class="feature-list">
-                  <li v-for="f in studioTopFeatures(plan)" :key="f" class="feature-item">
-                    <Icon name="mdi-check" size="14" class="feature-check" />
-                    <span>{{ f }}</span>
-                  </li>
-                </ul>
-
-                <Button
-                  :variant="plan.code === 'professional' ? 'default' : 'outline'"
-                  class="plan-cta w-full"
-                  @click="goToStudioRegister(plan.code, studioIsFree(plan) ? undefined : studioCycleCode)"
-                >
-                  {{ studioIsFree(plan) ? t('button.start_free_trial') : t('button.get_started') }}
-                  <Icon name="mdi-arrow-right" size="16" />
-                </Button>
-              </div>
-            </div>
+                :plan="plan"
+                :featured="plan.code === 'professional'"
+                :is-free="studioPricing.isFree(plan)"
+                :price-display="studioPricing.monthlyPrice(plan)"
+                :features="studioPricing.planFeatures(plan).slice(0, 7)"
+                :selected-months="studioPricing.selectedMonths"
+                :cycle-code="studioPricing.cycleCode"
+                @select="goToStudioRegister"
+              />
+            </RevealOnScroll>
 
             <ComparisonTable
               class="mt-16"
@@ -148,22 +93,25 @@
           </template>
         </template>
       </template>
-    </Container>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
   import { Alert, AlertDescription } from '~/components/ui/alert'
-  import { Badge } from '~/components/ui/badge'
-  import { Button } from '~/components/ui/button'
   import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
   import ComparisonTable from '~/components/sections/PricingComparisonTable.vue'
-  import type { StudioPlan } from '~/types'
 
   const { t, locale } = useI18n()
   const productsStore = useProductsStore()
   const posStore = usePosPlansStore()
-  const studioStore = useStudioPlansStore()
+  // reactive() so `studioPricing.xxx` auto-unwraps refs in both the
+  // template and this script, while still reading as one namespaced
+  // object (this page already has its own `activeSlug`/tab-switching
+  // state, so the composable's exports are kept under one name rather
+  // than destructured flat to avoid colliding with it).
+  const studioPricing = reactive(useStudioPricing())
+  const studioStore = studioPricing.store
 
   // Only products with a real, distinct pricing dataset get a tab here —
   // every other CMS product (if any are added later with no pricing
@@ -182,12 +130,12 @@
   )
   const activeProductName = computed(() => tabs.value.find((p) => p.slug === activeSlug.value)?.name ?? '')
 
-  // Cycles differ per product (POS's are CMS-driven, Studio's are fixed
-  // monthly/quarterly/yearly) — reset to monthly whenever the selected
-  // product changes so a stale cycle index never carries over.
-  const selectedMonths = ref(1)
+  // Studio's cycle selection (POS's own PosPricingCards.vue manages its
+  // own internal cycle state) — reset to monthly whenever the visitor
+  // switches away from and back to this tab, so a stale cycle never
+  // carries over from a previous visit.
   watch(activeSlug, () => {
-    selectedMonths.value = 1
+    studioPricing.selectedMonths = 1
   })
 
   await useAsyncData('pricing-page', async () => {
@@ -224,38 +172,11 @@
   })
 
   // ── Studio Management ────────────────────────────────────────────────
-  // `code` matches Studio's own BillingCycle enum values exactly, same as
-  // StudioPriceSection.vue's CYCLES — this is what actually gets sent
-  // through onboarding to Studio's /register endpoint.
-  const STUDIO_CYCLES = [
-    { months: 1, code: 'monthly', labelKey: 'studio_pricing.monthly' },
-    { months: 3, code: 'quarterly', labelKey: 'studio_pricing.quarterly' },
-    { months: 12, code: 'yearly', labelKey: 'studio_pricing.yearly' }
-  ]
-  const studioCycleCode = computed(() => STUDIO_CYCLES.find((c) => c.months === selectedMonths.value)?.code ?? 'monthly')
-  const studioHasPaidPlans = computed(() => studioStore.plans.some((p) => Number(p.price_monthly) > 0))
-  const studioIsFree = (plan: StudioPlan) => Number(plan.price_monthly) === 0
-  function studioTotalForCycle(plan: StudioPlan, months: number) {
-    if (months === 1) return Number(plan.price_monthly)
-    if (months === 3) return Number(plan.price_quarterly)
-    return Number(plan.price_yearly)
-  }
-  function studioMonthlyPrice(plan: StudioPlan) {
-    return (studioTotalForCycle(plan, selectedMonths.value) / selectedMonths.value).toFixed(2)
-  }
-  function studioSavingsPct(months: number) {
-    const referencePlan = studioStore.plans.find((p) => Number(p.price_monthly) > 0)
-    if (!referencePlan) return 0
-    const monthly = Number(referencePlan.price_monthly)
-    if (!monthly) return 0
-    const perMonthAtCycle = studioTotalForCycle(referencePlan, months) / months
-    return Math.round((1 - perMonthAtCycle / monthly) * 100)
-  }
-  function studioAllFeatures(plan: StudioPlan): string[] {
-    return studioPlanBullets(plan, locale.value)
-  }
-  const studioTopFeatures = (plan: StudioPlan) => studioAllFeatures(plan).slice(0, 7)
-
+  // Cycle/price math, plan-card rendering, and the cycle toggle all live
+  // in useStudioPricing() + StudioPlanCard.vue + StudioCycleToggle.vue
+  // (shared with StudioPriceSection.vue on the product detail page) —
+  // only the feature comparison table's own data is computed here.
+  //
   // Rows are keyed by `key` — Studio's PlanFeatureListing catalog id,
   // genuinely shared across every plan (unlike the old per-row render id
   // this used to key by), so rows align correctly with no text-matching.
@@ -332,7 +253,7 @@
     font-size: 0.9rem;
     font-weight: 700;
     color: color-mix(in srgb, var(--foreground) 55%, transparent) !important;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color var(--duration-base) var(--ease-out-quart), color var(--duration-base) var(--ease-out-quart);
   }
   .product-selector-trigger:hover {
     color: rgb(var(--foreground)) !important;
@@ -352,7 +273,7 @@
     overflow: hidden;
     background: color-mix(in srgb, var(--foreground) 8%, transparent);
     color: color-mix(in srgb, var(--foreground) 55%, transparent);
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color var(--duration-base) var(--ease-out-quart), color var(--duration-base) var(--ease-out-quart);
   }
   .trigger-logo img {
     width: 100%;
@@ -381,54 +302,9 @@
     }
   }
 
-  /* ── Billing cycle toggle ── */
-  .cycle-wrap {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 32px;
-  }
-  .cycle-track {
-    display: inline-flex;
-    align-items: center;
-    background: color-mix(in srgb, var(--foreground) 6%, transparent);
-    border-radius: 999px;
-    padding: 4px;
-    gap: 2px;
-    overflow-x: auto;
-    max-width: 100%;
-  }
-  .cycle-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 7px 16px;
-    border: none;
-    background: transparent;
-    border-radius: 999px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: color-mix(in srgb, var(--foreground) 50%, transparent);
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.2s, color 0.2s;
-  }
-  .cycle-btn--active {
-    background: var(--primary);
-    color: #fff;
-  }
-  .cycle-btn__badge {
-    font-size: 0.65rem;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.22);
-  }
-  .cycle-btn:not(.cycle-btn--active) .cycle-btn__badge {
-    background: color-mix(in srgb, var(--success) 15%, transparent);
-    color: var(--success);
-  }
-
-  /* ── Plan cards — compact, comparison-first ── */
+  /* Billing cycle toggle markup/styles now live in StudioCycleToggle.vue;
+     per-card styles in StudioPlanCard.vue — this page only owns the grid
+     container (including its count-aware responsive max-width). */
   .cards-grid {
     display: grid;
     gap: 18px;
@@ -456,112 +332,4 @@
     }
   }
 
-  .plan-card {
-    position: relative;
-    border-radius: 18px;
-    padding: 24px 22px;
-    background: var(--card);
-    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  }
-  .plan-card--featured {
-    border: 2px solid var(--primary);
-    box-shadow: 0 12px 32px color-mix(in srgb, var(--primary) 12%, transparent);
-  }
-  .popular-badge {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-  }
-
-  .plan-name {
-    font-size: 1.05rem;
-    font-weight: 800;
-    margin: 0;
-  }
-  .plan-desc {
-    font-size: 0.83rem;
-    color: color-mix(in srgb, var(--foreground) 55%, transparent);
-    margin: 0;
-    line-height: 1.5;
-  }
-
-  .price-block {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    min-height: 56px;
-  }
-  .price-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 2px;
-    line-height: 1;
-  }
-  .price-currency {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: color-mix(in srgb, var(--foreground) 50%, transparent);
-    margin-top: 4px;
-  }
-  .price-amount {
-    font-size: 2.4rem;
-    font-weight: 900;
-    letter-spacing: -1.5px;
-  }
-  .price-amount--free {
-    color: var(--success);
-  }
-  .price-meta {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .price-per {
-    font-size: 0.75rem;
-    color: color-mix(in srgb, var(--foreground) 50%, transparent);
-  }
-  .price-unavailable {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.78rem;
-    font-style: italic;
-    color: color-mix(in srgb, var(--foreground) 45%, transparent);
-  }
-
-  .plan-divider {
-    height: 1px;
-    background: color-mix(in srgb, var(--foreground) 10%, transparent);
-  }
-
-  .feature-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    flex-grow: 1;
-  }
-  .feature-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.82rem;
-  }
-  .feature-check {
-    color: var(--primary);
-    flex-shrink: 0;
-  }
-
-  .plan-cta {
-    margin-top: auto;
-  }
 </style>

@@ -4,7 +4,7 @@
   </div>
 
   <div v-else-if="!store.currentProduct" class="not-found">
-    <Container class="text-center">
+    <div class="w-full px-4 max-w-[1280px] mx-auto text-center">
       <Icon name="mdi-compass-off-outline" size="48" />
       <h2 class="section-title">{{ t('product_detail.not_found_title') }}</h2>
       <p class="section-sub mx-auto">
@@ -13,7 +13,7 @@
       <Button as="NuxtLink" to="/products">
         {{ t('button.back_to_products') }}
       </Button>
-    </Container>
+    </div>
   </div>
 
   <template v-else>
@@ -22,9 +22,9 @@
       class="section-pad hero"
       :style="{ '--accent': product.accent_color || '#6366F1' }"
     >
-      <Container>
-        <Row align="center">
-          <Col cols="12" md="7" data-aos="fade-up">
+      <div class="w-full px-4 max-w-[1280px] mx-auto">
+        <div class="grid grid-cols-12 gap-6 items-center">
+          <RevealOnScroll as="div" class="col-span-12 md:col-span-7">
             <Badge class="status-chip mb-4">
               {{ t(`common.status.${product.status}`) }}
             </Badge>
@@ -40,9 +40,9 @@
                 {{ t('button.all_products') }}
               </Button>
             </div>
-          </Col>
+          </RevealOnScroll>
 
-          <Col cols="12" md="5" data-aos="fade-up" data-aos-delay="100">
+          <RevealOnScroll as="div" class="col-span-12 md:col-span-5" :delay="100">
             <img
               v-if="product.hero_image_url"
               :src="product.hero_image_url"
@@ -52,9 +52,9 @@
             <div v-else class="hero-geo hidden md:block">
               <Geometric3D :accent="product.accent_color ?? undefined" />
             </div>
-          </Col>
-        </Row>
-      </Container>
+          </RevealOnScroll>
+        </div>
+      </div>
     </section>
 
     <!-- ── Feature Showcase (CMS-driven: grid/showcase/detail/workflow
@@ -69,52 +69,56 @@
         v-if="product.product_features?.length"
         class="section-pad section-tint-mint"
       >
-        <Container>
-          <div class="text-center mb-10" data-aos="fade-up">
+        <div class="w-full px-4 max-w-[1280px] mx-auto">
+          <RevealOnScroll as="div" class="text-center mb-10">
             <span class="section-tag">
               {{ t('product_detail.features_tag') }}
             </span>
             <h2 class="section-title">
               {{ t('product_detail.features_title', { name: product.name }) }}
             </h2>
-          </div>
+          </RevealOnScroll>
           <div class="features-grid">
-            <div
-              v-for="f in product.product_features"
+            <RevealOnScroll
+              v-for="(f, i) in product.product_features"
               :key="f.id"
-              class="feature-card"
-              data-aos="fade-up"
+              :delay="(i % 3) * 80"
             >
-              <div
-                class="feature-icon"
-                :style="{ '--accent': product.accent_color }"
-              >
-                <Icon :name="f.icon || 'mdi-check-circle-outline'" size="22" />
-              </div>
-              <h3 class="feature-title">{{ f.title }}</h3>
-              <p class="feature-desc">{{ f.description }}</p>
-            </div>
+              <TiltCard :max-tilt="6" :glare="false">
+                <div class="feature-card">
+                  <div
+                    class="feature-icon"
+                    :style="{ '--accent': product.accent_color }"
+                  >
+                    <Icon :name="f.icon || 'mdi-check-circle-outline'" size="22" />
+                  </div>
+                  <h3 class="feature-title">{{ f.title }}</h3>
+                  <p class="feature-desc">{{ f.description }}</p>
+                </div>
+              </TiltCard>
+            </RevealOnScroll>
           </div>
-        </Container>
+        </div>
       </section>
 
       <!-- ── Screenshots ── -->
       <section v-if="product.product_screenshots?.length" class="section-pad">
-        <Container>
-          <div class="text-center mb-10" data-aos="fade-up">
+        <div class="w-full px-4 max-w-[1280px] mx-auto">
+          <RevealOnScroll as="div" class="text-center mb-10">
             <span class="section-tag">
               {{ t('product_detail.screenshots_tag') }}
             </span>
             <h2 class="section-title">
               {{ t('product_detail.screenshots_title') }}
             </h2>
-          </div>
+          </RevealOnScroll>
           <div class="screenshots-grid">
-            <figure
-              v-for="s in product.product_screenshots"
+            <RevealOnScroll
+              v-for="(s, i) in product.product_screenshots"
               :key="s.id"
+              as="figure"
               class="screenshot"
-              data-aos="fade-up"
+              :delay="(i % 3) * 80"
             >
               <img
                 :src="s.url"
@@ -122,9 +126,9 @@
                 class="rounded-lg w-full"
               />
               <figcaption v-if="s.caption">{{ s.caption }}</figcaption>
-            </figure>
+            </RevealOnScroll>
           </div>
-        </Container>
+        </div>
       </section>
     </template>
 
@@ -147,15 +151,8 @@
 </template>
 
 <script setup lang="ts">
-import { Alert, AlertDescription } from '~/components/ui/alert'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
-import { getTrialLink } from '~/config/productTrials'
-
-// Products with a guided in-house onboarding wizard skip straight to it;
-// anything else falls back to that product's own external signup (see
-// config/productTrials.ts).
-const ONBOARDABLE_SLUGS = ['nexstack-pos', 'studio-management']
 
 const { t, locale } = useI18n()
 
@@ -164,17 +161,6 @@ const store = useProductsStore()
 
 const slug = computed(() => String(route.params.slug))
 const product = computed(() => store.currentProduct!)
-
-// Default ("register") CTA hands off to this site's own onboarding
-// wizard for products that have one; otherwise falls back to that
-// product's own external signup (see config/productTrials.ts).
-const finalCtaLink = computed(() => {
-  if (ONBOARDABLE_SLUGS.includes(product.value.slug)) {
-    return { to: `/onboarding/${product.value.slug}` }
-  }
-  const link = getTrialLink(product.value.slug)
-  return 'href' in link ? { href: link.href, target: '_blank', rel: 'noopener' } : { to: link.to }
-})
 
 // Registered before the data fetch below — useSeoMeta only needs to be
 // declared once with reactive getters, it doesn't need product data to
@@ -238,9 +224,10 @@ function goToStudioRegister(planCode?: string, billingCycle?: string) {
   }
 
   .hero-title {
-    font-size: clamp(1.8rem, 4.5vw, 3rem);
-    font-weight: 900;
-    letter-spacing: -1px;
+    font-size: var(--text-h1);
+    font-weight: var(--text-h1--font-weight);
+    letter-spacing: var(--text-h1--letter-spacing);
+    line-height: var(--text-h1--line-height);
     margin: 0 0 8px;
   }
   .hero-tagline {
@@ -260,9 +247,9 @@ function goToStudioRegister(planCode?: string, billingCycle?: string) {
   }
   .hero-image {
     max-height: 360px;
-    border-radius: 20px !important;
+    border-radius: var(--radius-xl) !important;
     overflow: hidden;
-    box-shadow: 0 18px 40px color-mix(in srgb, var(--foreground) 10%, transparent);
+    box-shadow: var(--shadow-lg);
   }
   .hero-geo {
     width: 100%;
@@ -278,28 +265,30 @@ function goToStudioRegister(planCode?: string, billingCycle?: string) {
   }
   .feature-card {
     padding: 26px 24px;
-    border-radius: 20px;
+    border-radius: var(--radius-xl);
     background: var(--card);
     border: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
-    box-shadow: 0 12px 28px color-mix(in srgb, var(--foreground) 6%, transparent);
+    box-shadow: var(--shadow-sm);
     transition:
-      transform 0.25s ease,
-      box-shadow 0.25s ease;
+      box-shadow var(--duration-base) var(--ease-out-quart);
   }
   .feature-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 18px 36px color-mix(in srgb, var(--foreground) 10%, transparent);
+    box-shadow: var(--shadow-md);
   }
   .feature-icon {
     width: 44px;
     height: 44px;
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
     background: color-mix(in srgb, var(--accent, #6366f1) 14%, transparent);
     color: var(--accent, #6366f1);
     margin-bottom: 14px;
+    transition: transform var(--duration-base) var(--ease-spring);
+  }
+  .feature-card:hover .feature-icon {
+    transform: scale(1.08);
   }
   .feature-title {
     font-size: 1rem;
@@ -319,9 +308,9 @@ function goToStudioRegister(planCode?: string, billingCycle?: string) {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
   .screenshot img {
-    border-radius: 18px;
+    border-radius: var(--radius-xl);
     overflow: hidden;
-    box-shadow: 0 14px 32px color-mix(in srgb, var(--foreground) 8%, transparent);
+    box-shadow: var(--shadow-md);
   }
   .screenshot figcaption {
     text-align: center;

@@ -1,14 +1,14 @@
 <template>
   <section class="section-pad section-tint-sky">
-    <Container>
-      <div v-if="section.title" class="text-center workflow-header" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll v-if="section.title" as="div" class="text-center workflow-header">
         <h2 class="section-title">{{ section.title }}</h2>
         <p v-if="section.subtitle" class="section-sub workflow-sub">{{ section.subtitle }}</p>
-      </div>
+      </RevealOnScroll>
 
       <div class="workflow-track">
         <template v-for="(item, i) in section.items" :key="item.id">
-          <div class="workflow-step" data-aos="fade-up" :data-aos-delay="i * 100">
+          <RevealOnScroll as="div" class="workflow-step" :delay="i * 100">
             <div class="step-icon">
               <Icon :name="item.icon || 'mdi-circle-medium'" size="24" />
             </div>
@@ -17,14 +17,14 @@
             </div>
             <h3 class="step-title">{{ item.title }}</h3>
             <p v-if="item.description" class="step-desc">{{ item.description }}</p>
-          </div>
+          </RevealOnScroll>
           <div v-if="i < section.items.length - 1" class="workflow-connector" aria-hidden="true">
             <Icon name="mdi-arrow-right" size="18" class="connector-icon connector-icon--h" />
             <Icon name="mdi-arrow-down" size="18" class="connector-icon connector-icon--v" />
           </div>
         </template>
       </div>
-    </Container>
+    </div>
   </section>
 </template>
 
@@ -68,9 +68,10 @@
     width: 100%;
     max-width: 220px;
     padding: 22px 18px;
-    border-radius: 18px;
+    border-radius: var(--radius-xl);
     background: var(--card);
     border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+    box-shadow: var(--shadow-sm);
   }
 
   .step-icon {

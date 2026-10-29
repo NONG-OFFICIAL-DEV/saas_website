@@ -84,6 +84,7 @@
     color: color-mix(in srgb, var(--foreground) 70%, transparent);
     text-decoration: none;
     border-left: 2px solid transparent;
+    transition: color var(--duration-fast) var(--ease-out-quart), border-color var(--duration-fast) var(--ease-out-quart);
   }
   .cat-article:hover {
     color: var(--primary);

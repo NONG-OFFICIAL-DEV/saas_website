@@ -1,31 +1,31 @@
 <template>
   <section class="section-pad section-tint-sky" id="products">
-    <Container>
-      <div class="text-center mb-10" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll as="div" class="text-center mb-10">
         <span class="section-tag">{{ t('home.products_teaser.tag') }}</span>
         <h2 class="section-title">{{ t('home.products_teaser.title') }}</h2>
         <p class="section-sub teaser-sub">
           {{ t('home.products_teaser.sub') }}
         </p>
-      </div>
+      </RevealOnScroll>
 
       <InlineLoader v-if="store.loading" min-height="200px" />
 
-      <div v-else class="teaser-grid" data-aos="fade-up">
+      <RevealOnScroll v-else as="div" class="teaser-grid" :delay="80">
         <ProductCard
           v-for="product in store.products"
           :key="product.id"
           :product="product"
         />
-      </div>
+      </RevealOnScroll>
 
-      <div class="text-center mt-10" data-aos="fade-up">
+      <RevealOnScroll as="div" class="text-center mt-10" :delay="160">
         <Button as="NuxtLink" variant="outline" to="/products">
           {{ t('button.view_all_products') }}
           <Icon name="mdi-arrow-right" size="18" />
         </Button>
-      </div>
-    </Container>
+      </RevealOnScroll>
+    </div>
   </section>
 </template>
 

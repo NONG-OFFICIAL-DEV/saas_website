@@ -182,6 +182,7 @@
     width: 300px;
     max-width: 85vw;
     background: var(--card);
+    box-shadow: var(--shadow-xl);
     z-index: 1200;
     display: flex;
     flex-direction: column;
@@ -214,6 +215,9 @@
     text-decoration: none;
     color: var(--foreground);
     font-weight: 600;
+    transition:
+      background var(--duration-fast) var(--ease-out-quart),
+      color var(--duration-fast) var(--ease-out-quart);
   }
   .drawer-link:hover {
     background: color-mix(in srgb, var(--primary) 5%, transparent);
@@ -228,7 +232,7 @@
   }
   .drawer-chevron {
     opacity: 0.6;
-    transition: transform 0.2s;
+    transition: transform var(--duration-fast) var(--ease-out-quart);
   }
   .drawer-chevron.open {
     transform: rotate(180deg);
@@ -339,10 +343,18 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform var(--duration-base) var(--ease-out-quart),
+      box-shadow var(--duration-base) var(--ease-out-quart);
+  }
+  .drawer-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
   }
   .backdrop-fade-enter-active,
   .backdrop-fade-leave-active {
-    transition: opacity 0.3s ease;
+    transition: opacity var(--duration-base) var(--ease-out-quart);
   }
   .backdrop-fade-enter-from,
   .backdrop-fade-leave-to {
@@ -350,7 +362,7 @@
   }
   .drawer-slide-enter-active,
   .drawer-slide-leave-active {
-    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: var(--duration-slow) var(--ease-out-expo);
   }
   .drawer-slide-enter-from,
   .drawer-slide-leave-to {

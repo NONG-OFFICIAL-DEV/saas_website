@@ -1,38 +1,40 @@
 <template>
   <section class="section-pad login-page">
-    <Container>
-      <div class="header text-center" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll as="div" class="header text-center">
         <span class="section-tag">{{ t('login_page.tag') }}</span>
         <h1 class="section-title">{{ t('login_page.title') }}</h1>
         <p class="section-sub header-sub">{{ t('login_page.sub') }}</p>
-      </div>
+      </RevealOnScroll>
 
       <InlineLoader v-if="store.loading" min-height="180px" />
 
-      <div v-else-if="loginableProducts.length" class="cards-grid" data-aos="fade-up">
-        <a
-          v-for="product in loginableProducts"
-          :key="product.id"
-          :href="getLoginLink(product.slug) ?? undefined"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="product-choice-card"
-          :style="{ '--accent': product.accent_color || '#6366F1' }"
-        >
-          <div class="logo-wrap">
-            <img v-if="product.logo_url" :src="product.logo_url" :alt="product.name" class="logo-img" />
-            <Icon v-else name="mdi-apps" size="28" />
-          </div>
-          <h3 class="product-name">{{ product.name }}</h3>
-          <span class="choice-cta">
-            {{ t('login_page.choose', { name: product.name }) }}
-            <Icon name="mdi-arrow-right" size="16" />
-          </span>
-        </a>
+      <div v-else-if="loginableProducts.length" class="cards-grid">
+        <RevealOnScroll v-for="(product, i) in loginableProducts" :key="product.id" :delay="(i % 3) * 80">
+          <TiltCard :max-tilt="6" :glare="false">
+            <a
+              :href="getLoginLink(product.slug) ?? undefined"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="product-choice-card"
+              :style="{ '--accent': product.accent_color || '#6366F1' }"
+            >
+              <div class="logo-wrap">
+                <img v-if="product.logo_url" :src="product.logo_url" :alt="product.name" class="logo-img" />
+                <Icon v-else name="mdi-apps" size="28" />
+              </div>
+              <h3 class="product-name">{{ product.name }}</h3>
+              <span class="choice-cta">
+                {{ t('login_page.choose', { name: product.name }) }}
+                <Icon name="mdi-arrow-right" size="16" />
+              </span>
+            </a>
+          </TiltCard>
+        </RevealOnScroll>
       </div>
 
       <p v-else class="empty-note text-center">{{ t('login_page.no_products') }}</p>
-    </Container>
+    </div>
   </section>
 </template>
 
@@ -79,24 +81,24 @@
     align-items: center;
     text-align: center;
     gap: 12px;
+    height: 100%;
     padding: 32px 28px;
-    border-radius: 22px;
+    border-radius: var(--radius-2xl);
     background: var(--card);
     border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
-    box-shadow: 0 14px 32px color-mix(in srgb, var(--foreground) 7%, transparent);
+    box-shadow: var(--shadow-sm);
     text-decoration: none;
     color: var(--foreground);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: box-shadow var(--duration-base) var(--ease-out-quart);
   }
   .product-choice-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 44px color-mix(in srgb, var(--foreground) 10%, transparent);
+    box-shadow: var(--shadow-lg);
   }
 
   .logo-wrap {
     width: 56px;
     height: 56px;
-    border-radius: 16px;
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;

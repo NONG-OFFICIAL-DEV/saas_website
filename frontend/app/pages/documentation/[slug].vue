@@ -4,16 +4,16 @@
   </div>
 
   <div v-else-if="!article" class="not-found">
-    <Container class="text-center">
+    <div class="w-full px-4 max-w-[1280px] mx-auto text-center">
       <Icon name="mdi-file-search-outline" size="48" />
       <h2 class="section-title">{{ t('documentation_article.not_found_title') }}</h2>
       <p class="section-sub mx-auto">{{ t('documentation_article.not_found_desc') }}</p>
       <Button as="NuxtLink" to="/documentation">{{ t('documentation_article.back_to_docs') }}</Button>
-    </Container>
+    </div>
   </div>
 
   <section v-else class="docs-article-page">
-    <Container fluid class="docs-layout" :class="{ 'docs-layout--no-toc': !headings.length }">
+    <div class="w-full px-4 docs-layout" :class="{ 'docs-layout--no-toc': !headings.length }">
       <!-- ── Left: category nav ── -->
       <aside v-if="mdAndUp" class="docs-sidebar docs-sidebar--left">
         <DocsCategoryNav :categories="store.categories" :current-slug="article.slug" />
@@ -86,7 +86,7 @@
         <div class="toc-title">{{ t('documentation_article.on_this_page') }}</div>
         <DocsTableOfContents :headings="headings" :active-id="activeHeadingId" @navigate="scrollToHeading" />
       </aside>
-    </Container>
+    </div>
   </section>
 </template>
 
@@ -301,9 +301,10 @@
     margin-bottom: 24px;
   }
   .article-title {
-    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
-    font-weight: 900;
-    letter-spacing: -0.5px;
+    font-size: var(--text-h1);
+    font-weight: var(--text-h1--font-weight);
+    letter-spacing: var(--text-h1--letter-spacing);
+    line-height: var(--text-h1--line-height);
     margin: 0 0 10px;
   }
   .article-excerpt {
@@ -388,12 +389,12 @@
     margin: 0 0 4px;
   }
   .article-content :deep(div[data-type='callout'][data-variant='tip']) {
-    background: rgba(99, 102, 241, 0.08);
+    background: color-mix(in srgb, var(--primary) 8%, transparent);
     border-left: 3px solid var(--primary);
   }
   .article-content :deep(div[data-type='callout'][data-variant='important']) {
-    background: rgba(245, 158, 11, 0.1);
-    border-left: 3px solid #f59e0b;
+    background: color-mix(in srgb, var(--warning) 10%, transparent);
+    border-left: 3px solid var(--warning);
   }
   .article-content :deep(div[data-type='callout'][data-variant='note']) {
     background: color-mix(in srgb, var(--foreground) 5%, transparent);
@@ -405,9 +406,9 @@
     width: 100%;
     padding-top: 56.25%;
     margin: 0 0 20px;
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     overflow: hidden;
-    box-shadow: 0 14px 32px color-mix(in srgb, var(--foreground) 8%, transparent);
+    box-shadow: var(--shadow-md);
   }
   .article-content :deep(div[data-type='video-embed'] iframe) {
     position: absolute;
@@ -441,6 +442,7 @@
     cursor: pointer;
     font-size: 0.86rem;
     font-weight: 600;
+    transition: border-color var(--duration-base) var(--ease-out-quart);
   }
   .feedback-btn:hover {
     border-color: var(--primary);
@@ -470,6 +472,7 @@
     color: var(--foreground);
     flex: 1;
     min-width: 200px;
+    transition: border-color var(--duration-base) var(--ease-out-quart);
   }
   .pn-link--next {
     text-align: right;
@@ -514,6 +517,7 @@
     border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     text-decoration: none;
     color: var(--foreground);
+    transition: border-color var(--duration-base) var(--ease-out-quart);
   }
   .related-card:hover {
     border-color: var(--primary);

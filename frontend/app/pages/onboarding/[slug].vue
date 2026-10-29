@@ -1,30 +1,30 @@
 <template>
   <section class="section-pad onboarding">
-    <Container>
-      <div v-if="!productMeta" class="unknown-state text-center" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll v-if="!productMeta" as="div" class="unknown-state text-center">
         <Icon name="mdi-compass-off-outline" size="44" />
         <p class="section-sub">{{ t('onboarding.unknown_product') }}</p>
         <Button as="NuxtLink" to="/get-started">{{ t('onboarding.start_over') }}</Button>
-      </div>
+      </RevealOnScroll>
 
       <template v-else>
-        <div v-if="step !== 'success'" class="header text-center" data-aos="fade-up">
+        <RevealOnScroll v-if="step !== 'success'" as="div" class="header text-center">
           <h1 class="section-title">{{ t('onboarding.title', { name: productMeta.name }) }}</h1>
           <p class="section-sub header-sub">{{ t('onboarding.sub', { name: productMeta.name }) }}</p>
-        </div>
+        </RevealOnScroll>
 
         <!-- Success screen -->
-        <div v-if="step === 'success'" class="success-card text-center" data-aos="fade-up">
+        <RevealOnScroll v-if="step === 'success'" as="div" class="success-card text-center">
           <Icon name="mdi-check-circle" size="56" color="var(--success)" />
           <h2 class="success-title">{{ t('onboarding.success_title', { name: productMeta.name }) }}</h2>
           <p class="section-sub success-sub">{{ t('onboarding.success_sub') }}</p>
           <Button as="a" size="lg" :href="loginUrl ?? undefined">
             {{ t('onboarding.go_to_login', { name: productMeta.name }) }}
           </Button>
-        </div>
+        </RevealOnScroll>
 
         <!-- Wizard -->
-        <form v-else class="wizard-card" data-aos="fade-up" @submit.prevent="handleSubmit">
+        <form v-else class="wizard-card" @submit.prevent="handleSubmit">
           <div class="step-tabs">
             <span :class="['step-tab', { active: step === 'business' }]">1. {{ t('onboarding.step_business') }}</span>
             <span :class="['step-tab', { active: step === 'owner' }]">2. {{ t('onboarding.step_owner') }}</span>
@@ -145,7 +145,7 @@
           </div>
         </form>
       </template>
-    </Container>
+    </div>
   </section>
 </template>
 
@@ -295,10 +295,10 @@
     max-width: 520px;
     margin: 0 auto;
     padding: 36px;
-    border-radius: 22px;
+    border-radius: var(--radius-2xl);
     background: var(--card);
     border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
-    box-shadow: 0 14px 32px color-mix(in srgb, var(--foreground) 7%, transparent);
+    box-shadow: var(--shadow-lg), var(--surface-sheen);
   }
 
   .step-tabs {
@@ -308,6 +308,9 @@
     font-size: 0.82rem;
     font-weight: 700;
     color: color-mix(in srgb, var(--foreground) 40%, transparent);
+  }
+  .step-tab {
+    transition: color var(--duration-base) var(--ease-out-quart);
   }
   .step-tab.active {
     color: var(--primary);

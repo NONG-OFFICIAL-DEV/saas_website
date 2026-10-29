@@ -148,7 +148,7 @@ defineI18nRoute(false)
     border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     background: color-mix(in srgb, var(--card) 72%, transparent);
     backdrop-filter: blur(20px);
-    box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.35);
+    box-shadow: var(--shadow-xl);
   }
 
   .login-brand {
@@ -215,7 +215,7 @@ defineI18nRoute(false)
 
   .fade-enter-active,
   .fade-leave-active {
-    transition: opacity 0.15s ease;
+    transition: opacity var(--duration-fast) var(--ease-out-quart);
   }
   .fade-enter-from,
   .fade-leave-to {

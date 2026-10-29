@@ -1,33 +1,21 @@
 <template>
   <section id="pricing" class="section-pad section-tint-peach">
-    <Container>
-      <div class="text-center mb-10" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll as="div" class="text-center mb-10">
         <span class="section-tag">{{ t('studio_pricing.eyebrow') }}</span>
         <h2 class="section-title">{{ t('studio_pricing.title') }}</h2>
         <p class="section-sub studio-pricing-sub">{{ t('studio_pricing.subtitle') }}</p>
-      </div>
+      </RevealOnScroll>
 
       <!-- ── Billing cycle toggle ── -->
-      <div v-if="!store.loading && hasPaidPlans" class="cycle-wrap">
-        <div class="cycle-track" role="group" :aria-label="t('common.billing_cycle')">
-          <button
-            v-for="c in CYCLES"
-            :key="c.months"
-            class="cycle-btn"
-            :class="{ 'cycle-btn--active': selectedMonths === c.months }"
-            :aria-pressed="selectedMonths === c.months"
-            @click="selectedMonths = c.months"
-          >
-            <span>{{ t(c.labelKey) }}</span>
-            <span v-if="c.months > 1" class="cycle-btn__badge">
-              -{{ savingsPct(c.months) }}%
-            </span>
-          </button>
-        </div>
-      </div>
+      <StudioCycleToggle
+        v-if="!store.loading && hasPaidPlans"
+        v-model:selected-months="selectedMonths"
+        :cycles="CYCLES"
+        :savings-pct="savingsPct"
+      />
 
       <InlineLoader v-if="store.loading" min-height="380px" />
-
 
       <Alert
         v-else-if="store.error"
@@ -38,80 +26,29 @@
       </Alert>
 
       <!-- ── Plan cards ── -->
-      <div v-else class="cards-grid" :data-count="store.plans.length" data-aos="fade-up">
-        <div
+      <RevealOnScroll v-else as="div" class="cards-grid" :data-count="store.plans.length">
+        <StudioPlanCard
           v-for="plan in store.plans"
           :key="plan.id"
-          class="plan-card clay-surface"
-          :class="{ 'plan-card--featured': plan.code === 'professional' }"
-        >
-          <Badge v-if="plan.code === 'professional'" class="popular-badge bg-primary text-primary-foreground border-transparent">
-            <Icon name="mdi-star" size="12" />
-            {{ t('common.most_popular') }}
-          </Badge>
-
-          <h3 class="plan-name">{{ plan.name }}</h3>
-          <p class="plan-desc">{{ plan.description }}</p>
-
-          <div class="price-block">
-            <template v-if="isFree(plan)">
-              <div class="price-row">
-                <span class="price-currency">$</span>
-                <span class="price-amount price-amount--free">0</span>
-              </div>
-              <div class="price-meta">
-                <Badge class="bg-primary/10 text-primary border-transparent">
-                  <Icon name="mdi-gift-outline" size="12" />
-                  {{ t('studio_pricing.trial_days', { days: plan.trial_days || 14 }) }}
-                </Badge>
-              </div>
-            </template>
-            <template v-else>
-              <div class="price-row">
-                <span class="price-currency">$</span>
-                <Transition name="price-flip" mode="out-in">
-                  <span :key="selectedMonths" class="price-amount">{{ monthlyPrice(plan) }}</span>
-                </Transition>
-              </div>
-              <div class="price-meta">
-                <span class="price-per">{{ t('common.per_month') }}</span>
-              </div>
-            </template>
-          </div>
-
-          <div class="plan-divider" />
-
-          <ul class="feature-list">
-            <li v-for="f in planFeatures(plan)" :key="f" class="feature-item">
-              <span class="plan-check-badge">
-                <Icon name="mdi-check" size="10" />
-              </span>
-              <span>{{ f }}</span>
-            </li>
-          </ul>
-
-          <Button
-            :variant="plan.code === 'professional' ? 'default' : 'outline'"
-            class="plan-cta w-full"
-            @click="emit('select-plan', plan.code, isFree(plan) ? undefined : cycleCode)"
-          >
-            {{ isFree(plan) ? t('button.start_free_trial') : t('button.get_started') }}
-            <Icon name="mdi-arrow-right" size="16" />
-          </Button>
-        </div>
-      </div>
-    </Container>
+          :plan="plan"
+          :featured="plan.code === 'professional'"
+          :is-free="isFree(plan)"
+          :price-display="monthlyPrice(plan)"
+          :features="planFeatures(plan)"
+          :selected-months="selectedMonths"
+          :cycle-code="cycleCode"
+          @select="(code, cycle) => emit('select-plan', code, cycle)"
+        />
+      </RevealOnScroll>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
   import { Alert, AlertDescription } from '~/components/ui/alert'
-  import { Badge } from '~/components/ui/badge'
-  import { Button } from '~/components/ui/button'
-  import type { StudioPlan } from '~/types'
 
-  const { t, locale } = useI18n()
-  const store = useStudioPlansStore()
+  const { t } = useI18n()
+  const { store, CYCLES, selectedMonths, cycleCode, hasPaidPlans, isFree, monthlyPrice, savingsPct, planFeatures } = useStudioPricing()
 
   // billingCycle is omitted (undefined) for the free trial plan — a cycle
   // is meaningless for a trial signup, so it's never sent for that button.
@@ -122,45 +59,6 @@
   // resolves. store.fetchPlans() already no-ops on repeat calls once plans
   // are cached, so this only ever does real work on first load.
   await useAsyncData('studio-plans', () => store.fetchPlans())
-
-  // `code` matches Studio's own BillingCycle enum values exactly
-  // (backend/app/Enums/BillingCycle.php) — this is what actually gets sent
-  // through onboarding to Studio's /register endpoint, not just a display label.
-  const CYCLES = [
-    { months: 1, code: 'monthly', labelKey: 'studio_pricing.monthly' },
-    { months: 3, code: 'quarterly', labelKey: 'studio_pricing.quarterly' },
-    { months: 12, code: 'yearly', labelKey: 'studio_pricing.yearly' }
-  ]
-  const selectedMonths = ref(1)
-  const cycleCode = computed(() => CYCLES.find((c) => c.months === selectedMonths.value)?.code ?? 'monthly')
-
-  const hasPaidPlans = computed(() => store.plans.some((p) => Number(p.price_monthly) > 0))
-
-  const isFree = (plan: StudioPlan) => Number(plan.price_monthly) === 0
-
-  // The API gives price_monthly/price_quarterly/price_yearly as flat
-  // totals for that billing period — normalize to an effective
-  // per-month price so cards stay comparable across cycles.
-  function totalForCycle(plan: StudioPlan, months: number) {
-    if (months === 1) return Number(plan.price_monthly)
-    if (months === 3) return Number(plan.price_quarterly)
-    return Number(plan.price_yearly)
-  }
-  function monthlyPrice(plan: StudioPlan) {
-    return (totalForCycle(plan, selectedMonths.value) / selectedMonths.value).toFixed(2)
-  }
-  function savingsPct(months: number) {
-    const referencePlan = store.plans.find((p) => Number(p.price_monthly) > 0)
-    if (!referencePlan) return 0
-    const monthly = Number(referencePlan.price_monthly)
-    const perMonthAtCycle = totalForCycle(referencePlan, months) / months
-    if (!monthly) return 0
-    return Math.round((1 - perMonthAtCycle / monthly) * 100)
-  }
-
-  function planFeatures(plan: StudioPlan) {
-    return studioPlanBullets(plan, locale.value)
-  }
 </script>
 
 <style scoped>
@@ -169,166 +67,13 @@
     margin: 0 auto;
   }
 
-  .cycle-wrap {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 32px;
-  }
-  .cycle-track {
-    display: inline-flex;
-    align-items: center;
-    background: color-mix(in srgb, var(--foreground) 6%, transparent);
-    border-radius: 999px;
-    padding: 4px;
-    gap: 2px;
-  }
-  .cycle-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 16px;
-    border: none;
-    background: transparent;
-    border-radius: 999px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: color-mix(in srgb, var(--foreground) 55%, transparent);
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-  }
-  .cycle-btn--active {
-    background: var(--primary);
-    color: #fff;
-    box-shadow: 0 2px 12px color-mix(in srgb, var(--primary) 40%, transparent);
-  }
-  .cycle-btn__badge {
-    font-size: 0.65rem;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.22);
-  }
-  .cycle-btn:not(.cycle-btn--active) .cycle-btn__badge {
-    background: color-mix(in srgb, var(--success) 15%, transparent);
-    color: var(--success);
-  }
-
+  /* Per-card styling now lives in StudioPlanCard.vue; the cycle toggle's
+     in StudioCycleToggle.vue — this section only owns the grid container. */
   .cards-grid {
     display: grid;
     gap: 20px;
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
     max-width: 1080px;
     margin: 0 auto;
-  }
-
-  .plan-card {
-    position: relative;
-    padding: 28px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .plan-card--featured {
-    border-color: color-mix(in srgb, var(--primary) 35%, transparent) !important;
-  }
-  .popular-badge {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .plan-name {
-    font-size: 1.05rem;
-    font-weight: 800;
-    margin: 0;
-  }
-  .plan-desc {
-    font-size: 0.82rem;
-    color: color-mix(in srgb, var(--foreground) 55%, transparent);
-    line-height: 1.5;
-    margin: 0;
-    min-height: 40px;
-  }
-
-  .price-block {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    min-height: 56px;
-  }
-  .price-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 2px;
-  }
-  .price-currency {
-    font-size: 1rem;
-    font-weight: 700;
-    color: color-mix(in srgb, var(--foreground) 50%, transparent);
-    margin-top: 4px;
-  }
-  .price-amount {
-    font-size: 2.4rem;
-    font-weight: 900;
-    letter-spacing: -1.5px;
-  }
-  .price-amount--free {
-    color: var(--success);
-  }
-  .price-per {
-    font-size: 0.75rem;
-    color: color-mix(in srgb, var(--foreground) 50%, transparent);
-  }
-
-  .feature-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-    flex-grow: 1;
-  }
-  .feature-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.82rem;
-  }
-  .plan-check-badge {
-    width: 18px;
-    height: 18px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    background: color-mix(in srgb, var(--primary) 14%, transparent);
-    color: var(--primary);
-  }
-  .plan-divider {
-    height: 1px;
-    background: color-mix(in srgb, var(--foreground) 10%, transparent);
-  }
-
-  .plan-cta {
-    /* Inside this vertical flex column, an unconstrained button would
-       stretch to fill leftover height. Pin it back down;
-       .feature-list's flex-grow: 1 is what should absorb that space. */
-    flex: none !important;
-  }
-
-  .price-flip-enter-active,
-  .price-flip-leave-active {
-    transition: opacity 0.16s ease, transform 0.16s ease;
-  }
-  .price-flip-enter-from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  .price-flip-leave-to {
-    opacity: 0;
-    transform: translateY(-6px);
   }
 </style>

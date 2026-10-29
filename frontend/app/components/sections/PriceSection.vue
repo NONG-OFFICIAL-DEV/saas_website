@@ -1,7 +1,7 @@
 <template>
   <section id="pricing" class="section-pad section-tint-peach">
-    <Container>
-      <div class="pricing-container" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll as="div" class="pricing-container">
         <!-- ── Header ── -->
         <div class="text-center pricing-header">
           <span class="section-tag">{{ t('pricing.eyebrow') }}</span>
@@ -13,21 +13,18 @@
              /pricing page's Nexstack POS tab, so the plan-selection
              experience is identical wherever it appears. -->
         <PosPricingCards />
-      </div>
-    </Container>
+      </RevealOnScroll>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
-  import { Alert, AlertDescription } from '~/components/ui/alert'
-
   const { t } = useI18n()
   const store = usePosPlansStore()
-  const hasVisiblePlans = computed(() => store.plans.some((p) => p.is_active))
 
   // fetchPlans() no-ops on repeat calls once cached — PosPricingCards
-  // fetches independently too, this just lets `hasVisiblePlans` above react
-  // without waiting on that child component's own request.
+  // fetches independently too, this just lets this section render without
+  // waiting on that child component's own request on client navigations.
   await useAsyncData('pos-plans', () => store.fetchPlans())
 </script>
 

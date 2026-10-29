@@ -1,18 +1,18 @@
 <template>
   <section v-if="store.testimonials.length" class="section-pad section-tint-sky" id="testimonials">
-    <Container>
-      <div class="text-center mb-12" data-aos="fade-up">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll as="div" class="text-center mb-12">
         <span class="section-tag">{{ t('testimonials.eyebrow') }}</span>
         <h2 class="section-title">{{ t('testimonials.title') }}</h2>
-      </div>
+      </RevealOnScroll>
 
       <div class="testimonials-grid">
-        <div
+        <RevealOnScroll
           v-for="(item, i) in store.testimonials"
           :key="item.id"
+          as="div"
           class="testimonial-card clay-surface"
-          data-aos="fade-up"
-          :data-aos-delay="(i % 3) * 80"
+          :delay="(i % 3) * 80"
         >
           <div v-if="item.rating" class="stars">
             <Icon v-for="n in 5" :key="n" name="mdi-star" size="16" :color="n <= item.rating ? 'var(--warning)' : undefined" />
@@ -30,9 +30,9 @@
               <div v-if="item.author_title" class="author-title">{{ item.author_title }}</div>
             </div>
           </div>
-        </div>
+        </RevealOnScroll>
       </div>
-    </Container>
+    </div>
   </section>
 </template>
 

@@ -279,7 +279,7 @@
     color: color-mix(in srgb, var(--foreground) 65%, transparent);
     text-decoration: none;
     line-height: 1.55;
-    transition: color 0.15s;
+    transition: color var(--duration-fast) var(--ease-out-quart);
   }
   .contact-link:hover {
     color: var(--primary);
@@ -312,8 +312,8 @@
     color: color-mix(in srgb, var(--foreground) 55%, transparent);
     text-decoration: none;
     transition:
-      color 0.15s,
-      gap 0.15s;
+      color var(--duration-fast) var(--ease-out-quart),
+      gap var(--duration-fast) var(--ease-out-quart);
   }
   .footer-nav-link:hover {
     color: var(--foreground);
@@ -325,7 +325,7 @@
     border-radius: 50%;
     background: color-mix(in srgb, var(--primary) 45%, transparent);
     flex-shrink: 0;
-    transition: background 0.15s;
+    transition: background var(--duration-fast) var(--ease-out-quart);
   }
   .footer-nav-link:hover .link-dot {
     background: var(--primary);
@@ -342,7 +342,7 @@
     border-radius: 16px;
     border: 1px solid color-mix(in srgb, var(--primary) 18%, transparent);
     background: color-mix(in srgb, var(--primary) 6%, transparent);
-    box-shadow: 0 8px 20px color-mix(in srgb, var(--foreground) 4%, transparent);
+    box-shadow: var(--shadow-sm);
     color: var(--primary);
     margin-bottom: 28px;
   }
@@ -384,14 +384,16 @@
     color: color-mix(in srgb, var(--foreground) 55%, transparent);
     text-decoration: none;
     transition:
-      background 0.18s,
-      color 0.18s,
-      transform 0.15s;
+      background var(--duration-base) var(--ease-out-quart),
+      color var(--duration-base) var(--ease-out-quart),
+      transform var(--duration-base) var(--ease-out-quart),
+      box-shadow var(--duration-base) var(--ease-out-quart);
   }
   .social-btn:hover {
     background: color-mix(in srgb, var(--primary) 12%, transparent);
     color: var(--primary);
     transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
   }
 
   /* ── Bottom bar ─────────────────────────────────────────────────────── */
@@ -421,7 +423,7 @@
     font-size: 0.775rem;
     color: color-mix(in srgb, var(--foreground) 35%, transparent);
     text-decoration: none;
-    transition: color 0.15s;
+    transition: color var(--duration-fast) var(--ease-out-quart);
   }
   .bottom-link:hover {
     color: var(--primary);

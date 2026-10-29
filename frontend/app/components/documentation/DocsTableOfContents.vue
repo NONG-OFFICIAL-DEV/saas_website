@@ -42,6 +42,7 @@
     color: color-mix(in srgb, var(--foreground) 60%, transparent);
     text-decoration: none;
     border-left: 2px solid transparent;
+    transition: color var(--duration-fast) var(--ease-out-quart), border-color var(--duration-fast) var(--ease-out-quart);
   }
   .toc-link:hover {
     color: var(--primary);

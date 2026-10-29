@@ -1,7 +1,7 @@
 <template>
   <section class="section-pad" id="contact">
-    <Container>
-      <div class="cta-block text-center" data-aos="zoom-in">
+    <div class="w-full px-4 max-w-[1280px] mx-auto">
+      <RevealOnScroll as="div" class="cta-block text-center">
         <h2 class="cta-title text-white mb-3">
           {{ t('home.cta.title') }}
         </h2>
@@ -38,8 +38,8 @@
             <span>{{ footer.phone }}</span>
           </a>
         </div>
-      </div>
-    </Container>
+      </RevealOnScroll>
+    </div>
   </section>
 </template>
 
@@ -68,14 +68,16 @@
     var(--primary) 0%,
     color-mix(in srgb, var(--primary), black 28%) 100%
   );
-  border-radius: 24px;
+  border-radius: var(--radius-2xl);
   padding: 56px 32px;
+  box-shadow: var(--shadow-xl);
 }
 
 .cta-title {
-  font-size: clamp(1.5rem, 3.4vw, 2.2rem);
-  font-weight: 900;
-  letter-spacing: -0.8px;
+  font-size: var(--text-h1);
+  font-weight: var(--text-h1--font-weight);
+  letter-spacing: var(--text-h1--letter-spacing);
+  line-height: var(--text-h1--line-height);
 }
 .cta-sub {
   color: rgba(255, 255, 255, 0.75);
@@ -141,7 +143,7 @@
   font-size: 0.86rem;
   font-weight: 600;
   text-decoration: none;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition: transform var(--duration-base) var(--ease-out-quart), background var(--duration-base) var(--ease-out-quart);
 }
 .contact-card:hover {
   background: rgba(255, 255, 255, 0.16);
